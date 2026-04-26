@@ -25,7 +25,7 @@ if VENDOR_ROOT.exists() and str(VENDOR_ROOT) not in sys.path:
 if str(MULTISTICKER_ROOT) not in sys.path:
     sys.path.insert(0, str(MULTISTICKER_ROOT))
 
-from src.usticker_igsr import (  # noqa: E402
+from src.multisticker import (  # noqa: E402
     OpenClipEncoder,
     _extract_missing_stickers,
     _filter_decodable_stickers,
@@ -35,7 +35,7 @@ from src.usticker_igsr import (  # noqa: E402
     _resolve_device,
     _seed_everything,
     _set_cache_env,
-    default_usticker_config,
+    default_multisticker_config,
     prepare_manifest,
 )
 from src.utils import save_json  # noqa: E402
@@ -65,7 +65,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_config(args):
-    config = default_usticker_config(str(MULTISTICKER_ROOT))
+    config = default_multisticker_config(str(MULTISTICKER_ROOT))
     config.runtime.device = args.device
     config.data.max_files = args.max_files
     config.data.max_stickers = args.max_stickers

@@ -26,7 +26,7 @@ The current implementation already supports:
 
 Important code paths:
 
-- Manifest/data construction: `/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py`
+- Manifest/data construction: `/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py`
 - AM training entry: `/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py`
 - Pilot script: `/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/run_pilot.sh`
 - Full script: `/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/run_full.sh`

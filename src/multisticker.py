@@ -174,7 +174,7 @@ class RuntimeConfig:
 
 
 @dataclass
-class UStickerIGSRConfig:
+class MultiStickerConfig:
     paths: UStickerPaths
     data: UStickerDataConfig = field(default_factory=UStickerDataConfig)
     model: ModelConfig = field(default_factory=ModelConfig)
@@ -244,11 +244,11 @@ class IntentGuidedRetriever(nn.Module):
         return intent_repr, retrieval_logits, intent_logits
 
 
-def default_usticker_config(project_root: str) -> UStickerIGSRConfig:
-    return UStickerIGSRConfig(paths=UStickerPaths(project_root=project_root))
+def default_multisticker_config(project_root: str) -> MultiStickerConfig:
+    return MultiStickerConfig(paths=UStickerPaths(project_root=project_root))
 
 
-def _set_cache_env(config: UStickerIGSRConfig) -> None:
+def _set_cache_env(config: MultiStickerConfig) -> None:
     cache_root = config.paths.hf_home
     os.environ["HF_HOME"] = cache_root
     os.environ["HUGGINGFACE_HUB_CACHE"] = cache_root
@@ -260,7 +260,7 @@ def _set_cache_env(config: UStickerIGSRConfig) -> None:
     os.environ["VLLM_CACHE_ROOT"] = config.paths.vllm_home
 
 
-def _resolve_device(config: UStickerIGSRConfig) -> torch.device:
+def _resolve_device(config: MultiStickerConfig) -> torch.device:
     if config.runtime.device == "auto":
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
     return torch.device(config.runtime.device)
@@ -774,7 +774,7 @@ def _two_stage_group_rerank_scores(
     return masked_scores
 
 
-def _build_raw_sessions(config: UStickerIGSRConfig) -> tuple[List[SessionRecord], Dict[str, List[str]], Dict[str, int]]:
+def _build_raw_sessions(config: MultiStickerConfig) -> tuple[List[SessionRecord], Dict[str, List[str]], Dict[str, int]]:
     root = Path(config.paths.usticker_root)
     domain_map = _load_domain_map(config.paths.domain_map_path)
     json_files = sorted(root.glob("*.json"))
@@ -871,7 +871,7 @@ def _build_raw_sessions(config: UStickerIGSRConfig) -> tuple[List[SessionRecord]
     return all_sessions, sessions_by_file, media_stats
 
 
-def _build_dataset_manifest(config: UStickerIGSRConfig, device: torch.device) -> dict:
+def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) -> dict:
     print("[prepare] building raw sessions", flush=True)
     sessions, sessions_by_file, media_stats = _build_raw_sessions(config)
     supported_media = _normalize_supported_media(config.data.supported_media)
@@ -1074,7 +1074,7 @@ def _build_dataset_manifest(config: UStickerIGSRConfig, device: torch.device) ->
     return manifest
 
 
-def prepare_manifest(config: UStickerIGSRConfig, force_rebuild: bool = False) -> dict:
+def prepare_manifest(config: MultiStickerConfig, force_rebuild: bool = False) -> dict:
     _set_cache_env(config)
     config.data.supported_media = _normalize_supported_media(config.data.supported_media)
     manifest_path = Path(config.paths.manifest_path)
@@ -1104,7 +1104,7 @@ def _gather_split_arrays(
     }
 
 
-def train_usticker_igsr(config: UStickerIGSRConfig, force_rebuild: bool = False) -> dict:
+def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) -> dict:
     _set_cache_env(config)
     rng = _seed_everything(config.data.seed)
     device = _resolve_device(config)

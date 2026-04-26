@@ -7,7 +7,7 @@ Multimodal sticker retrieval with dialogue memory.
 | path | purpose |
 | --- | --- |
 | `src/` | Core Python package for dataset construction, memory retrieval, OpenCLIP encoding, sticker-bank encoding, metrics, and utility helpers. This directory was renamed from `meme_project/` so imports now use `from src...`. |
-| `src/usticker_igsr.py` | Main library module. It defines config dataclasses, U-Sticker session/sample construction, E5 memory retrieval, OpenCLIP wrappers, animated sticker frame loading, `IntentGuidedRetriever`, metrics, and the older head-only training helper. |
+| `src/multisticker.py` | Main library module. It defines config dataclasses, U-Sticker session/sample construction, E5 memory retrieval, OpenCLIP wrappers, animated sticker frame loading, `IntentGuidedRetriever`, metrics, and the older head-only training helper. |
 | `src/utils.py` | Small shared utilities such as JSON save/load helpers. |
 | `scripts/train_am.py` | Main train/eval entry for the rebuild experiments. It supports `head_only`, `image_lora`, `text_lora`, and `dual_lora`, plus `--memory-strategy retrieved_topk/recent_topk/disabled`. |
 | `scripts/eval_direct_clip.py` | Zero-shot direct OpenCLIP retrieval baseline. It ranks stickers without training a retriever head. |

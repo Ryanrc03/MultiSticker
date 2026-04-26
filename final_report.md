@@ -44,7 +44,7 @@ rank all candidate stickers; report exact Hit@K and semantic-group Hit@K
 
 The method is an intent-guided CLIP retrieval model. OpenCLIP provides a text encoder and an image encoder. The text side encodes three views of the query: recent dialogue context, retrieved long-term memory, and LLM-generated reply intent. These three vectors are concatenated and projected by `IntentGuidedRetriever` into the same dimension as the sticker image embeddings. Retrieval logits are `intent_repr @ image_bank.T / temperature`, and a small auxiliary classifier predicts the sticker's intent group.
 
-Implementation links: [IntentGuidedRetriever](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:217), [forward scoring](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:233), [AM training entry](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:196).
+Implementation links: [IntentGuidedRetriever](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:217), [forward scoring](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:233), [AM training entry](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:196).
 
 ### 1.2 Memory
 
@@ -144,7 +144,7 @@ This `memory_text` is not used as an E5 vector in the final sticker model. It is
 
 The memory retrieval score is only a construction-time ranking score; there is no separate labeled memory-retrieval metric in the current code. The reported metrics are end-to-end sticker retrieval metrics after memory has been injected: exact sticker Hit@K/Recall@K, semantic-group Hit@K, and reranked/fused group metrics. In the current result JSONs these fields are still named `p@1`, `p@5`, `p@10`, and `p@30`, but because each sample has only one observed gold sticker, they are best interpreted as whether the gold item appears in the top-K list rather than as multi-positive precision. Therefore memory is evaluated indirectly: if better memory helps choose better stickers, it should improve those downstream retrieval metrics.
 
-Implementation links: [memory config](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:129), [memory selection](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:449), [MeanPoolingEncoder](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:481), [manifest memory retrieval](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:973).
+Implementation links: [memory config](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:129), [memory selection](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:449), [MeanPoolingEncoder](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:481), [manifest memory retrieval](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:973).
 
 ### 1.3 Context, memory, and intent text
 
@@ -212,7 +212,7 @@ retrieval_logits = intent_repr @ image_bank.T / temperature
 
 This design keeps the three sources separate until the trainable retrieval head. The head can learn how much to rely on immediate context, retrieved memory, and explicit intent for each sticker retrieval decision.
 
-Implementation links: [context construction](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:893), [intent text load](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:1014), [three-vector concat](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:240), [AM text encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:253).
+Implementation links: [context construction](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:893), [intent text load](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:1014), [three-vector concat](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:240), [AM text encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:253).
 
 ### 1.4 Multi-frame stickers
 
@@ -233,7 +233,7 @@ The supported sticker formats are `.png`, `.gif`, and `.webm`. Static images are
 
 During image-LoRA training, the full image bank is re-encoded without gradients for memory efficiency. Then, for each batch, only the unique positive stickers in that batch are re-encoded with gradients and patched back into a cloned bank. Animated positives are capped to at most 4 uniformly sampled frames when gradients are enabled.
 
-Implementation links: [media constants](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:26), [OpenCLIP image encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:537), [ffmpeg webm decoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:591), [gif/webm frame loader](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:621), [LoRA image-bank encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:139), [positive re-encoding patch](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:352).
+Implementation links: [media constants](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:26), [OpenCLIP image encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:537), [ffmpeg webm decoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:591), [gif/webm frame loader](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:621), [LoRA image-bank encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:139), [positive re-encoding patch](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:352).
 
 ### 1.5 Fine-tuning: head, adapter, LoRA
 
@@ -286,7 +286,7 @@ retriever intent_repr and image embeddings live in the same CLIP embedding space
 
 The project does not manually reimplement OpenCLIP internals; it calls `create_model_and_transforms()` and `get_tokenizer()` from `open_clip`. Text is encoded by `model.encode_text()`, images by `model.encode_image()`, then both are normalized.
 
-Implementation links: [OpenClipEncoder init](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:512), [text encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:527), [image encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:554), [model config](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:151).
+Implementation links: [OpenClipEncoder init](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:512), [text encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:527), [image encoding](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:554), [model config](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:151).
 
 ## 2. Dataset and Annotation
 
@@ -312,7 +312,7 @@ The dataset is U-Sticker from `/scratch/rl182/meme/u-sticker`, with stickers ext
 
 Each training sample is a turn where the current message contains a usable sticker and has at least 2 previous context turns. The model input is the previous dialogue context, retrieved memory, and intent annotation. The positive label is the actual sticker used in that turn. The full run summary is: 8,129 sessions, 368,503 provisional supported-media sticker samples, 100,000 training samples, 18,403 validation samples, and 42,319 decodable stickers in the retrieval bank.
 
-Implementation links: [raw sessions](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:874), [sample construction](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:893), [label filtering and split caps](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:941), [full run config](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/run_full.sh:21).
+Implementation links: [raw sessions](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:874), [sample construction](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:893), [label filtering and split caps](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:941), [full run config](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/run_full.sh:21).
 
 ### 2.1 What was annotated
 
@@ -335,7 +335,7 @@ The all-media runs use merged annotation files:
 `/scratch/rl182/meme/usticker_igsr/llm/session_memories_qwen32_gptq_v10_png_gif_webm_merged.jsonl` and
 `/scratch/rl182/meme/usticker_igsr/llm/sample_intents_qwen32_gptq_v10_png_gif_webm_merged.jsonl`.
 
-Implementation links: [taxonomy](/home/rl182/dl/V2L/Project-meme/scripts/run_generate_usticker_llm_artifacts.py:29), [annotation output paths](/home/rl182/dl/V2L/Project-meme/scripts/run_generate_usticker_llm_artifacts.py:354), [manifest reads annotations](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:879), [sample intent fallback](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:1014).
+Implementation links: [taxonomy](/home/rl182/dl/V2L/Project-meme/scripts/run_generate_usticker_llm_artifacts.py:29), [annotation output paths](/home/rl182/dl/V2L/Project-meme/scripts/run_generate_usticker_llm_artifacts.py:354), [manifest reads annotations](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:879), [sample intent fallback](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:1014).
 
 ### 2.2 Annotation prompts
 
@@ -419,7 +419,7 @@ Semantic-group metrics use the same ranked list, but a hit is counted when any r
 
 Positive samples are the observed sticker labels from real dialogue turns. Negative samples are implicit: because `retrieval_logits` has shape `[batch_size, full_sticker_bank_size]`, cross-entropy treats the gold sticker as the only positive class and all other stickers in the bank as negatives for that sample. There is no separate hard-negative mining in the AM script. For image-LoRA training, gradients flow through the positive sticker image features in the batch, while the rest of the bank acts as frozen negatives for efficiency.
 
-Implementation links: [exact metrics](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:694), [semantic group metrics](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:715), [group prior and two-stage rerank](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/usticker_igsr.py:744), [group assignment](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:220), [evaluation metrics](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:299), [training positive/all-bank loss](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:394).
+Implementation links: [exact metrics](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:694), [semantic group metrics](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:715), [group prior and two-stage rerank](/home/rl182/dl/V2L/Project-meme/MultiSticker/src/multisticker.py:744), [group assignment](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:220), [evaluation metrics](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:299), [training positive/all-bank loss](/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/train_am.py:394).
 
 ## 4. Current Results
 
