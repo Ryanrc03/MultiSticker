@@ -692,23 +692,25 @@ def _kmeans_assignments(vectors: np.ndarray, clusters: int, iterations: int, see
 
 
 def _metrics_from_scores(score_matrix: np.ndarray, gold_indices: np.ndarray) -> Dict[str, float]:
+    # Single positive per query, so HitRate@K == Recall@K. MRR is also reported as `map`
+    # because mean(1/rank) coincides with MAP under the 1-positive setup.
     if len(gold_indices) == 0:
-        return {"p@1": 0.0, "p@3": 0.0, "p@5": 0.0, "p@10": 0.0, "p@30": 0.0, "map": 0.0, "mrr": 0.0}
+        return {"recall@1": 0.0, "recall@3": 0.0, "recall@5": 0.0, "recall@10": 0.0, "recall@30": 0.0, "map": 0.0, "mrr": 0.0}
     order = np.argsort(-score_matrix, axis=1)
     ranks = []
     for row_index, gold_index in enumerate(gold_indices):
         rank = int(np.where(order[row_index] == int(gold_index))[0][0]) + 1
         ranks.append(rank)
     ranks_np = np.asarray(ranks, dtype=np.float32)
-    hit_rates = {
-        "p@1": float((ranks_np <= 1).mean()),
-        "p@3": float((ranks_np <= 3).mean()),
-        "p@5": float((ranks_np <= 5).mean()),
-        "p@10": float((ranks_np <= 10).mean()),
-        "p@30": float((ranks_np <= 30).mean()),
+    recall = {
+        "recall@1": float((ranks_np <= 1).mean()),
+        "recall@3": float((ranks_np <= 3).mean()),
+        "recall@5": float((ranks_np <= 5).mean()),
+        "recall@10": float((ranks_np <= 10).mean()),
+        "recall@30": float((ranks_np <= 30).mean()),
     }
     return round_dict(
-        hit_rates | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
+        recall | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
     )
 
 
@@ -717,8 +719,10 @@ def _group_metrics_from_scores(
     gold_indices: np.ndarray,
     sticker_group_ids: np.ndarray,
 ) -> Dict[str, float]:
+    # Group-level any-hit recall: relevance is "any sticker in the gold group".
+    # Reports first-relevant rank, so (rank<=K).mean() is Recall@K under that relevance.
     if len(gold_indices) == 0:
-        return {"p@1": 0.0, "p@3": 0.0, "p@5": 0.0, "p@10": 0.0, "p@30": 0.0, "map": 0.0, "mrr": 0.0}
+        return {"recall@1": 0.0, "recall@3": 0.0, "recall@5": 0.0, "recall@10": 0.0, "recall@30": 0.0, "map": 0.0, "mrr": 0.0}
     order = np.argsort(-score_matrix, axis=1)
     ranks = []
     for row_index, gold_index in enumerate(gold_indices):
@@ -730,15 +734,15 @@ def _group_metrics_from_scores(
                 break
         ranks.append(group_rank)
     ranks_np = np.asarray(ranks, dtype=np.float32)
-    hit_rates = {
-        "p@1": float((ranks_np <= 1).mean()),
-        "p@3": float((ranks_np <= 3).mean()),
-        "p@5": float((ranks_np <= 5).mean()),
-        "p@10": float((ranks_np <= 10).mean()),
-        "p@30": float((ranks_np <= 30).mean()),
+    recall = {
+        "recall@1": float((ranks_np <= 1).mean()),
+        "recall@3": float((ranks_np <= 3).mean()),
+        "recall@5": float((ranks_np <= 5).mean()),
+        "recall@10": float((ranks_np <= 10).mean()),
+        "recall@30": float((ranks_np <= 30).mean()),
     }
     return round_dict(
-        hit_rates | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
+        recall | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
     )
 
 
@@ -1284,8 +1288,6 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
             image_bank,
             sticker_group_ids,
             device,
-            group_prior_alpha=config.model.group_prior_alpha,
-            rerank_top_groups=config.model.rerank_top_groups,
         )
         history.append(
             {
@@ -1293,23 +1295,19 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
                 "train_loss": round(float(np.mean(losses)), 4),
                 "retrieval_loss": round(float(np.mean(retrieval_losses)), 4),
                 "intent_loss": round(float(np.mean(intent_losses)), 4),
-                "val_p@1": val_metrics["metrics"]["p@1"],
+                "val_recall@1": val_metrics["metrics"]["recall@1"],
                 "val_map": val_metrics["semantic_metrics"]["map"],
-                "val_group_p@30": val_metrics["semantic_metrics"]["p@30"],
-                "val_fused_group_p@30": val_metrics["fused_semantic_metrics"]["p@30"],
-                "val_two_stage_group_p@30": val_metrics["two_stage_semantic_metrics"]["p@30"],
+                "val_group_recall@30": val_metrics["semantic_metrics"]["recall@30"],
             }
         )
-        score = val_metrics["two_stage_semantic_metrics"]["p@30"]
+        score = val_metrics["semantic_metrics"]["recall@30"]
         if score > best_score:
             best_score = score
             best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
         print(
             f"[train] epoch={epoch} loss={history[-1]['train_loss']} "
-            + f"exact_val_p@1={history[-1]['val_p@1']} "
-            + f"group_val_p@30={history[-1]['val_group_p@30']} "
-            + f"fused_group_val_p@30={history[-1]['val_fused_group_p@30']} "
-            + f"two_stage_group_val_p@30={history[-1]['val_two_stage_group_p@30']}",
+            + f"exact_val_recall@1={history[-1]['val_recall@1']} "
+            + f"group_val_recall@30={history[-1]['val_group_recall@30']}",
             flush=True,
         )
 
@@ -1337,8 +1335,6 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
         image_bank,
         sticker_group_ids,
         device,
-        group_prior_alpha=config.model.group_prior_alpha,
-        rerank_top_groups=config.model.rerank_top_groups,
     )
     test_result = evaluate_split(
         model,
@@ -1346,8 +1342,6 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
         image_bank,
         sticker_group_ids,
         device,
-        group_prior_alpha=config.model.group_prior_alpha,
-        rerank_top_groups=config.model.rerank_top_groups,
     )
     results = {
         "config": {
@@ -1370,10 +1364,6 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
             "intent_cluster_count": int(intent_cluster_count),
             "group_name_to_index": group_name_to_index,
         },
-        "rerank_summary": {
-            "group_prior_alpha": float(config.model.group_prior_alpha),
-            "rerank_top_groups": int(config.model.rerank_top_groups),
-        },
         "training_history": history,
         "val": val_result,
         "test": test_result,
@@ -1394,48 +1384,21 @@ def evaluate_split(
     image_bank: torch.Tensor,
     sticker_group_ids: np.ndarray,
     device: torch.device,
-    group_prior_alpha: float = 2.0,
-    rerank_top_groups: int = 2,
 ) -> dict:
     model.eval()
     score_chunks = []
-    intent_logit_chunks = []
     with torch.no_grad():
         for start in range(0, len(split_arrays["rows"]), 512):
             context_batch = torch.from_numpy(split_arrays["context_embeddings"][start : start + 512]).to(device)
             memory_batch = torch.from_numpy(split_arrays["memory_embeddings"][start : start + 512]).to(device)
             intent_text_batch = torch.from_numpy(split_arrays["intent_text_embeddings"][start : start + 512]).to(device)
-            _, retrieval_logits, intent_logits = model(context_batch, memory_batch, intent_text_batch, image_bank)
+            _, retrieval_logits, _ = model(context_batch, memory_batch, intent_text_batch, image_bank)
             score_chunks.append(retrieval_logits.cpu().numpy().astype(np.float32))
-            intent_logit_chunks.append(intent_logits.cpu().numpy().astype(np.float32))
     score_matrix = np.concatenate(score_chunks, axis=0) if score_chunks else np.zeros((0, image_bank.shape[0]), dtype=np.float32)
-    intent_logit_matrix = (
-        np.concatenate(intent_logit_chunks, axis=0)
-        if intent_logit_chunks
-        else np.zeros((0, int(sticker_group_ids.max()) + 1 if len(sticker_group_ids) else 0), dtype=np.float32)
-    )
     metrics = _metrics_from_scores(score_matrix, split_arrays["label_indices"])
     semantic_metrics = _group_metrics_from_scores(score_matrix, split_arrays["label_indices"], sticker_group_ids)
-    fused_score_matrix = _fuse_group_prior_scores(score_matrix, intent_logit_matrix, sticker_group_ids, alpha=group_prior_alpha)
-    fused_metrics = _metrics_from_scores(fused_score_matrix, split_arrays["label_indices"])
-    fused_semantic_metrics = _group_metrics_from_scores(fused_score_matrix, split_arrays["label_indices"], sticker_group_ids)
-    two_stage_score_matrix = _two_stage_group_rerank_scores(
-        score_matrix,
-        intent_logit_matrix,
-        sticker_group_ids,
-        top_groups=rerank_top_groups,
-        alpha=group_prior_alpha,
-    )
-    two_stage_metrics = _metrics_from_scores(two_stage_score_matrix, split_arrays["label_indices"])
-    two_stage_semantic_metrics = _group_metrics_from_scores(two_stage_score_matrix, split_arrays["label_indices"], sticker_group_ids)
     return {
         "metrics": metrics,
         "semantic_metrics": semantic_metrics,
-        "fused_metrics": fused_metrics,
-        "fused_semantic_metrics": fused_semantic_metrics,
-        "two_stage_metrics": two_stage_metrics,
-        "two_stage_semantic_metrics": two_stage_semantic_metrics,
-        "group_prior_alpha": float(group_prior_alpha),
-        "rerank_top_groups": int(rerank_top_groups),
         "sample_count": len(split_arrays["rows"]),
     }

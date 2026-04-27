@@ -6,8 +6,11 @@ Memory strategies: retrieved_topk | recent_topk | disabled.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
+import os
 import sys
+import time
 from collections import defaultdict
 from dataclasses import asdict
 from pathlib import Path
@@ -18,6 +21,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 MULTISTICKER_ROOT = Path("/home/rl182/dl/V2L/Project-meme/MultiSticker")
+SCRATCH_ARTIFACT_ROOT = Path("/scratch/rl182/mutlisticker")
 VENDOR_ROOT = Path("/home/rl182/dl/V2L/Project-meme") / ".vendor"
 if VENDOR_ROOT.exists() and str(VENDOR_ROOT) not in sys.path:
     sys.path.append(str(VENDOR_ROOT))
@@ -31,7 +35,6 @@ from src.multisticker import (  # noqa: E402
     OpenClipEncoder,
     _extract_missing_stickers,
     _filter_decodable_stickers,
-    _fuse_group_prior_scores,
     _group_metrics_from_scores,
     _load_sticker_frames,
     _load_sticker_image,
@@ -40,11 +43,11 @@ from src.multisticker import (  # noqa: E402
     _resolve_device,
     _seed_everything,
     _set_cache_env,
-    _two_stage_group_rerank_scores,
     default_multisticker_config,
     prepare_manifest,
 )
 from src.utils import save_json  # noqa: E402
+from embedding_cache import cache_path, describe_cache, digest_rows, digest_stickers, load_npz, save_npz  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
@@ -74,6 +77,15 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--head-lr", type=float, default=1e-3)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--image-reencode-every-epoch", action="store_true", default=True)
+    p.add_argument("--num-workers", type=int, default=0, help="CPU threads for torch/OpenMP style work; 0 keeps environment defaults.")
+    p.add_argument("--log-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "logs"))
+    p.add_argument("--results-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "results"))
+    p.add_argument("--log-every", type=int, default=25)
+    p.add_argument("--log-samples", type=int, default=8, help="Validation examples to print/write after each epoch.")
+    p.add_argument("--log-top-k", type=int, default=5)
+    p.add_argument("--plot-history", action="store_true", default=True)
+    p.add_argument("--embedding-cache-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "embedding_cache"), help="Directory for reusable frozen CLIP embeddings.")
+    p.add_argument("--no-embedding-cache", action="store_true", help="Disable disk cache for frozen text/image embeddings.")
     return p.parse_args()
 
 
@@ -93,6 +105,7 @@ def build_config(args):
     config.model.train_batch_size = args.train_batch_size
     config.model.infer_batch_size = args.infer_batch_size
     config.model.intent_clusters = args.intent_clusters
+    config.runtime.num_workers = args.num_workers
     if args.session_memories_file:
         config.paths.session_memory_override = args.session_memories_file
     if args.sample_intents_file:
@@ -181,13 +194,160 @@ def per_media_metrics(score_matrix, label_indices, rows, sticker_ids, sticker_gr
     return out
 
 
+def format_metric_table(history):
+    if not history:
+        return ""
+    headers = ["epoch", "loss", "r@1", "r@5", "r@30", "grp@30", "sec/ep", "samples/s"]
+    rows = []
+    for item in history:
+        rows.append([
+            str(item["epoch"]),
+            f"{item['train_loss']:.4f}",
+            f"{item['val_recall@1']:.4f}",
+            f"{item['val_recall@5']:.4f}",
+            f"{item['val_recall@30']:.4f}",
+            f"{item['val_group_recall@30']:.4f}",
+            f"{item.get('epoch_seconds', 0.0):.1f}",
+            f"{item.get('train_samples_per_second', 0.0):.1f}",
+        ])
+    widths = [len(h) for h in headers]
+    for row in rows:
+        widths = [max(width, len(cell)) for width, cell in zip(widths, row)]
+    fmt = "  ".join("{:<" + str(width) + "}" for width in widths)
+    lines = [fmt.format(*headers), fmt.format(*["-" * width for width in widths])]
+    lines.extend(fmt.format(*row) for row in rows)
+    return "\n".join(lines)
+
+
+def format_per_media(per_media):
+    lines = ["media  count  r@1     r@5     r@30    group@30"]
+    lines.append("-----  -----  ------  ------  ------  --------")
+    for name in ["png", "gif", "webm"]:
+        item = per_media.get(name, {"count": 0})
+        exact = item.get("exact", {})
+        group = item.get("group", {})
+        lines.append(
+            f"{name:<5}  {int(item.get('count', 0)):<5}  "
+            f"{exact.get('recall@1', 0.0):<6.4f}  {exact.get('recall@5', 0.0):<6.4f}  "
+            f"{exact.get('recall@30', 0.0):<6.4f}  {group.get('recall@30', 0.0):<8.4f}"
+        )
+    return "\n".join(lines)
+
+
+def sample_predictions(score_matrix, rows, label_indices, sticker_ids, sticker_group_ids, limit: int, top_k: int):
+    if limit <= 0 or len(rows) == 0:
+        return []
+    top_k = max(1, min(top_k, len(sticker_ids)))
+    limit = min(limit, len(rows))
+    indices = np.linspace(0, len(rows) - 1, num=limit, dtype=np.int64)
+    examples = []
+    for row_index in indices:
+        scores = score_matrix[int(row_index)]
+        top_indices = np.argsort(-scores)[:top_k]
+        gold_index = int(label_indices[int(row_index)])
+        top_items = [
+            {
+                "rank": rank + 1,
+                "sticker_id": sticker_ids[int(idx)],
+                "score": round(float(scores[int(idx)]), 4),
+                "same_group": bool(sticker_group_ids[int(idx)] == sticker_group_ids[gold_index]),
+            }
+            for rank, idx in enumerate(top_indices)
+        ]
+        row = rows[int(row_index)]
+        examples.append(
+            {
+                "sample_id": row.get("sample_id", ""),
+                "domain": row.get("domain", ""),
+                "intent_label": row.get("intent_label", ""),
+                "gold": sticker_ids[gold_index],
+                "gold_rank": int(np.where(np.argsort(-scores) == gold_index)[0][0]) + 1,
+                "top_predictions": top_items,
+                "context_preview": str(row.get("context_text", ""))[:160],
+            }
+        )
+    return examples
+
+
+def print_sample_predictions(examples):
+    if not examples:
+        return
+    print("[am] validation examples", flush=True)
+    for item in examples:
+        preds = ", ".join(
+            f"{pred['rank']}:{pred['sticker_id']}:{pred['score']:.3f}{'*' if pred['same_group'] else ''}"
+            for pred in item["top_predictions"]
+        )
+        print(
+            f"[am]   sample={item['sample_id']} intent={item['intent_label']} "
+            f"gold={item['gold']} rank={item['gold_rank']} top={preds}",
+            flush=True,
+        )
+
+
+def append_jsonl(path: Path, record: dict):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as handle:
+        handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def write_history_csv(path: Path, history):
+    if not history:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = list(history[-1].keys())
+    with open(path, "w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(history)
+
+
+def maybe_plot_history(path: Path, history):
+    if not history:
+        return
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except Exception as exc:
+        print(f"[am] history plot skipped: {exc}", flush=True)
+        return
+    epochs = [item["epoch"] for item in history]
+    plt.figure(figsize=(8, 4.5))
+    plt.plot(epochs, [item["train_loss"] for item in history], marker="o", label="train_loss")
+    plt.plot(epochs, [item["val_recall@30"] for item in history], marker="o", label="val_recall@30")
+    plt.plot(epochs, [item["val_group_recall@30"] for item in history], marker="o", label="val_group_recall@30")
+    plt.xlabel("epoch")
+    plt.grid(alpha=0.25)
+    plt.legend()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    plt.tight_layout()
+    plt.savefig(path, dpi=150)
+    plt.close()
+
+
 def main():
     args = parse_args()
+    if args.num_workers > 0:
+        os.environ.setdefault("OMP_NUM_THREADS", str(args.num_workers))
+        os.environ.setdefault("MKL_NUM_THREADS", str(args.num_workers))
+        os.environ.setdefault("NUMEXPR_NUM_THREADS", str(args.num_workers))
+        torch.set_num_threads(args.num_workers)
     config = build_config(args)
     _set_cache_env(config)
     _seed_everything(config.data.seed)
     device = _resolve_device(config)
-    print(f"[am] mode={args.tuning_mode} memory={args.memory_strategy} run={args.run_name} device={device}", flush=True)
+    embedding_cache_dir = Path(args.embedding_cache_dir) if args.embedding_cache_dir else SCRATCH_ARTIFACT_ROOT / "embedding_cache"
+    use_embedding_cache = not args.no_embedding_cache
+    if use_embedding_cache:
+        embedding_cache_dir.mkdir(parents=True, exist_ok=True)
+        print(f"[am] embedding_cache={embedding_cache_dir}", flush=True)
+    print(
+        f"[am] mode={args.tuning_mode} memory={args.memory_strategy} run={args.run_name} "
+        f"device={device} torch_threads={torch.get_num_threads()}",
+        flush=True,
+    )
 
     manifest = prepare_manifest(config=config, force_rebuild=args.force_rebuild)
 
@@ -240,10 +400,33 @@ def main():
         return clip_encoder.encode_texts(texts, batch_size=config.model.infer_batch_size)
 
     if not use_text_lora:
-        print("[am] precomputing frozen text embeddings", flush=True)
-        ctx_np = encode_texts_frozen([r["context_text"] for r in all_rows])
-        mem_np = encode_texts_frozen([r["memory_text"] for r in all_rows])
-        int_np = encode_texts_frozen([r["intent_text"] for r in all_rows])
+        text_cache = None
+        if use_embedding_cache:
+            text_cache = cache_path(
+                embedding_cache_dir,
+                "train_frozen_text",
+                {
+                    "clip_model_name": config.model.clip_model_name,
+                    "clip_pretrained": config.model.clip_pretrained,
+                    "rows_digest": digest_rows(all_rows, ["context_text", "memory_text", "intent_text"]),
+                },
+            )
+            cached = load_npz(text_cache)
+        else:
+            cached = None
+        if cached is not None:
+            print(f"[am] loaded frozen text embeddings from {describe_cache(text_cache)}", flush=True)
+            ctx_np = cached["ctx"]
+            mem_np = cached["mem"]
+            int_np = cached["intent"]
+        else:
+            print("[am] precomputing frozen text embeddings", flush=True)
+            ctx_np = encode_texts_frozen([r["context_text"] for r in all_rows])
+            mem_np = encode_texts_frozen([r["memory_text"] for r in all_rows])
+            int_np = encode_texts_frozen([r["intent_text"] for r in all_rows])
+            if text_cache is not None:
+                save_npz(text_cache, ctx=ctx_np, mem=mem_np, intent=int_np)
+                print(f"[am] saved frozen text embeddings to {describe_cache(text_cache)}", flush=True)
         text_dim = ctx_np.shape[1]
     else:
         text_dim = clip_encoder.output_dim
@@ -251,8 +434,29 @@ def main():
 
     image_paths_list = [sticker_paths[s] for s in sticker_ids]
     if not use_image_lora:
-        print("[am] precomputing frozen image bank", flush=True)
-        img_np = clip_encoder.encode_images(image_paths_list, batch_size=config.model.infer_batch_size)
+        image_cache = None
+        if use_embedding_cache:
+            image_cache = cache_path(
+                embedding_cache_dir,
+                "frozen_image_bank",
+                {
+                    "clip_model_name": config.model.clip_model_name,
+                    "clip_pretrained": config.model.clip_pretrained,
+                    "stickers_digest": digest_stickers(sticker_ids, image_paths_list),
+                },
+            )
+            cached = load_npz(image_cache)
+        else:
+            cached = None
+        if cached is not None:
+            print(f"[am] loaded frozen image bank from {describe_cache(image_cache)}", flush=True)
+            img_np = cached["image"]
+        else:
+            print("[am] precomputing frozen image bank", flush=True)
+            img_np = clip_encoder.encode_images(image_paths_list, batch_size=config.model.infer_batch_size)
+            if image_cache is not None:
+                save_npz(image_cache, image=img_np)
+                print(f"[am] saved frozen image bank to {describe_cache(image_cache)}", flush=True)
         image_bank = torch.from_numpy(img_np).to(device)
     else:
         image_bank = None
@@ -282,7 +486,7 @@ def main():
     best_state = None
     best_score = -1.0
 
-    def evaluate(precomputed_bank=None):
+    def evaluate(precomputed_bank=None, collect_examples: bool = False):
         retriever.eval()
         clip_encoder.model.eval()
         with torch.no_grad():
@@ -302,38 +506,42 @@ def main():
                 mem = torch.from_numpy(mem_np[train_n:train_n + len(val_rows)]).to(device)
                 ints = torch.from_numpy(int_np[train_n:train_n + len(val_rows)]).to(device)
             score_chunks = []
-            logit_chunks = []
             for s in range(0, len(val_rows), 512):
-                _, rl, il = retriever(ctx[s:s + 512], mem[s:s + 512], ints[s:s + 512], bank)
+                _, rl, _ = retriever(ctx[s:s + 512], mem[s:s + 512], ints[s:s + 512], bank)
                 score_chunks.append(rl.cpu().numpy().astype(np.float32))
-                logit_chunks.append(il.cpu().numpy().astype(np.float32))
         score_matrix = np.concatenate(score_chunks, axis=0)
-        logit_matrix = np.concatenate(logit_chunks, axis=0)
         metrics = _metrics_from_scores(score_matrix, val_label_idx)
         semantic = _group_metrics_from_scores(score_matrix, val_label_idx, sticker_group_ids)
-        fused = _fuse_group_prior_scores(score_matrix, logit_matrix, sticker_group_ids, alpha=config.model.group_prior_alpha)
-        fused_metrics = _metrics_from_scores(fused, val_label_idx)
-        fused_sem = _group_metrics_from_scores(fused, val_label_idx, sticker_group_ids)
-        ts = _two_stage_group_rerank_scores(score_matrix, logit_matrix, sticker_group_ids, top_groups=config.model.rerank_top_groups, alpha=config.model.group_prior_alpha)
-        ts_metrics = _metrics_from_scores(ts, val_label_idx)
-        ts_sem = _group_metrics_from_scores(ts, val_label_idx, sticker_group_ids)
         media_bd = per_media_metrics(score_matrix, val_label_idx, val_rows, sticker_ids, sticker_group_ids)
-        return {
+        result = {
             "metrics": metrics,
             "semantic_metrics": semantic,
-            "fused_metrics": fused_metrics,
-            "fused_semantic_metrics": fused_sem,
-            "two_stage_metrics": ts_metrics,
-            "two_stage_semantic_metrics": ts_sem,
             "per_media": media_bd,
             "sample_count": len(val_rows),
-        }, bank
+        }
+        if collect_examples:
+            result["examples"] = sample_predictions(
+                score_matrix,
+                val_rows,
+                val_label_idx,
+                sticker_ids,
+                sticker_group_ids,
+                limit=args.log_samples,
+                top_k=args.log_top_k,
+            )
+        return result, bank
 
-    results_dir = MULTISTICKER_ROOT / "results"
+    results_dir = Path(args.results_dir)
     results_dir.mkdir(parents=True, exist_ok=True)
+    log_dir = Path(args.log_dir)
+    log_dir.mkdir(parents=True, exist_ok=True)
     out_name = f"am_{args.tuning_mode}_{args.memory_strategy}_{args.run_name}"
+    epoch_jsonl_path = log_dir / f"{out_name}_epochs.jsonl"
+    history_csv_path = results_dir / f"{out_name}_history.csv"
+    plot_path = results_dir / f"{out_name}_history.png"
 
     for epoch in range(1, args.epochs + 1):
+        epoch_start_time = time.time()
         if use_image_lora:
             print(f"[am] epoch {epoch}: re-encoding image bank (no-grad bank; positives re-encoded per batch)", flush=True)
             with torch.no_grad():
@@ -382,21 +590,34 @@ def main():
             loss.backward()
             optimizer.step()
             losses.append(float(loss.item()))
-            if step_start // B % 50 == 0:
-                print(f"[am] epoch {epoch} step {step_start//B} loss={loss.item():.4f}", flush=True)
+            step_index = step_start // B
+            if args.log_every > 0 and step_index % args.log_every == 0:
+                seen = min(step_start + len(bi), train_n)
+                elapsed = max(1e-6, time.time() - epoch_start_time)
+                print(
+                    f"[am] epoch {epoch} step {step_index} "
+                    f"seen={seen}/{train_n} loss={loss.item():.4f} "
+                    f"avg_loss={float(np.mean(losses)):.4f} samples/s={seen / elapsed:.1f}",
+                    flush=True,
+                )
 
-        val_result, _ = evaluate(precomputed_bank=image_bank if use_image_lora else None)
+        val_result, _ = evaluate(precomputed_bank=image_bank if use_image_lora else None, collect_examples=True)
+        epoch_seconds = time.time() - epoch_start_time
         history.append({
             "epoch": epoch,
             "train_loss": round(float(np.mean(losses)), 4),
-            "val_p@1": val_result["metrics"]["p@1"],
-            "val_p@5": val_result["metrics"]["p@5"],
-            "val_p@30": val_result["metrics"]["p@30"],
-            "val_group_p@30": val_result["semantic_metrics"]["p@30"],
-            "val_two_stage_group_p@30": val_result["two_stage_semantic_metrics"]["p@30"],
+            "val_recall@1": val_result["metrics"]["recall@1"],
+            "val_recall@5": val_result["metrics"]["recall@5"],
+            "val_recall@30": val_result["metrics"]["recall@30"],
+            "val_group_recall@30": val_result["semantic_metrics"]["recall@30"],
+            "epoch_seconds": round(epoch_seconds, 2),
+            "train_samples_per_second": round(train_n / max(epoch_seconds, 1e-6), 2),
         })
         print(f"[am] epoch {epoch} summary {history[-1]}", flush=True)
-        score = val_result["two_stage_semantic_metrics"]["p@30"]
+        print("[am] metric history\n" + format_metric_table(history), flush=True)
+        print("[am] per-media validation\n" + format_per_media(val_result["per_media"]), flush=True)
+        print_sample_predictions(val_result.get("examples", []))
+        score = val_result["semantic_metrics"]["recall@30"]
         if score > best_score:
             best_score = score
             best_state = {
@@ -417,15 +638,36 @@ def main():
             "media_summary": {"sticker_bank_size": len(sticker_ids), "supported_media": list(config.data.supported_media)},
             "training_history": history,
             "val": val_result,
-            "best_val_two_stage_group_p@30": best_score,
+            "best_val_group_recall@30": best_score,
             "partial": epoch < args.epochs,
         }
+        append_jsonl(
+            epoch_jsonl_path,
+            {
+                "mode": args.tuning_mode,
+                "memory_strategy": args.memory_strategy,
+                "run_name": args.run_name,
+                "epoch": epoch,
+                "history": history[-1],
+                "val_metrics": val_result["metrics"],
+                "val_semantic_metrics": val_result["semantic_metrics"],
+                "per_media": val_result["per_media"],
+                "examples": val_result.get("examples", []),
+            },
+        )
+        write_history_csv(history_csv_path, history)
+        if args.plot_history:
+            maybe_plot_history(plot_path, history)
         save_json(ckpt_results, str(results_dir / f"{out_name}.json"))
         if best_state is not None:
             torch.save(best_state, str(results_dir / f"{out_name}.pt"))
-        print(f"[am] epoch {epoch} checkpoint saved (best_score={best_score:.4f})", flush=True)
+        print(
+            f"[am] epoch {epoch} checkpoint saved "
+            f"(best_score={best_score:.4f}, epoch_log={epoch_jsonl_path}, history_csv={history_csv_path})",
+            flush=True,
+        )
 
-    final_val, _ = evaluate()
+    final_val, _ = evaluate(collect_examples=True)
 
     results = {
         "mode": args.tuning_mode,
@@ -441,7 +683,12 @@ def main():
         "media_summary": {"sticker_bank_size": len(sticker_ids), "supported_media": list(config.data.supported_media)},
         "training_history": history,
         "val": final_val,
-        "best_val_two_stage_group_p@30": best_score,
+        "best_val_group_recall@30": best_score,
+        "artifacts": {
+            "epoch_jsonl": str(epoch_jsonl_path),
+            "history_csv": str(history_csv_path),
+            "history_plot": str(plot_path) if args.plot_history else "",
+        },
     }
     save_json(results, str(results_dir / f"{out_name}.json"))
     if best_state is not None:

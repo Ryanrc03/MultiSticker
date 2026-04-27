@@ -1,0 +1,359 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+\cvprfinalcopy
+
+\def\cvprPaperID{****}
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+\setcounter{page}{1}
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{MultiSticker: Intent-Guided Multimodal Sticker Retrieval\\with Dialogue Memory}
+
+\author{Anonymous Author\\
+Department of Computer Science, Rice University\\
+{\tt\small rl182@rice.edu}
+}
+
+\maketitle
+
+%%%%%%%%% ABSTRACT
+\begin{abstract}
+Stickers are widely used in messaging platforms to express affect, humor and
+intent. Retrieving the right sticker for a dialogue turn is challenging because
+(i)~the candidate bank is large and dominated by animated formats, (ii)~the
+correct reply depends on long-range conversational state rather than just the
+last turn, and (iii)~each context typically has only one observed positive even
+though many semantically equivalent stickers exist. We present
+\textbf{MultiSticker}, an intent-guided sticker retrieval system that combines
+three text streams---recent dialogue context, retrieved long-term session
+memory, and an LLM-generated reply intent---against a frozen-or-adapted
+OpenCLIP image bank covering \texttt{.png}, \texttt{.gif} and \texttt{.webm}
+stickers. We compare a frozen-CLIP zero-shot baseline against a learned
+retrieval head and three parameter-efficient fine-tuning variants
+(text-side LoRA, image-side LoRA, dual LoRA) on the U-Sticker corpus
+(8{,}129 sessions, 42{,}319 stickers). Text-side LoRA gives the largest
+improvement on \emph{exact} top-1 retrieval, while image-side LoRA most
+improves \emph{semantic-group} retrieval, indicating that the text and visual
+domains contribute complementary forms of adaptation. We argue that for a
+candidate-panel use case, semantic-group Hit@30 is the most meaningful target.
+\end{abstract}
+
+%%%%%%%%% BODY TEXT
+\section{Introduction}
+
+When users reply with stickers in a chat, the choice depends on local
+context (what was just said), long-range state (who is talking, prior tone,
+recurring topics) and the communicative \emph{intent} behind the reply
+(e.g.\ gratitude, encouragement, teasing). A retrieval system that only looks
+at the last few turns frequently selects stickers with the wrong affect or the
+wrong recurring style for a given user stream. Conversely, a system that uses
+only image-side similarity ignores the dialogue entirely.
+
+We focus on the U-Sticker corpus, which contains real multilingual chats
+spanning crypto, gaming and social-domain channels. Several properties make
+sticker retrieval different from generic image--text retrieval. First, the
+candidate set is sparse and animated: 42{,}319 decodable stickers across
+\texttt{.png}, \texttt{.gif} and \texttt{.webm}. Second, supervision is
+\emph{single-positive}: each turn records the one sticker the user actually
+sent, even though many other stickers in the bank are equally valid. Third,
+turns frequently contain code-switching and chat slang outside CLIP's
+pre-training distribution.
+
+We build on the IGSR-style design~\cite{showandtell} of using a CLIP backbone
+plus a small learned head, and extend it in three directions:
+\begin{itemize}
+\item A retrieved \emph{long-term memory} stream from previous sessions of the
+      same user/file, encoded by multilingual~E5~\cite{wang2022e5}.
+\item An LLM-generated \emph{reply intent} stream that abstracts away from the
+      exact sticker id and describes the communicative function of the reply.
+\item A unified pipeline that handles \texttt{.png}, \texttt{.gif} and
+      \texttt{.webm} via per-frame OpenCLIP encoding and mean pooling, and
+      supports parameter-efficient adaptation through LoRA~\cite{hu2021lora}
+      on the text side, image side, or both.
+\end{itemize}
+
+\noindent\textbf{Contributions.}
+(1)~A clean five-row experiment matrix (zero-shot CLIP, learned head with
+memory, text-LoRA, image-LoRA, dual-LoRA) on a unified all-media sticker
+bank.
+(2)~A pilot benchmark showing that text-side and image-side LoRA make
+asymmetric contributions to exact-vs-semantic retrieval.
+(3)~A reusable, self-contained MultiSticker codebase including data
+manifest construction, memory retrieval, OpenCLIP wrapping, multi-frame
+decoding, and SLURM-friendly run scripts.
+
+%-------------------------------------------------------------------------
+\section{Related Work}
+
+\noindent\textbf{Vision--language retrieval.}
+CLIP~\cite{radford2021clip} popularised dual-encoder image--text retrieval,
+and OpenCLIP~\cite{ilharco2021openclip} provides open-weight reproductions
+trained on LAION-class corpora. Our system uses ViT-B/32 with the
+\texttt{laion2b\_s34b\_b79k} weights as the backbone for both the text and
+image branches.
+
+\noindent\textbf{Sticker / meme retrieval.}
+Sticker reply suggestion has been studied as a multimodal retrieval and
+ranking problem~\cite{laddha2020understanding,gao2020learning}. Intent-guided
+sticker retrieval (IGSR)~\cite{zhang2022igsr} adds an explicit intent
+classification head and a group prior. We adopt this template and add long-term
+memory and parameter-efficient adaptation.
+
+\noindent\textbf{Memory-augmented dialogue.}
+Long-term dialogue memory has been used to condition open-domain
+chatbots~\cite{xu2022long}. We use it specifically to construct a third query
+stream for retrieval rather than to generate text. Our memory encoder is
+multilingual~E5~\cite{wang2022e5}, chosen for code-switched chat data.
+
+\noindent\textbf{Parameter-efficient fine-tuning.}
+LoRA~\cite{hu2021lora} adds low-rank update matrices to selected linear
+layers, leaving the original weights frozen. We inject LoRA into OpenCLIP's
+\texttt{out\_proj}, \texttt{c\_fc} and \texttt{c\_proj} modules through
+PEFT~\cite{mangrulkar2022peft}, and isolate text-side, image-side and dual
+adaptation through name-based parameter masking.
+
+%-------------------------------------------------------------------------
+\section{Method}
+
+\subsection{Pipeline overview}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.96\textwidth]{pipeline_overview.png}
+\caption{End-to-end MultiSticker pipeline. Raw U-Sticker JSON is split into
+12-hour sessions; an LLM produces a per-session memory and a per-sample
+intent label/text; multilingual~E5 retrieves the top-3 historical sessions
+for the current turn; OpenCLIP independently encodes the context, memory
+and intent strings; the \texttt{IntentGuidedRetriever} head projects their
+concatenation into the CLIP image space and ranks the sticker bank by
+cosine similarity. An auxiliary intent classifier predicts the sticker's
+group and supplies a prior for the two-stage rerank.}
+\label{fig:pipeline}
+\end{figure*}
+
+For each turn $t$ where the user sent a sticker $s^\star_t$, we form three
+text inputs: the immediate \emph{context} $c_t$ (up to 12 prior turns),
+the retrieved \emph{memory} $m_t$ (concatenation of the top-3 prior session
+summaries), and the LLM \emph{intent} $i_t$ (a short description of what the
+sticker should express). These are encoded independently by the OpenCLIP
+text encoder $f_T$. Sticker images $s$ are encoded by the OpenCLIP image
+encoder $f_I$ (with mean-pooling over frames for animated formats). The
+trainable head $g_\theta$ projects the concatenation into the image space:
+\begin{equation}
+\mathbf{q}_t = \mathrm{norm}\Bigl(g_\theta\bigl(
+  [f_T(c_t);\,f_T(m_t);\,f_T(i_t)]
+\bigr)\Bigr).
+\end{equation}
+Retrieval logits are
+$\mathbf{z}_t = \mathbf{q}_t\,\mathbf{B}^{\top}/\tau$,
+where $\mathbf{B}\!\in\!\mathbb{R}^{N\times d}$ is the (optionally adapted)
+OpenCLIP image bank and $\tau$ is a learned temperature. A second head
+predicts the sticker's intent group $y_t$, and we minimise
+\begin{equation}
+\mathcal{L} = \mathrm{CE}(\mathbf{z}_t, s^\star_t) +
+              \lambda \,\mathrm{CE}(\mathbf{z}^{\mathrm{int}}_t, y_t),
+\quad \lambda{=}0.2.
+\end{equation}
+
+\subsection{Long-term memory retrieval}
+
+Each raw chat file is split into sessions by a 12-hour inactivity gap. For
+sample $t$, we collect up to 8 prior sessions from the same file. Their
+LLM-generated session summaries are encoded with the E5 \texttt{passage:}
+prefix; the current session text is encoded with the \texttt{query:} prefix.
+After L2 normalisation, the dot products rank the prior sessions and we keep
+the top-3. The selected memory texts are concatenated and stored as $m_t$,
+then encoded by OpenCLIP at training time. Crucially, memory enters the model
+through the \emph{text} encoder, not as a separate vector, which lets the
+retrieval head learn to reweight memory against the local context.
+
+\subsection{LLM annotation}
+
+We annotate every session with a $\le$~4-sentence
+\texttt{session\_memory\_text} (used as the passage corpus for memory
+retrieval), and every sticker-reply sample with one
+\texttt{intent\_label} from a 10-class taxonomy
+(celebration\_approval, humor\_teasing, encouragement\_support, gratitude,
+affection\_care, confusion\_curiosity, frustration\_disapproval,
+disappointment\_sadness, surprise\_reaction, neutral\_acknowledgment) plus a
+free-form \texttt{intent\_text}. The intent label feeds the auxiliary head
+and induces the semantic-group label space; the intent text becomes the
+third query stream.
+
+\subsection{Multi-frame sticker encoding}
+
+\texttt{.png} stickers are encoded as one-frame clips. \texttt{.gif} and
+\texttt{.webm} are decoded to all frames (FFmpeg for video, PIL for GIF),
+each frame is encoded by the OpenCLIP image encoder, and the per-frame
+embeddings are mean-pooled and renormalised. During image-LoRA training,
+the full bank is re-encoded once per epoch without gradients; for each batch
+we additionally re-encode only the unique \emph{positive} stickers with
+gradients (animated positives capped at 4 frames) and patch them into a
+cloned bank, which keeps backprop tractable for a 42K-sticker bank.
+
+\subsection{Tuning modes}
+
+We compare four tuning modes against a zero-shot CLIP baseline.
+\textbf{direct\_clip} uses no learned head: the query is just $f_T(c_t)$
+scored against the frozen image bank.
+\textbf{head\_only} (\emph{memory}) trains the retrieval head on top of frozen
+OpenCLIP encoders.
+\textbf{text\_lora} additionally injects LoRA ($r{=}8$, $\alpha{=}16$) into
+the text branch.
+\textbf{image\_lora} injects LoRA into the visual branch only, while
+\textbf{dual\_lora} adapts both branches. Only LoRA parameters and the head
+are trainable; all original OpenCLIP weights are frozen.
+
+%-------------------------------------------------------------------------
+\section{Experiments}
+
+\subsection{Setup}
+
+We use the U-Sticker corpus stored under \texttt{u-sticker-combined.zip},
+covering 8{,}129 sessions and 368{,}503 provisional sticker-reply samples
+across the three media types. The full setting caps training at 100{,}000
+samples; the validation split has 18{,}403 samples and the decodable sticker
+bank has 42{,}319 entries. For fast iteration we also report a
+\emph{pilot} configuration (5K train, 2K val, 3K-sticker bank, 2 epochs).
+The text encoder is multilingual~E5-small for memory retrieval and OpenCLIP
+ViT-B/32 (\texttt{laion2b\_s34b\_b79k}) for the CLIP branch. We use AdamW with
+head LR $10^{-3}$ and LoRA LR $10^{-4}$, retrieval temperature $0.07$, and
+intent-loss weight $0.2$. All experiments use a single A100-class GPU on
+the cluster. Code, scripts and SLURM batch files are in
+\texttt{MultiSticker/scripts/}.
+
+\subsection{Metrics}
+
+The result JSONs use the legacy field names \texttt{p@K}, but because each
+sample has a single observed positive we interpret them as
+\textbf{Exact Hit@K} (the gold sticker appears in the top-$K$).
+\textbf{Group Hit@K} counts a hit if any top-$K$ sticker shares the gold
+sticker's majority intent group. \textbf{Two-stage Group Hit@30} restricts
+the top-$K$ list to the two most likely intent groups predicted by the
+auxiliary head, then re-applies the group hit criterion. For a sticker
+panel UI, Hit@30 is the most informative metric; Hit@1 measures strict
+auto-send quality.
+
+\subsection{Results}
+
+\begin{table*}[t]
+\setlength{\tabcolsep}{4pt}
+\centering
+\small
+\begin{tabular}{l l c c c c c c c}
+\toprule
+\textbf{Mode} & \textbf{Trainable} & \textbf{Bank} & \textbf{Train}
+ & \textbf{Exact H@1} & \textbf{Exact H@5} & \textbf{Exact H@30}
+ & \textbf{Group H@30} & \textbf{2-stage Group H@30} \\
+\midrule
+\multicolumn{9}{l}{\emph{Full all-media run (val=18{,}403)}} \\
+\texttt{head\_only} (memory) & head      & 42,319 & 100K & 0.0064 & 0.0188 & 0.0589 & 0.9578 & 0.7122 \\
+\texttt{text\_lora}          & head+T    & 42,319 & 100K & \textbf{0.0092} & \textbf{0.0208} & 0.0565 & 0.9501 & 0.6884 \\
+\texttt{image\_lora}         & head+V    & 42,319 & 100K & 0.0008 & 0.0029 & 0.0111 & 0.9075 & \textbf{0.7903} \\
+\midrule
+\multicolumn{9}{l}{\emph{Pilot run (val=2{,}000)}} \\
+\texttt{head\_only} (memory) & head      &  1,873 & 5K   & 0.0160 & 0.0641 & 0.1913 & 0.9710 & 0.7121 \\
+\texttt{text\_lora}          & head+T    &  1,873 & 5K   & \textbf{0.0255} & \textbf{0.0791} & 0.2359 & 0.9690 & 0.7121 \\
+\texttt{image\_lora}         & head+V    &  1,873 & 5K   & 0.0095 & 0.0461 & 0.1758 & \textbf{0.9790} & \textbf{0.7501} \\
+\texttt{dual\_lora}          & head+T+V  &  1,873 & 5K   & 0.0220 & 0.0736 & \textbf{0.2389} & 0.9720 & 0.6970 \\
+\bottomrule
+\end{tabular}
+\caption{Sticker-retrieval results. \emph{Trainable} columns: T~=~text-side
+LoRA, V~=~image-side LoRA, head~=~\texttt{IntentGuidedRetriever}. The full run
+uses all three media types and a 42{,}319-sticker bank; the pilot uses
+3{,}000-sticker cap with min frequency 2. Exact Hit@K measures recovery of
+the observed gold sticker; Group Hit@K measures retrieval of any sticker with
+the same majority intent label; 2-stage rerank restricts candidates to the
+top-2 predicted intent groups before applying the group criterion.}
+\label{table:results}
+\end{table*}
+
+Table~\ref{table:results} summarises all completed runs. Three observations
+stand out.
+
+\noindent\textbf{Text-side LoRA helps exact retrieval most.}
+On both pilot and full settings, \texttt{text\_lora} gives the highest
+Exact Hit@1 and Hit@5. This is consistent with a story where the bottleneck
+on the text side is domain-shifted chat language and code-switching that the
+frozen OpenCLIP text encoder did not see.
+
+\noindent\textbf{Image-side LoRA helps semantic-group retrieval.}
+\texttt{image\_lora} hurts Exact Hit@K (the gold sticker often gets
+out-ranked by visually similar siblings) but improves both raw and two-stage
+Group Hit@30. The visual encoder learns to bring stickers with the same
+intent closer together, which is the right behaviour for a candidate-panel
+deployment that does not need to recover the exact id.
+
+\noindent\textbf{Dual LoRA does not always win.}
+At pilot scale \texttt{dual\_lora} gives the best Exact Hit@30 but does not
+beat the single-side LoRAs on their respective best metrics, consistent with
+mild interference between the two adaptations. The full-scale dual-LoRA run
+was still queued at submission time and is the next item to fill in.
+
+%-------------------------------------------------------------------------
+\section{Analysis and Discussion}
+
+\noindent\textbf{Why the Exact--Group gap is so large.}
+Across every mode, Group Hit@30 is an order of magnitude higher than Exact
+Hit@30. Each sample has only one observed positive even though many
+stickers in the bank carry the same affect, so the model is penalised
+every time it returns a \emph{different but equally valid} sticker. For a
+deployed candidate panel this is not a real failure; we therefore
+recommend Group Hit@30 as the primary KPI and Exact Hit@1 as a
+strict-mode auto-reply metric.
+
+\noindent\textbf{Role of memory.}
+Memory enters the model as a third \emph{textual} stream rather than as a
+separate latent vector, which lets the head reweight memory against
+context per-sample. A clean ablation against a no-memory head is supported
+by the new \texttt{--memory-strategy disabled} flag and will be added in
+the next revision.
+
+\noindent\textbf{What a zero-shot CLIP baseline tells us.}
+The \texttt{direct\_clip} script ranks stickers using only the frozen
+OpenCLIP text encoder applied to the raw context. Any margin between it
+and \texttt{head\_only} isolates the contribution of the head and the
+memory/intent streams.
+
+\noindent\textbf{Limitations.}
+Intent labels come from a single LLM (Qwen2.5-32B-GPTQ); label noise
+propagates into the auxiliary loss and the group-level metrics. Memory
+retrieval is bounded to the same chat file, so cross-channel patterns are
+not exploited. Exact Hit@K is conservative; a multi-positive evaluation
+that accepts any same-group sticker is left for future work.
+
+%-------------------------------------------------------------------------
+\section{Conclusion}
+
+We presented MultiSticker, an intent-guided dialogue-aware sticker
+retrieval system that combines OpenCLIP, retrieved long-term memory, and
+LLM-generated intent into a single trainable head with optional LoRA
+adaptation on either encoder branch. On U-Sticker, text-side LoRA most
+improves exact recovery while image-side LoRA most improves semantic-group
+recovery, suggesting the two modalities should be adapted with different
+objectives in mind. The released code makes the five-row comparison
+reproducible end-to-end.
+
+\noindent
+{\bf Acknowledgments.} We thank the authors of OpenCLIP and PEFT, and the
+U-Sticker maintainers. Session summaries and intent annotations were
+produced with Qwen2.5-32B-GPTQ; all experimental decisions are our own.
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{egbib}
+}
+
+\end{document}

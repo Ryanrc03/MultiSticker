@@ -19,6 +19,7 @@ from pathlib import Path
 import numpy as np
 
 MULTISTICKER_ROOT = Path("/home/rl182/dl/V2L/Project-meme/MultiSticker")
+SCRATCH_ARTIFACT_ROOT = Path("/scratch/rl182/mutlisticker")
 VENDOR_ROOT = Path("/home/rl182/dl/V2L/Project-meme") / ".vendor"
 if VENDOR_ROOT.exists() and str(VENDOR_ROOT) not in sys.path:
     sys.path.append(str(VENDOR_ROOT))
@@ -39,6 +40,7 @@ from src.multisticker import (  # noqa: E402
     prepare_manifest,
 )
 from src.utils import save_json  # noqa: E402
+from embedding_cache import cache_path, describe_cache, digest_rows, digest_stickers, load_npz, save_npz  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
@@ -61,6 +63,9 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument("--infer-batch-size", type=int, default=64)
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--results-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "results"))
+    p.add_argument("--embedding-cache-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "embedding_cache"), help="Directory for reusable frozen CLIP embeddings.")
+    p.add_argument("--no-embedding-cache", action="store_true", help="Disable disk cache for frozen direct CLIP embeddings.")
     return p.parse_args()
 
 
@@ -110,6 +115,11 @@ def main():
     _set_cache_env(config)
     _seed_everything(args.seed)
     device = _resolve_device(config)
+    embedding_cache_dir = Path(args.embedding_cache_dir) if args.embedding_cache_dir else SCRATCH_ARTIFACT_ROOT / "embedding_cache"
+    use_embedding_cache = not args.no_embedding_cache
+    if use_embedding_cache:
+        embedding_cache_dir.mkdir(parents=True, exist_ok=True)
+        print(f"[direct_clip] embedding_cache={embedding_cache_dir}", flush=True)
     print(f"[direct_clip] query_mode={args.query_mode} run={args.run_name} device={device}", flush=True)
 
     manifest = prepare_manifest(config=config, force_rebuild=args.force_rebuild)
@@ -134,9 +144,30 @@ def main():
         all_rows_by_sticker[r["label_id"]].append(r)
     sticker_group_ids = _build_sticker_groups(sticker_ids, train_rows, all_rows_by_sticker)
 
-    print("[direct_clip] encoding sticker image bank", flush=True)
     image_paths_list = [sticker_paths[s] for s in sticker_ids]
-    img_np = clip_encoder.encode_images(image_paths_list, batch_size=config.model.infer_batch_size)
+    image_cache = None
+    if use_embedding_cache:
+        image_cache = cache_path(
+            embedding_cache_dir,
+            "frozen_image_bank",
+            {
+                "clip_model_name": config.model.clip_model_name,
+                "clip_pretrained": config.model.clip_pretrained,
+                "stickers_digest": digest_stickers(sticker_ids, image_paths_list),
+            },
+        )
+        cached = load_npz(image_cache)
+    else:
+        cached = None
+    if cached is not None:
+        print(f"[direct_clip] loaded sticker image bank from {describe_cache(image_cache)}", flush=True)
+        img_np = cached["image"]
+    else:
+        print("[direct_clip] encoding sticker image bank", flush=True)
+        img_np = clip_encoder.encode_images(image_paths_list, batch_size=config.model.infer_batch_size)
+        if image_cache is not None:
+            save_npz(image_cache, image=img_np)
+            print(f"[direct_clip] saved sticker image bank to {describe_cache(image_cache)}", flush=True)
 
     def query_text(row: dict) -> str:
         if args.query_mode == "clip_context":
@@ -146,9 +177,31 @@ def main():
         else:
             return row["context_text"] + " " + row.get("memory_text", "") + " " + row.get("intent_text", "")
 
-    print(f"[direct_clip] encoding {len(val_rows)} val queries", flush=True)
     query_texts = [query_text(r) for r in val_rows]
-    query_np = clip_encoder.encode_texts(query_texts, batch_size=config.model.infer_batch_size)
+    query_cache = None
+    if use_embedding_cache:
+        query_cache = cache_path(
+            embedding_cache_dir,
+            "direct_clip_query",
+            {
+                "clip_model_name": config.model.clip_model_name,
+                "clip_pretrained": config.model.clip_pretrained,
+                "query_mode": args.query_mode,
+                "rows_digest": digest_rows(val_rows, ["context_text", "memory_text", "intent_text"]),
+            },
+        )
+        cached = load_npz(query_cache)
+    else:
+        cached = None
+    if cached is not None:
+        print(f"[direct_clip] loaded {len(val_rows)} val query embeddings from {describe_cache(query_cache)}", flush=True)
+        query_np = cached["query"]
+    else:
+        print(f"[direct_clip] encoding {len(val_rows)} val queries", flush=True)
+        query_np = clip_encoder.encode_texts(query_texts, batch_size=config.model.infer_batch_size)
+        if query_cache is not None:
+            save_npz(query_cache, query=query_np)
+            print(f"[direct_clip] saved val query embeddings to {describe_cache(query_cache)}", flush=True)
     val_label_idx = np.asarray([r["label_index"] for r in val_rows], dtype=np.int64)
 
     # Pure cosine similarity (both sides already L2-normalised by encoders)
@@ -181,7 +234,7 @@ def main():
         },
     }
 
-    results_dir = MULTISTICKER_ROOT / "results"
+    results_dir = Path(args.results_dir)
     results_dir.mkdir(parents=True, exist_ok=True)
     out_name = f"direct_clip_{args.query_mode}_{args.run_name}"
     save_json(results, str(results_dir / f"{out_name}.json"))
