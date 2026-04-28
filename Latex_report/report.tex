@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{booktabs}
+\usepackage{xcolor}
 
 \usepackage[breaklinks=true,bookmarks=false]{hyperref}
 
@@ -14,6 +15,8 @@
 
 \def\cvprPaperID{****}
 \def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+\newcommand{\best}[1]{\textcolor{red!75!black}{\textbf{#1}}}
+\newcommand{\second}[1]{\textcolor{blue!75!black}{\textbf{#1}}}
 
 \setcounter{page}{1}
 \begin{document}
@@ -43,11 +46,11 @@ OpenCLIP image bank covering \texttt{.png}, \texttt{.gif} and \texttt{.webm}
 stickers. We compare a frozen-CLIP zero-shot baseline against a learned
 retrieval head and three parameter-efficient fine-tuning variants
 (text-side LoRA, image-side LoRA, dual LoRA) on the U-Sticker corpus
-(8{,}129 sessions, 42{,}319 stickers). Text-side LoRA gives the largest
-improvement on \emph{exact} top-1 retrieval, while image-side LoRA most
-improves \emph{semantic-group} retrieval, indicating that the text and visual
-domains contribute complementary forms of adaptation. We argue that for a
-candidate-panel use case, semantic-group Hit@30 is the most meaningful target.
+(8{,}129 sessions). On the completed medium-scale run, dual LoRA gives the
+best trained-model semantic Group@5/10 performance, while image-side LoRA
+gives the strongest exact top-5 ranking. We argue that for a chat sticker
+panel, semantic Group@5/10 is the right north-star metric and exact retrieval
+should be treated as a secondary within-group ranking diagnostic.
 \end{abstract}
 
 %%%%%%%%% BODY TEXT
@@ -88,8 +91,9 @@ plus a small learned head, and extend it in three directions:
 (1)~A clean five-row experiment matrix (zero-shot CLIP, learned head with
 memory, text-LoRA, image-LoRA, dual-LoRA) on a unified all-media sticker
 bank.
-(2)~A pilot benchmark showing that text-side and image-side LoRA make
-asymmetric contributions to exact-vs-semantic retrieval.
+(2)~A medium-scale benchmark showing that dual LoRA gives the most balanced
+group-level retrieval, while image-side LoRA is strongest for exact top-5
+ranking.
 (3)~A reusable, self-contained MultiSticker codebase including data
 manifest construction, memory retrieval, OpenCLIP wrapping, multi-frame
 decoding, and SLURM-friendly run scripts.
@@ -221,118 +225,165 @@ are trainable; all original OpenCLIP weights are frozen.
 
 \subsection{Setup}
 
-We use the U-Sticker corpus stored under \texttt{u-sticker-combined.zip},
-covering 8{,}129 sessions and 368{,}503 provisional sticker-reply samples
-across the three media types. The full setting caps training at 100{,}000
-samples; the validation split has 18{,}403 samples and the decodable sticker
-bank has 42{,}319 entries. For fast iteration we also report a
-\emph{pilot} configuration (5K train, 2K val, 3K-sticker bank, 2 epochs).
-The text encoder is multilingual~E5-small for memory retrieval and OpenCLIP
-ViT-B/32 (\texttt{laion2b\_s34b\_b79k}) for the CLIP branch. We use AdamW with
-head LR $10^{-3}$ and LoRA LR $10^{-4}$, retrieval temperature $0.07$, and
-intent-loss weight $0.2$. All experiments use a single A100-class GPU on
-the cluster. Code, scripts and SLURM batch files are in
-\texttt{MultiSticker/scripts/}.
+We report the completed \texttt{rebuild\_medium} setting. The manifest is
+constructed from 8{,}129 sessions and 368{,}503 provisional sticker-reply
+samples. After frequency filtering and media decoding, the experiment uses
+30{,}000 training samples, 5{,}000 validation samples (4{,}998 after media
+filtering), and a 6{,}758-sticker bank over \texttt{.png}, \texttt{.gif}, and
+\texttt{.webm}. All trainable models are optimized for 5 epochs with AdamW.
+The retrieval head uses batch size 256; LoRA runs use batch size 96; inference
+batch size is 256. The CLIP backbone is OpenCLIP ViT-B/32 with
+\texttt{laion2b\_s34b\_b79k} weights. The retrieval temperature is $0.07$,
+hidden dimension is 512, dropout is $0.1$, the auxiliary intent-loss weight
+is $0.2$, and the intent vocabulary is clustered into 64 groups. LoRA uses
+rank $r{=}8$, $\alpha{=}16$, dropout $0.05$, LoRA LR $10^{-4}$, and head LR
+$10^{-3}$.
+
+\noindent\textbf{Compared models.}
+We evaluate five rows. \texttt{direct\_clip} is a zero-shot baseline with no
+learned parameters. \texttt{head\_only} freezes OpenCLIP and trains only the
+retrieval and intent heads. \texttt{text\_lora}, \texttt{image\_lora}, and
+\texttt{dual\_lora} train the head plus LoRA adapters on the text branch, the
+visual branch, or both branches respectively. This design isolates whether
+domain adaptation is more useful on chat text, sticker imagery, or the shared
+alignment geometry.
 
 \subsection{Metrics}
 
-The result JSONs use the legacy field names \texttt{p@K}, but because each
-sample has a single observed positive we interpret them as
-\textbf{Exact Hit@K} (the gold sticker appears in the top-$K$).
-\textbf{Group Hit@K} counts a hit if any top-$K$ sticker shares the gold
-sticker's majority intent group. \textbf{Two-stage Group Hit@30} restricts
-the top-$K$ list to the two most likely intent groups predicted by the
-auxiliary head, then re-applies the group hit criterion. For a sticker
-panel UI, Hit@30 is the most informative metric; Hit@1 measures strict
-auto-send quality.
+We evaluate retrieval at two granularities. The primary metric is
+\textbf{Group Hit@K}: a prediction is correct if any of the top-$K$ retrieved
+stickers belongs to the same semantic intent group as the logged sticker. This
+is the most faithful proxy for a chat sticker panel, where the interface shows
+5--10 plausible choices and the user mainly needs the right affect, tone, or
+communicative intent. We therefore treat \textbf{Group@5} and
+\textbf{Group@10} as the north-star metrics. As a secondary diagnostic, we
+also report \textbf{Exact Hit@K}, which requires recovering the single
+observed sticker id. Exact metrics measure within-group ranking quality, but
+are conservative because many unobserved stickers may be equally valid. All
+Hit@K metrics are higher-is-better.
 
 \subsection{Results}
 
 \begin{table*}[t]
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{3.5pt}
 \centering
-\small
+\scriptsize
 \begin{tabular}{l l c c c c c c c}
 \toprule
-\textbf{Mode} & \textbf{Trainable} & \textbf{Bank} & \textbf{Train}
- & \textbf{Exact H@1} & \textbf{Exact H@5} & \textbf{Exact H@30}
- & \textbf{Group H@30} & \textbf{2-stage Group H@30} \\
+\textbf{Model} & \textbf{Trainable}
+ & \textbf{Group@1}$\uparrow$ & \textbf{Group@5}$\uparrow$
+ & \textbf{Group@10}$\uparrow$ & \textbf{Group@30}$\uparrow$
+ & \textbf{Exact@5}$\uparrow$ & \textbf{Exact@30}$\uparrow$ & \textbf{MAP}$\uparrow$ \\
 \midrule
-\multicolumn{9}{l}{\emph{Full all-media run (val=18{,}403)}} \\
-\texttt{head\_only} (memory) & head      & 42,319 & 100K & 0.0064 & 0.0188 & 0.0589 & 0.9578 & 0.7122 \\
-\texttt{text\_lora}          & head+T    & 42,319 & 100K & \textbf{0.0092} & \textbf{0.0208} & 0.0565 & 0.9501 & 0.6884 \\
-\texttt{image\_lora}         & head+V    & 42,319 & 100K & 0.0008 & 0.0029 & 0.0111 & 0.9075 & \textbf{0.7903} \\
-\midrule
-\multicolumn{9}{l}{\emph{Pilot run (val=2{,}000)}} \\
-\texttt{head\_only} (memory) & head      &  1,873 & 5K   & 0.0160 & 0.0641 & 0.1913 & 0.9710 & 0.7121 \\
-\texttt{text\_lora}          & head+T    &  1,873 & 5K   & \textbf{0.0255} & \textbf{0.0791} & 0.2359 & 0.9690 & 0.7121 \\
-\texttt{image\_lora}         & head+V    &  1,873 & 5K   & 0.0095 & 0.0461 & 0.1758 & \textbf{0.9790} & \textbf{0.7501} \\
-\texttt{dual\_lora}          & head+T+V  &  1,873 & 5K   & 0.0220 & 0.0736 & \textbf{0.2389} & 0.9720 & 0.6970 \\
+\texttt{direct\_clip} & none
+ & 0.6335 & 0.8778 & \best{0.9084} & \best{0.9588} & 0.0012 & 0.0028 & 0.0013 \\
+\texttt{head\_only} & head
+ & \best{0.7933} & 0.8619 & 0.8780 & 0.9406 & 0.0296 & \second{0.1263} & 0.0282 \\
+\texttt{text\_lora} & head+T
+ & \second{0.7623} & 0.8661 & 0.8880 & 0.9420 & 0.0312 & 0.1190 & 0.0280 \\
+\texttt{image\_lora} & head+V
+ & 0.7063 & \second{0.8812} & 0.9044 & \second{0.9550} & \best{0.0376} & 0.1188 & \best{0.0302} \\
+\texttt{dual\_lora} & head+T+V
+ & 0.6275 & \best{0.8816} & \second{0.9064} & 0.9540 & \second{0.0326} & \best{0.1315} & \second{0.0286} \\
 \bottomrule
 \end{tabular}
-\caption{Sticker-retrieval results. \emph{Trainable} columns: T~=~text-side
-LoRA, V~=~image-side LoRA, head~=~\texttt{IntentGuidedRetriever}. The full run
-uses all three media types and a 42{,}319-sticker bank; the pilot uses
-3{,}000-sticker cap with min frequency 2. Exact Hit@K measures recovery of
-the observed gold sticker; Group Hit@K measures retrieval of any sticker with
-the same majority intent label; 2-stage rerank restricts candidates to the
-top-2 predicted intent groups before applying the group criterion.}
-\label{table:results}
+\caption{\textbf{Main \texttt{rebuild\_medium} results.} The north-star
+metrics are Group@5 and Group@10, matching a chat UI that displays a small
+panel of sticker candidates. Exact metrics are stricter single-positive
+diagnostics. \best{Red bold} marks the best method per column and
+\second{blue bold} marks the runner-up. T/V denote text/visual LoRA.}
+\label{table:medium-main}
 \end{table*}
 
-Table~\ref{table:results} summarises all completed runs. Three observations
-stand out.
+\begin{table*}[t]
+\setlength{\tabcolsep}{5pt}
+\centering
+\scriptsize
+\begin{tabular}{l l c c c c c}
+\toprule
+\textbf{Media} & \textbf{Model} & \textbf{Count}
+ & \textbf{Group@5}$\uparrow$ & \textbf{Group@10}$\uparrow$
+ & \textbf{Exact@5}$\uparrow$ & \textbf{Exact@30}$\uparrow$ \\
+\midrule
+PNG & \texttt{head\_only}  & 1{,}676 & 0.9141 & 0.9242 & 0.0197 & \best{0.1062} \\
+PNG & \texttt{text\_lora}  & 1{,}676 & 0.9206 & 0.9314 & \second{0.0286} & \second{0.0990} \\
+PNG & \texttt{image\_lora} & 1{,}676 & \second{0.9254} & \second{0.9391} & 0.0185 & 0.0752 \\
+PNG & \texttt{dual\_lora}  & 1{,}676 & \best{0.9320} & \best{0.9403} & \best{0.0304} & 0.0973 \\
+\midrule
+GIF & \texttt{head\_only}  & 2{,}284 & 0.8695 & 0.8870 & \second{0.0499} & 0.1935 \\
+GIF & \texttt{text\_lora}  & 2{,}284 & 0.8717 & 0.8971 & 0.0468 & 0.1843 \\
+GIF & \texttt{image\_lora} & 2{,}284 & \best{0.8927} & \second{0.9168} & \best{0.0670} & \second{0.1948} \\
+GIF & \texttt{dual\_lora}  & 2{,}284 & \second{0.8892} & \best{0.9177} & 0.0464 & \best{0.2062} \\
+\midrule
+WEBM & \texttt{head\_only}  & 1{,}038 & 0.7611 & 0.7832 & 0.0010 & 0.0106 \\
+WEBM & \texttt{text\_lora}  & 1{,}038 & 0.7659 & 0.7977 & 0.0010 & 0.0077 \\
+WEBM & \texttt{image\_lora} & 1{,}038 & \best{0.7842} & \second{0.8208} & \second{0.0039} & \best{0.0222} \\
+WEBM & \texttt{dual\_lora}  & 1{,}038 & \second{0.7832} & \best{0.8266} & \best{0.0058} & \best{0.0222} \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Per-media breakdown for trainable models.}
+Direct CLIP is omitted because its result artifact does not store per-media
+metrics. The group metrics are strongest and most stable in PNG/GIF, while
+WEBM remains the hardest exact-retrieval format.}
+\label{table:medium-media}
+\end{table*}
 
-\noindent\textbf{Text-side LoRA helps exact retrieval most.}
-On both pilot and full settings, \texttt{text\_lora} gives the highest
-Exact Hit@1 and Hit@5. This is consistent with a story where the bottleneck
-on the text side is domain-shifted chat language and code-switching that the
-frozen OpenCLIP text encoder did not see.
-
-\noindent\textbf{Image-side LoRA helps semantic-group retrieval.}
-\texttt{image\_lora} hurts Exact Hit@K (the gold sticker often gets
-out-ranked by visually similar siblings) but improves both raw and two-stage
-Group Hit@30. The visual encoder learns to bring stickers with the same
-intent closer together, which is the right behaviour for a candidate-panel
-deployment that does not need to recover the exact id.
-
-\noindent\textbf{Dual LoRA does not always win.}
-At pilot scale \texttt{dual\_lora} gives the best Exact Hit@30 but does not
-beat the single-side LoRAs on their respective best metrics, consistent with
-mild interference between the two adaptations. The full-scale dual-LoRA run
-was still queued at submission time and is the next item to fill in.
+Table~\ref{table:medium-main} and Table~\ref{table:medium-media} summarise
+the completed medium-scale run. The key result is that \texttt{dual\_lora}
+is the best trained model under the panel-recommendation objective: it wins
+overall Group@5 and is second only to the zero-shot baseline on Group@10.
+At the same time, \texttt{image\_lora} has the strongest exact top-5 ranking,
+which suggests that visual adaptation is especially useful for ordering
+near-duplicate stickers within a semantic group.
 
 %-------------------------------------------------------------------------
 \section{Analysis and Discussion}
 
-\noindent\textbf{Why the Exact--Group gap is so large.}
-Across every mode, Group Hit@30 is an order of magnitude higher than Exact
-Hit@30. Each sample has only one observed positive even though many
-stickers in the bank carry the same affect, so the model is penalised
-every time it returns a \emph{different but equally valid} sticker. For a
-deployed candidate panel this is not a real failure; we therefore
-recommend Group Hit@30 as the primary KPI and Exact Hit@1 as a
-strict-mode auto-reply metric.
+\noindent\textbf{Group retrieval is the right north star.}
+The most important deployment regime is not auto-sending a single sticker;
+it is filling a chat panel with 5--10 plausible choices. In this regime,
+recovering the \emph{semantic group} of the desired reply is more important
+than recovering the exact historical sticker id. The results support this
+framing: exact retrieval remains difficult for all methods, but Group@5 and
+Group@10 are already near the level required for a usable recommendation
+panel. Under this criterion, \texttt{dual\_lora} is the best trained model:
+it achieves the strongest Group@5 (0.8816) and the strongest trained-model
+Group@10 (0.9064). The zero-shot \texttt{direct\_clip} baseline slightly
+exceeds it on Group@10, but its exact ranking is nearly unusable, indicating
+that CLIP recognises coarse semantic neighborhoods while failing to
+distinguish the concrete sticker vocabulary.
 
-\noindent\textbf{Role of memory.}
-Memory enters the model as a third \emph{textual} stream rather than as a
-separate latent vector, which lets the head reweight memory against
-context per-sample. A clean ablation against a no-memory head is supported
-by the new \texttt{--memory-strategy disabled} flag and will be added in
-the next revision.
+\noindent\textbf{Exact metrics are secondary but still diagnostic.}
+Exact Hit@K should not be treated as the primary objective because U-Sticker
+contains only one logged positive per context. A different sticker with the
+same intent may be a perfectly good recommendation but is counted as wrong
+by Exact Hit@K. Still, exact metrics reveal how well a model orders siblings
+inside a group. Here \texttt{image\_lora} has the best Exact@5 and MAP,
+suggesting that visual adaptation improves fine-grained ordering among
+similar stickers. \texttt{dual\_lora}, meanwhile, has the best Exact@30,
+which is attractive for a two-stage system: first retrieve a semantically
+correct candidate pool, then rerank or diversify it for display.
 
-\noindent\textbf{What a zero-shot CLIP baseline tells us.}
-The \texttt{direct\_clip} script ranks stickers using only the frozen
-OpenCLIP text encoder applied to the raw context. Any margin between it
-and \texttt{head\_only} isolates the contribution of the head and the
-memory/intent streams.
+\noindent\textbf{Why LoRA helps different media differently.}
+The per-media table shows that GIF is the most responsive format to visual
+adaptation: \texttt{image\_lora} wins GIF Exact@5 and Group@5, while
+\texttt{dual\_lora} wins GIF Exact@30 and Group@10. This is intuitive:
+animated stickers encode much of their intent in character pose, motion, and
+style, so adapting the visual branch makes the embedding space more
+sticker-specific. PNG behaves differently. The frozen CLIP space already
+separates many static stickers well, so \texttt{head\_only} remains strong
+on PNG Exact@30, while \texttt{dual\_lora} gives the best PNG Group@5/10.
+WEBM remains the hardest exact-retrieval case; frame sampling and video
+compression likely erase cues needed to distinguish close variants.
 
-\noindent\textbf{Limitations.}
-Intent labels come from a single LLM (Qwen2.5-32B-GPTQ); label noise
-propagates into the auxiliary loss and the group-level metrics. Memory
-retrieval is bounded to the same chat file, so cross-channel patterns are
-not exploited. Exact Hit@K is conservative; a multi-positive evaluation
-that accepts any same-group sticker is left for future work.
+\noindent\textbf{Recommended retrieval design.}
+For a production-style sticker panel, the cleanest design is to use
+\texttt{dual\_lora} as the group-aware first-stage retriever and optimize
+the system around Group@5/10. Exact@5 and MAP should be tracked as secondary
+ranking signals, where \texttt{image\_lora} currently sets the strongest
+reference point. A future reranker can combine these strengths: use
+\texttt{dual\_lora} to guarantee semantic coverage, then apply a lightweight
+visual/textual reranker or diversity rule to choose the final 5--10 stickers.
 
 %-------------------------------------------------------------------------
 \section{Conclusion}
@@ -340,11 +391,13 @@ that accepts any same-group sticker is left for future work.
 We presented MultiSticker, an intent-guided dialogue-aware sticker
 retrieval system that combines OpenCLIP, retrieved long-term memory, and
 LLM-generated intent into a single trainable head with optional LoRA
-adaptation on either encoder branch. On U-Sticker, text-side LoRA most
-improves exact recovery while image-side LoRA most improves semantic-group
-recovery, suggesting the two modalities should be adapted with different
-objectives in mind. The released code makes the five-row comparison
-reproducible end-to-end.
+adaptation on either encoder branch. On the completed medium-scale U-Sticker
+run, dual LoRA is the strongest trained model for group-level panel
+recommendation, while image-side LoRA gives the best exact top-5 ordering.
+This supports a two-stage view of sticker retrieval: optimize the first stage
+for semantically correct 5--10 item panels, then use exact metrics as
+secondary diagnostics for fine-grained reranking. The released code makes the
+five-row comparison reproducible end-to-end.
 
 \noindent
 {\bf Acknowledgments.} We thank the authors of OpenCLIP and PEFT, and the
