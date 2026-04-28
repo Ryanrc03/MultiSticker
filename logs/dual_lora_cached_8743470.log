@@ -1,0 +1,2 @@
+[single_lora] START mode=dual_lora scale=medium run=rebuild_medium train_bs=96 infer_bs=256 cache=/scratch/rl182/mutlisticker/embedding_cache log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/dual_lora_retrieved_topk_rebuild_medium.log
+[single_lora] DONE mode=dual_lora run=rebuild_medium

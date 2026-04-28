@@ -1,0 +1,540 @@
+{
+  "mode": "head_only",
+  "memory_strategy": "retrieved_topk",
+  "run_name": "rebuild_medium",
+  "config": {
+    "data": {
+      "max_files": 0,
+      "session_gap_hours": 12.0,
+      "max_context_turns": 12,
+      "min_context_turns": 2,
+      "history_session_limit": 8,
+      "top_k_memories": 3,
+      "max_summary_turns": 6,
+      "max_text_chars": 180,
+      "train_ratio": 0.9,
+      "val_ratio": 0.1,
+      "test_ratio": 0.0,
+      "max_stickers": 8000,
+      "min_sticker_frequency": 2,
+      "max_train_samples": 30000,
+      "max_val_samples": 5000,
+      "max_test_samples": 0,
+      "supported_media": [
+        ".gif",
+        ".png",
+        ".webm"
+      ],
+      "memory_strategy": "retrieved_topk",
+      "seed": 42
+    },
+    "model": {
+      "clip_model_name": "ViT-B-32",
+      "clip_pretrained": "laion2b_s34b_b79k",
+      "memory_model_name": "intfloat/multilingual-e5-small",
+      "train_batch_size": 256,
+      "infer_batch_size": 256,
+      "epochs": 5,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "temperature": 0.07,
+      "hidden_dim": 512,
+      "dropout": 0.1,
+      "intent_clusters": 64,
+      "intent_loss_weight": 0.2,
+      "group_prior_alpha": 2.0,
+      "rerank_top_groups": 2
+    },
+    "lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "lora_lr": 0.0001,
+      "head_lr": 0.001
+    }
+  },
+  "dataset_summary": {
+    "session_count": 8129,
+    "supported_media_provisional_samples": 368503,
+    "full_train_size_before_cap": 181758,
+    "candidate_sticker_count": 7011,
+    "memory_strategy": "retrieved_topk",
+    "train_samples": 30000,
+    "val_samples": 5000,
+    "test_samples": 0
+  },
+  "media_summary": {
+    "sticker_bank_size": 6758,
+    "supported_media": [
+      ".gif",
+      ".png",
+      ".webm"
+    ]
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 8.0537,
+      "val_recall@1": 0.0054,
+      "val_recall@5": 0.015,
+      "val_recall@30": 0.0552,
+      "val_group_recall@30": 0.9206,
+      "epoch_seconds": 2.71,
+      "train_samples_per_second": 10616.46
+    },
+    {
+      "epoch": 2,
+      "train_loss": 7.5887,
+      "val_recall@1": 0.0114,
+      "val_recall@5": 0.0344,
+      "val_recall@30": 0.1034,
+      "val_group_recall@30": 0.9212,
+      "epoch_seconds": 2.63,
+      "train_samples_per_second": 10963.29
+    },
+    {
+      "epoch": 3,
+      "train_loss": 7.3876,
+      "val_recall@1": 0.0088,
+      "val_recall@5": 0.0286,
+      "val_recall@30": 0.1126,
+      "val_group_recall@30": 0.9384,
+      "epoch_seconds": 2.63,
+      "train_samples_per_second": 10948.14
+    },
+    {
+      "epoch": 4,
+      "train_loss": 7.2113,
+      "val_recall@1": 0.0116,
+      "val_recall@5": 0.0376,
+      "val_recall@30": 0.1405,
+      "val_group_recall@30": 0.9414,
+      "epoch_seconds": 2.65,
+      "train_samples_per_second": 10886.62
+    },
+    {
+      "epoch": 5,
+      "train_loss": 7.0296,
+      "val_recall@1": 0.011,
+      "val_recall@5": 0.0296,
+      "val_recall@30": 0.1263,
+      "val_group_recall@30": 0.9406,
+      "epoch_seconds": 2.62,
+      "train_samples_per_second": 10986.02
+    }
+  ],
+  "val": {
+    "metrics": {
+      "recall@1": 0.011,
+      "recall@3": 0.02,
+      "recall@5": 0.0296,
+      "recall@10": 0.054,
+      "recall@30": 0.1263,
+      "map": 0.0282,
+      "mrr": 0.0282
+    },
+    "semantic_metrics": {
+      "recall@1": 0.7933,
+      "recall@3": 0.8513,
+      "recall@5": 0.8619,
+      "recall@10": 0.878,
+      "recall@30": 0.9406,
+      "map": 0.8293,
+      "mrr": 0.8293
+    },
+    "per_media": {
+      "png": {
+        "count": 1676,
+        "exact": {
+          "recall@1": 0.0048,
+          "recall@3": 0.0125,
+          "recall@5": 0.0197,
+          "recall@10": 0.043,
+          "recall@30": 0.1062,
+          "map": 0.0204,
+          "mrr": 0.0204
+        },
+        "group": {
+          "recall@1": 0.8896,
+          "recall@3": 0.9123,
+          "recall@5": 0.9141,
+          "recall@10": 0.9242,
+          "recall@30": 0.9594,
+          "map": 0.9046,
+          "mrr": 0.9046
+        }
+      },
+      "gif": {
+        "count": 2284,
+        "exact": {
+          "recall@1": 0.0201,
+          "recall@3": 0.0342,
+          "recall@5": 0.0499,
+          "recall@10": 0.0854,
+          "recall@30": 0.1935,
+          "map": 0.0456,
+          "mrr": 0.0456
+        },
+        "group": {
+          "recall@1": 0.7583,
+          "recall@3": 0.8511,
+          "recall@5": 0.8695,
+          "recall@10": 0.887,
+          "recall@30": 0.9422,
+          "map": 0.8121,
+          "mrr": 0.8121
+        }
+      },
+      "webm": {
+        "count": 1038,
+        "exact": {
+          "recall@1": 0.001,
+          "recall@3": 0.001,
+          "recall@5": 0.001,
+          "recall@10": 0.0029,
+          "recall@30": 0.0106,
+          "map": 0.0028,
+          "mrr": 0.0028
+        },
+        "group": {
+          "recall@1": 0.7148,
+          "recall@3": 0.7534,
+          "recall@5": 0.7611,
+          "recall@10": 0.7832,
+          "recall@30": 0.9066,
+          "map": 0.7454,
+          "mrr": 0.7454
+        }
+      }
+    },
+    "sample_count": 4998,
+    "examples": [
+      {
+        "sample_id": "58_session_0003#turn2247",
+        "domain": "Media Sharing",
+        "intent_label": "celebration_approval",
+        "gold": "202331403893875224.png",
+        "gold_rank": 1155,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "2562980648230846537.gif",
+            "score": 4.689,
+            "same_group": false
+          },
+          {
+            "rank": 2,
+            "sticker_id": "5974034655282728539.png",
+            "score": 3.7404,
+            "same_group": false
+          },
+          {
+            "rank": 3,
+            "sticker_id": "202331403893877192.png",
+            "score": 3.7269,
+            "same_group": false
+          },
+          {
+            "rank": 4,
+            "sticker_id": "5974286628129083332.png",
+            "score": 3.7122,
+            "same_group": false
+          },
+          {
+            "rank": 5,
+            "sticker_id": "202331403893877864.png",
+            "score": 3.7118,
+            "same_group": false
+          }
+        ],
+        "context_preview": "None: [sticker:5910981387166420143.png] || 13970572: #USER_ID, #USER_ID has increased your reputation. 🏆 Your reputation 77 || 13970572: #USER_ID, #USER_ID has "
+      },
+      {
+        "sample_id": "40_session_0001#turn524076",
+        "domain": "Game",
+        "intent_label": "encouragement_support",
+        "gold": "359541685262226181.gif",
+        "gold_rank": 2315,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "6021381219407629477.gif",
+            "score": 7.5231,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "6021698441397144863.gif",
+            "score": 7.3923,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "6021764420684746125.gif",
+            "score": 6.7432,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "5843978729117716639.gif",
+            "score": 6.2748,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "6023735656054787127.gif",
+            "score": 6.0977,
+            "same_group": true
+          }
+        ],
+        "context_preview": "51e3f78c: HGAAHA || 5fb35712: is actly fun || b7fef7a4: good meh bro setting me up for failure || 5fb35712: we won leh || b7fef7a4: cb slow ash || 5fb35712: yah"
+      },
+      {
+        "sample_id": "40_session_0001#turn35277",
+        "domain": "Game",
+        "intent_label": "confusion_curiosity",
+        "gold": "244604348921809134.png",
+        "gold_rank": 6193,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "6021764420684746125.gif",
+            "score": 5.2017,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "6021698441397144863.gif",
+            "score": 4.8985,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "6021381219407629477.gif",
+            "score": 4.7165,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "5985741675274703134.webm",
+            "score": 4.5073,
+            "same_group": false
+          },
+          {
+            "rank": 5,
+            "sticker_id": "6305336866149239638.webm",
+            "score": 4.3828,
+            "same_group": true
+          }
+        ],
+        "context_preview": "6e039260: cb || 5531d655: ??? || 6e039260: hi || 6e039260: im not his? || 5531d655: hi || 6e039260: im back || 6e039260: BAHAHAH || 7edf9063: || 5531d655: wym |"
+      },
+      {
+        "sample_id": "58_session_0003#turn2497",
+        "domain": "Media Sharing",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "5807453270670576035.png",
+        "gold_rank": 148,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "5974286628129083332.png",
+            "score": 4.0347,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "202331403893877192.png",
+            "score": 3.7043,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "5974478110656039677.png",
+            "score": 3.6326,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "202331403893876577.png",
+            "score": 3.3568,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "202331403893877868.png",
+            "score": 3.273,
+            "same_group": true
+          }
+        ],
+        "context_preview": "None: [sticker:5924520919379741096.png] || d921fa96: [sticker:5911076142734905386.png] || None: [sticker:5974547581752053638.png] || c9327094: || None: [sticker"
+      },
+      {
+        "sample_id": "52_session_0001#turn2840",
+        "domain": "Media Sharing",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "5911179252014779708.png",
+        "gold_rank": 5348,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "1621864712796897307.png",
+            "score": 3.9366,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "545248250005815494.png",
+            "score": 3.9318,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "5350346567146548967.webm",
+            "score": 3.915,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "5460792334062981498.webm",
+            "score": 3.915,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "5206442227605184475.webm",
+            "score": 3.6735,
+            "same_group": true
+          }
+        ],
+        "context_preview": "bc545aa2: || a5945ded: [sticker:1250018251174314422.png] || 2a9d2b8c: [sticker:5837150843513605959.webm] || bc545aa2: || b7cb4dcb: || 7adb54bb: [sticker:5262929"
+      },
+      {
+        "sample_id": "40_session_0001#turn575946",
+        "domain": "Game",
+        "intent_label": "humor_teasing",
+        "gold": "5217480246311271496.webm",
+        "gold_rank": 1227,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "6021381219407629477.gif",
+            "score": 6.6231,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "6021764420684746125.gif",
+            "score": 6.5752,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "6021698441397144863.gif",
+            "score": 6.4672,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "6023735656054787127.gif",
+            "score": 6.0491,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "1833563040931381719.png",
+            "score": 5.782,
+            "same_group": true
+          }
+        ],
+        "context_preview": "4ad53b3d: -1mm/roam mh rg || 610f6751: Or mm also can || 610f6751: Whichever you find || 4ad53b3d: okay cn || 610f6751: Before I go lose 7 in a row || 4ad53b3d:"
+      },
+      {
+        "sample_id": "62_session_0018#turn51173",
+        "domain": "Finance",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "1391391008142393351.gif",
+        "gold_rank": 70,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "773947703670341879.gif",
+            "score": 5.1059,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "5436023536839828911.gif",
+            "score": 4.8679,
+            "same_group": false
+          },
+          {
+            "rank": 3,
+            "sticker_id": "773947703670342216.gif",
+            "score": 4.7988,
+            "same_group": false
+          },
+          {
+            "rank": 4,
+            "sticker_id": "773947703670341886.gif",
+            "score": 4.7043,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "773947703670341882.gif",
+            "score": 4.5505,
+            "same_group": true
+          }
+        ],
+        "context_preview": "4b1336c7: Ты сделал деньги || b3e57a72: That's the hope || b3e57a72: If this billionaire wins, it could force Facebook and other platforms || b3e57a72: to be mo"
+      },
+      {
+        "sample_id": "62_session_0018#turn47900",
+        "domain": "Finance",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "5447662683463618227.gif",
+        "gold_rank": 391,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "773947703670342217.gif",
+            "score": 5.1522,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "5996838878630119901.gif",
+            "score": 4.6162,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "773947703670342218.gif",
+            "score": 4.5915,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "6001572276187695369.gif",
+            "score": 4.4057,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "5402238082843944282.gif",
+            "score": 4.2469,
+            "same_group": true
+          }
+        ],
+        "context_preview": "6bac7332: Конечно, количество обмена также имеет значение || f640b3c3: А что если возникнут проблемы во время высадки || f640b3c3: [sticker:1269403972611866873."
+      }
+    ]
+  },
+  "best_val_group_recall@30": 0.9414,
+  "artifacts": {
+    "epoch_jsonl": "/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_head_only_retrieved_topk_rebuild_medium_epochs.jsonl",
+    "history_csv": "/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_head_only_retrieved_topk_rebuild_medium_history.csv",
+    "history_plot": "/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_head_only_retrieved_topk_rebuild_medium_history.png"
+  }
+}

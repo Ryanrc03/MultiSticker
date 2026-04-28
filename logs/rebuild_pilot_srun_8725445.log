@@ -1,0 +1,10 @@
+[rebuild] START mode=head_only memory=retrieved_topk train_bs=128 infer_bs=128 threads=8 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/head_only_retrieved_topk_rebuild_pilot.log
+[rebuild] DONE mode=head_only memory=retrieved_topk
+[rebuild] START direct_clip query=clip_context infer_bs=128 threads=8 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/direct_clip_clip_context_rebuild_pilot.log
+[rebuild] DONE direct_clip query=clip_context
+[rebuild] START mode=image_lora memory=retrieved_topk train_bs=64 infer_bs=128 threads=8 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/image_lora_retrieved_topk_rebuild_pilot.log
+[rebuild] DONE mode=image_lora memory=retrieved_topk
+[rebuild] START mode=text_lora memory=retrieved_topk train_bs=64 infer_bs=128 threads=8 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/text_lora_retrieved_topk_rebuild_pilot.log
+[rebuild] DONE mode=text_lora memory=retrieved_topk
+[rebuild] START mode=dual_lora memory=retrieved_topk train_bs=64 infer_bs=128 threads=8 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/dual_lora_retrieved_topk_rebuild_pilot.log
+slurmstepd: error: *** STEP 8725445.0 ON bc11u15n1 CANCELLED AT 2026-04-26T22:17:05 ***

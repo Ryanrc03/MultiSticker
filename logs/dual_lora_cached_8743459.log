@@ -1,0 +1,3 @@
+[dual_lora] START scale=pilot run=rebuild_pilot train_bs=64 infer_bs=128 cache=/scratch/rl182/mutlisticker/embedding_cache log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/dual_lora_retrieved_topk_rebuild_pilot.log
+[dual_lora] DONE run=rebuild_pilot
+/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/run_dual_lora_cached.sh: line 117: -t: command not found

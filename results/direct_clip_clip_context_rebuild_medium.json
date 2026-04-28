@@ -1,0 +1,60 @@
+{
+  "mode": "direct_clip",
+  "query_mode": "clip_context",
+  "run_name": "rebuild_medium",
+  "config": {
+    "data": {
+      "max_stickers": 8000,
+      "min_sticker_frequency": 2,
+      "max_val_samples": 5000,
+      "supported_media": [
+        ".gif",
+        ".png",
+        ".webm"
+      ]
+    },
+    "model": {
+      "clip_model_name": "ViT-B-32",
+      "clip_pretrained": "laion2b_s34b_b79k"
+    }
+  },
+  "dataset_summary": {
+    "session_count": 8129,
+    "supported_media_provisional_samples": 368503,
+    "full_train_size_before_cap": 181758,
+    "candidate_sticker_count": 7011,
+    "memory_strategy": "retrieved_topk",
+    "train_samples": 30000,
+    "val_samples": 5000,
+    "test_samples": 0
+  },
+  "media_summary": {
+    "sticker_bank_size": 6758,
+    "supported_media": [
+      ".gif",
+      ".png",
+      ".webm"
+    ]
+  },
+  "val": {
+    "metrics": {
+      "recall@1": 0.0002,
+      "recall@3": 0.001,
+      "recall@5": 0.0012,
+      "recall@10": 0.0014,
+      "recall@30": 0.0028,
+      "map": 0.0013,
+      "mrr": 0.0013
+    },
+    "semantic_metrics": {
+      "recall@1": 0.6335,
+      "recall@3": 0.8469,
+      "recall@5": 0.8778,
+      "recall@10": 0.9084,
+      "recall@30": 0.9588,
+      "map": 0.7469,
+      "mrr": 0.7469
+    },
+    "sample_count": 4998
+  }
+}

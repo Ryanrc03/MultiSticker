@@ -1,0 +1,510 @@
+{
+  "mode": "dual_lora",
+  "memory_strategy": "retrieved_topk",
+  "run_name": "rebuild_pilot",
+  "config": {
+    "data": {
+      "max_files": 0,
+      "session_gap_hours": 12.0,
+      "max_context_turns": 12,
+      "min_context_turns": 2,
+      "history_session_limit": 8,
+      "top_k_memories": 3,
+      "max_summary_turns": 6,
+      "max_text_chars": 180,
+      "train_ratio": 0.9,
+      "val_ratio": 0.1,
+      "test_ratio": 0.0,
+      "max_stickers": 3000,
+      "min_sticker_frequency": 2,
+      "max_train_samples": 5000,
+      "max_val_samples": 2000,
+      "max_test_samples": 0,
+      "supported_media": [
+        ".gif",
+        ".png",
+        ".webm"
+      ],
+      "memory_strategy": "retrieved_topk",
+      "seed": 42
+    },
+    "model": {
+      "clip_model_name": "ViT-B-32",
+      "clip_pretrained": "laion2b_s34b_b79k",
+      "memory_model_name": "intfloat/multilingual-e5-small",
+      "train_batch_size": 64,
+      "infer_batch_size": 128,
+      "epochs": 2,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "temperature": 0.07,
+      "hidden_dim": 512,
+      "dropout": 0.1,
+      "intent_clusters": 64,
+      "intent_loss_weight": 0.2,
+      "group_prior_alpha": 2.0,
+      "rerank_top_groups": 2
+    },
+    "lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "lora_lr": 0.0001,
+      "head_lr": 0.001
+    }
+  },
+  "dataset_summary": {
+    "session_count": 8129,
+    "supported_media_provisional_samples": 368503,
+    "full_train_size_before_cap": 133751,
+    "candidate_sticker_count": 1954,
+    "memory_strategy": "retrieved_topk",
+    "train_samples": 5000,
+    "val_samples": 2000,
+    "test_samples": 0
+  },
+  "media_summary": {
+    "sticker_bank_size": 1873,
+    "supported_media": [
+      ".gif",
+      ".png",
+      ".webm"
+    ]
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 4.3202,
+      "val_recall@1": 0.0125,
+      "val_recall@5": 0.032,
+      "val_recall@30": 0.1302,
+      "val_group_recall@30": 0.967,
+      "epoch_seconds": 2626.18,
+      "train_samples_per_second": 1.82
+    },
+    {
+      "epoch": 2,
+      "train_loss": 3.7456,
+      "val_recall@1": 0.0155,
+      "val_recall@5": 0.0416,
+      "val_recall@30": 0.1187,
+      "val_group_recall@30": 0.974,
+      "epoch_seconds": 2554.3,
+      "train_samples_per_second": 1.87
+    }
+  ],
+  "val": {
+    "metrics": {
+      "recall@1": 0.015,
+      "recall@3": 0.0486,
+      "recall@5": 0.0701,
+      "recall@10": 0.0991,
+      "recall@30": 0.1963,
+      "map": 0.0495,
+      "mrr": 0.0495
+    },
+    "semantic_metrics": {
+      "recall@1": 0.6945,
+      "recall@3": 0.8528,
+      "recall@5": 0.8853,
+      "recall@10": 0.9384,
+      "recall@30": 0.978,
+      "map": 0.7846,
+      "mrr": 0.7846
+    },
+    "per_media": {
+      "png": {
+        "count": 635,
+        "exact": {
+          "recall@1": 0.0031,
+          "recall@3": 0.011,
+          "recall@5": 0.0268,
+          "recall@10": 0.0472,
+          "recall@30": 0.1276,
+          "map": 0.0243,
+          "mrr": 0.0243
+        },
+        "group": {
+          "recall@1": 0.7575,
+          "recall@3": 0.8819,
+          "recall@5": 0.9039,
+          "recall@10": 0.9307,
+          "recall@30": 0.9717,
+          "map": 0.8283,
+          "mrr": 0.8283
+        }
+      },
+      "gif": {
+        "count": 1111,
+        "exact": {
+          "recall@1": 0.0252,
+          "recall@3": 0.081,
+          "recall@5": 0.1107,
+          "recall@10": 0.1512,
+          "recall@30": 0.2754,
+          "map": 0.0741,
+          "mrr": 0.0741
+        },
+        "group": {
+          "recall@1": 0.6904,
+          "recall@3": 0.8353,
+          "recall@5": 0.8758,
+          "recall@10": 0.9451,
+          "recall@30": 0.9865,
+          "map": 0.7778,
+          "mrr": 0.7778
+        }
+      },
+      "webm": {
+        "count": 251,
+        "exact": {
+          "recall@1": 0.0,
+          "recall@3": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "recall@30": 0.0199,
+          "map": 0.0042,
+          "mrr": 0.0042
+        },
+        "group": {
+          "recall@1": 0.5538,
+          "recall@3": 0.8566,
+          "recall@5": 0.8805,
+          "recall@10": 0.9283,
+          "recall@30": 0.9562,
+          "map": 0.7042,
+          "mrr": 0.7042
+        }
+      }
+    },
+    "sample_count": 1997,
+    "examples": [
+      {
+        "sample_id": "62_session_0018#turn30546",
+        "domain": "Finance",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "1494180970083909689.gif",
+        "gold_rank": 291,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "773947703670341879.gif",
+            "score": 6.2114,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "5465187296787575216.gif",
+            "score": 5.9357,
+            "same_group": false
+          },
+          {
+            "rank": 3,
+            "sticker_id": "5465315179438813054.gif",
+            "score": 5.9139,
+            "same_group": false
+          },
+          {
+            "rank": 4,
+            "sticker_id": "773947703670341897.gif",
+            "score": 5.8354,
+            "same_group": false
+          },
+          {
+            "rank": 5,
+            "sticker_id": "5366240304078786290.gif",
+            "score": 5.8321,
+            "same_group": true
+          }
+        ],
+        "context_preview": "4b1336c7: Hepiniz #SENSITIVE-INFO'yı ve benzersizliğini duydunuz mu? || 6bac7332: Olabilir. || 4b1336c7: İsim varlıklarını düzenleme ve yönetme yaklaşımı || 4b1"
+      },
+      {
+        "sample_id": "62_session_0018#turn5540",
+        "domain": "Finance",
+        "intent_label": "celebration_approval",
+        "gold": "1391391008142393363.gif",
+        "gold_rank": 219,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "2212103995063795919.png",
+            "score": 6.5339,
+            "same_group": false
+          },
+          {
+            "rank": 2,
+            "sticker_id": "6194828598868709293.png",
+            "score": 6.3343,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "6278537451338205812.png",
+            "score": 6.2378,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "6287148693262959018.gif",
+            "score": 6.2354,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "2212103995063795915.png",
+            "score": 6.2092,
+            "same_group": true
+          }
+        ],
+        "context_preview": "08e63aae: And over a million Argentinians already using the World App? || 08e63aae: That's some serious user base. || 08e63aae: Seems like there's real interest"
+      },
+      {
+        "sample_id": "62_session_0018#turn66728",
+        "domain": "Finance",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "773947703670341878.gif",
+        "gold_rank": 14,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "773947703670341886.gif",
+            "score": 8.4029,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "773947703670341889.gif",
+            "score": 8.3896,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "773947703670341879.gif",
+            "score": 8.3624,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "773947703670341874.gif",
+            "score": 8.3442,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "773947703670341897.gif",
+            "score": 8.2634,
+            "same_group": false
+          }
+        ],
+        "context_preview": "244be514: and Tennessee, for example, increases their power || 244be514: usage significantly. || 244be514: || b13ed08a: True mate || b13ed08a: but CleanSpark’s "
+      },
+      {
+        "sample_id": "19_session_0008#turn1276",
+        "domain": "Media Sharing",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "6005992957176450249.png",
+        "gold_rank": 199,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "6028627748358983261.png",
+            "score": 7.0604,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "6048626567788105389.png",
+            "score": 6.745,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "202331403893870576.png",
+            "score": 6.7318,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "202331403893877232.png",
+            "score": 6.601,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "202331403893870415.png",
+            "score": 6.571,
+            "same_group": true
+          }
+        ],
+        "context_preview": "bc545aa2: [sticker:6026247730886610114.png] || bc545aa2: [sticker:202331403893873848.png] || bc545aa2: [sticker:202331403893870989.png] || 7c76515d: || 949b23ea"
+      },
+      {
+        "sample_id": "62_session_0018#turn24796",
+        "domain": "Finance",
+        "intent_label": "disappointment_sadness",
+        "gold": "773947703670341886.gif",
+        "gold_rank": 3,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "773947703670341879.gif",
+            "score": 8.3693,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "773947703670341889.gif",
+            "score": 8.2999,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "773947703670341886.gif",
+            "score": 8.2404,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "773947703670341874.gif",
+            "score": 8.2381,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "773947703670341901.gif",
+            "score": 8.0644,
+            "same_group": true
+          }
+        ],
+        "context_preview": "e3f94fe2: Not necessarily a good one. || e3f94fe2: It suggests they're losing confidence in the market. || e3f94fe2: And then there's the whole derivatives thin"
+      },
+      {
+        "sample_id": "58_session_0003#turn5934",
+        "domain": "Media Sharing",
+        "intent_label": "celebration_approval",
+        "gold": "5911179252014779708.png",
+        "gold_rank": 182,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "6008355184894282388.png",
+            "score": 6.119,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "202331403893877248.png",
+            "score": 5.9902,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "6028627748358983261.png",
+            "score": 5.8977,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "202331403893870576.png",
+            "score": 5.82,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "5974234315427418172.png",
+            "score": 5.7936,
+            "same_group": true
+          }
+        ],
+        "context_preview": "None: [sticker:202331403893872399.png] || 19c34352: [sticker:5001436837202362948.png] || None: [sticker:5978851349436042176.png] || 13970572: #USER_ID, #USER_ID"
+      },
+      {
+        "sample_id": "62_session_0018#turn26426",
+        "domain": "Finance",
+        "intent_label": "gratitude",
+        "gold": "1391391008142393350.gif",
+        "gold_rank": 24,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "773947703670341886.gif",
+            "score": 8.6141,
+            "same_group": false
+          },
+          {
+            "rank": 2,
+            "sticker_id": "773947703670341889.gif",
+            "score": 8.5633,
+            "same_group": false
+          },
+          {
+            "rank": 3,
+            "sticker_id": "750766425144033734.gif",
+            "score": 8.5546,
+            "same_group": false
+          },
+          {
+            "rank": 4,
+            "sticker_id": "773947703670341897.gif",
+            "score": 8.5489,
+            "same_group": false
+          },
+          {
+            "rank": 5,
+            "sticker_id": "773947703670341879.gif",
+            "score": 8.538,
+            "same_group": false
+          }
+        ],
+        "context_preview": "03486699: Kimse geride bırakılamaz || 03486699: [sticker:1391391008142393345.gif] || c9d7e7e9: Harikasın dostum || c9d7e7e9: Şimdi kaç puanın var? || 03486699: "
+      },
+      {
+        "sample_id": "62_session_0018#turn61293",
+        "domain": "Finance",
+        "intent_label": "neutral_acknowledgment",
+        "gold": "773947703670341874.gif",
+        "gold_rank": 3,
+        "top_predictions": [
+          {
+            "rank": 1,
+            "sticker_id": "773947703670341879.gif",
+            "score": 8.7623,
+            "same_group": true
+          },
+          {
+            "rank": 2,
+            "sticker_id": "773947703670341889.gif",
+            "score": 8.7333,
+            "same_group": true
+          },
+          {
+            "rank": 3,
+            "sticker_id": "773947703670341874.gif",
+            "score": 8.7074,
+            "same_group": true
+          },
+          {
+            "rank": 4,
+            "sticker_id": "773947703670341886.gif",
+            "score": 8.6956,
+            "same_group": true
+          },
+          {
+            "rank": 5,
+            "sticker_id": "773947703670341901.gif",
+            "score": 8.6323,
+            "same_group": true
+          }
+        ],
+        "context_preview": "629e1f13: with the asset it's linked to. || 629e1f13: Pretty cool, right? || 629e1f13: || e3f94fe2: Whoa, that does sound cool. || e3f94fe2: But isn't Bitcoin a"
+      }
+    ]
+  },
+  "best_val_group_recall@30": 0.974,
+  "artifacts": {
+    "epoch_jsonl": "/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_dual_lora_retrieved_topk_rebuild_pilot_epochs.jsonl",
+    "history_csv": "/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_dual_lora_retrieved_topk_rebuild_pilot_history.csv",
+    "history_plot": "/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_dual_lora_retrieved_topk_rebuild_pilot_history.png"
+  }
+}

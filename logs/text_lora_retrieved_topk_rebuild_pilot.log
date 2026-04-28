@@ -1,0 +1,24 @@
+[am] mode=text_lora memory=retrieved_topk run=rebuild_pilot device=cuda
+[am] sticker_bank=1873 train=4774 val=1997
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[am] lora injected; trainable clip params=589824 sample_names=['transformer.resblocks.0.attn.out_proj.lora_A.default.weight', 'transformer.resblocks.0.attn.out_proj.lora_B.default.weight', 'transformer.resblocks.0.mlp.c_fc.lora_A.default.weight']
+[am] precomputing frozen image bank
+[am] epoch 1 step 0 loss=8.1965
+[am] epoch 1 step 50 loss=6.5926
+[am] epoch 1 summary {'epoch': 1, 'train_loss': 6.9751, 'val_p@1': 0.02, 'val_p@5': 0.0526, 'val_p@30': 0.1713, 'val_group_p@30': 0.971, 'val_two_stage_group_p@30': 0.7391}
+[am] epoch 1 checkpoint saved (best_score=0.7391)
+[am] epoch 2 step 0 loss=6.5402
+[am] epoch 2 step 50 loss=6.3397
+[am] epoch 2 summary {'epoch': 2, 'train_loss': 6.1965, 'val_p@1': 0.0185, 'val_p@5': 0.0726, 'val_p@30': 0.2118, 'val_group_p@30': 0.9755, 'val_two_stage_group_p@30': 0.7732}
+[am] epoch 2 checkpoint saved (best_score=0.7732)
+[am] DONE am_text_lora_retrieved_topk_rebuild_pilot best_score=0.7732
+{
+  "p@1": 0.0185,
+  "p@3": 0.0506,
+  "p@5": 0.0726,
+  "p@10": 0.1057,
+  "p@30": 0.2118,
+  "map": 0.0538,
+  "mrr": 0.0538
+}

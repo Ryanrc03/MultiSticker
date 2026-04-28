@@ -1,0 +1,23 @@
+[direct_clip] query_mode=clip_context run=rebuild_pilot device=cuda
+[direct_clip] sticker_bank=1873 val=1997
+[direct_clip] encoding sticker image bank
+[direct_clip] encoding 1997 val queries
+[direct_clip] DONE direct_clip_clip_context_rebuild_pilot
+{
+  "p@1": 0.0,
+  "p@3": 0.001,
+  "p@5": 0.001,
+  "p@10": 0.001,
+  "p@30": 0.0035,
+  "map": 0.0024,
+  "mrr": 0.0024
+}
+[direct_clip] group metrics: {
+  "p@1": 0.5689,
+  "p@3": 0.8202,
+  "p@5": 0.8748,
+  "p@10": 0.9264,
+  "p@30": 0.978,
+  "map": 0.7035,
+  "mrr": 0.7035
+}

@@ -1,0 +1,201 @@
+[am] mode=image_lora memory=retrieved_topk run=rebuild_medium device=cuda torch_threads=16
+[am] sticker_bank=6758 train=28819 val=4998
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[am] lora injected; trainable clip params=884736 sample_names=['visual.transformer.resblocks.0.attn.out_proj.lora_A.default.weight', 'visual.transformer.resblocks.0.attn.out_proj.lora_B.default.weight', 'visual.transformer.resblocks.0.mlp.c_fc.lora_A.default.weight']
+[am] precomputing frozen text embeddings
+[am] epoch 1: re-encoding image bank (no-grad bank; positives re-encoded per batch)
+[am] epoch 1 step 0 seen=96/28819 loss=9.4241 avg_loss=9.4241 samples/s=0.0
+[am] epoch 1 step 25 seen=2496/28819 loss=4.4590 avg_loss=6.1516 samples/s=0.8
+[am] epoch 1 step 50 seen=4896/28819 loss=4.0961 avg_loss=5.2407 samples/s=1.4
+[am] epoch 1 step 75 seen=7296/28819 loss=3.9494 avg_loss=4.8700 samples/s=1.8
+[am] epoch 1 step 100 seen=9696/28819 loss=3.9869 avg_loss=4.6556 samples/s=2.1
+[am] epoch 1 step 125 seen=12096/28819 loss=3.7841 avg_loss=4.5087 samples/s=2.3
+[am] epoch 1 step 150 seen=14496/28819 loss=3.7995 avg_loss=4.3994 samples/s=2.5
+[am] epoch 1 step 175 seen=16896/28819 loss=3.5042 avg_loss=4.3120 samples/s=2.6
+[am] epoch 1 step 200 seen=19296/28819 loss=3.6132 avg_loss=4.2408 samples/s=2.8
+[am] epoch 1 step 225 seen=21696/28819 loss=3.6897 avg_loss=4.1812 samples/s=2.8
+[am] epoch 1 step 250 seen=24096/28819 loss=3.6224 avg_loss=4.1294 samples/s=2.9
+[am] epoch 1 step 275 seen=26496/28819 loss=3.6336 avg_loss=4.0890 samples/s=3.0
+[am] epoch 1 step 300 seen=28819/28819 loss=2.2186 avg_loss=4.0427 samples/s=3.0
+[am] epoch 1 summary {'epoch': 1, 'train_loss': 4.0427, 'val_recall@1': 0.0008, 'val_recall@5': 0.006, 'val_recall@30': 0.0258, 'val_group_recall@30': 0.961, 'epoch_seconds': 9459.15, 'train_samples_per_second': 3.05}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      4.0427  0.0008  0.0060  0.0258  0.9610  9459.1  3.0      
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0006  0.0030  0.0310  0.9672  
+gif    2284   0.0013  0.0109  0.0337  0.9602  
+webm   1038   0.0000  0.0000  0.0000  0.9528  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=1727 top=1:6046506125254201166.png:1.338, 2:6048719089973596379.png:0.759, 3:6048738116678717423.png:0.424, 4:5949606461851046562.gif:0.304, 5:6048544031401578629.png:0.167
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=5322 top=1:5918253943619587220.gif:0.581*, 2:316841412463166152.png:0.255*, 3:5843978729117716639.gif:-0.132*, 4:5949606461851046562.gif:-0.226*, 5:5843652191344136167.gif:-0.292*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=3868 top=1:316841412463166152.png:0.419*, 2:5918253943619587220.gif:-0.783*, 3:5269449908938609831.gif:-0.898*, 4:202331403893876746.png:-1.010, 5:5949606461851046562.gif:-1.025*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=215 top=1:6046506125254201166.png:1.361*, 2:6048719089973596379.png:0.766*, 3:6048738116678717423.png:0.396*, 4:6046610338340673175.png:0.276*, 5:316841412463166152.png:0.186*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=1490 top=1:6046506125254201166.png:0.378*, 2:316841412463166152.png:-0.134*, 3:5915652275769969317.png:-0.290, 4:6048700140577885836.png:-0.345, 5:6048626567788105389.png:-0.411*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=3478 top=1:563108579448455571.png:0.064, 2:316841412463166152.png:-0.116*, 3:5918253943619587220.gif:-0.127*, 4:6278421603185331400.png:-0.489*, 5:6278298981869029932.png:-0.588
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=2294 top=1:5949606461851046562.gif:0.479*, 2:6165764391967917451.webm:0.065*, 3:5974227297450854964.png:-0.052*, 4:5974089575029545299.png:-0.057*, 5:5792098831306852445.gif:-0.061*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=116 top=1:5841326440783547652.png:-0.057*, 2:6278298981869029932.png:-0.076, 3:5875238385861268409.png:-0.213*, 4:6278421603185331400.png:-0.217*, 5:316841412463166152.png:-0.322*
+[am] epoch 1 checkpoint saved (best_score=0.9610, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_image_lora_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_image_lora_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 2: re-encoding image bank (no-grad bank; positives re-encoded per batch)
+[am] epoch 2 step 0 seen=96/28819 loss=7.6159 avg_loss=7.6159 samples/s=0.0
+[am] epoch 2 step 25 seen=2496/28819 loss=4.2967 avg_loss=4.9627 samples/s=0.8
+[am] epoch 2 step 50 seen=4896/28819 loss=3.7705 avg_loss=4.4714 samples/s=1.3
+[am] epoch 2 step 75 seen=7296/28819 loss=3.5930 avg_loss=4.2049 samples/s=1.6
+[am] epoch 2 step 100 seen=9696/28819 loss=3.6065 avg_loss=4.0409 samples/s=1.9
+[am] epoch 2 step 125 seen=12096/28819 loss=3.2779 avg_loss=3.9309 samples/s=2.1
+[am] epoch 2 step 150 seen=14496/28819 loss=3.2267 avg_loss=3.8523 samples/s=2.3
+[am] epoch 2 step 175 seen=16896/28819 loss=3.2678 avg_loss=3.7968 samples/s=2.4
+[am] epoch 2 step 200 seen=19296/28819 loss=3.3437 avg_loss=3.7493 samples/s=2.5
+[am] epoch 2 step 225 seen=21696/28819 loss=3.1819 avg_loss=3.7112 samples/s=2.6
+[am] epoch 2 step 250 seen=24096/28819 loss=3.4487 avg_loss=3.6770 samples/s=2.6
+[am] epoch 2 step 275 seen=26496/28819 loss=3.3146 avg_loss=3.6465 samples/s=2.7
+[am] epoch 2 step 300 seen=28819/28819 loss=1.4977 avg_loss=3.6173 samples/s=2.7
+[am] epoch 2 summary {'epoch': 2, 'train_loss': 3.6173, 'val_recall@1': 0.004, 'val_recall@5': 0.0176, 'val_recall@30': 0.0618, 'val_group_recall@30': 0.944, 'epoch_seconds': 10548.01, 'train_samples_per_second': 2.73}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep   samples/s
+-----  ------  ------  ------  ------  ------  -------  ---------
+1      4.0427  0.0008  0.0060  0.0258  0.9610  9459.1   3.0      
+2      3.6173  0.0040  0.0176  0.0618  0.9440  10548.0  2.7      
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0024  0.0089  0.0525  0.9630  
+gif    2284   0.0070  0.0320  0.0954  0.9496  
+webm   1038   0.0000  0.0000  0.0029  0.9008  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=716 top=1:5974234315427418172.png:2.830, 2:202331403893876653.png:2.569*, 3:202331403893877286.png:2.429, 4:202331403893877207.png:2.359, 5:5999246577166715642.png:2.347
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=3328 top=1:6021698441397144863.gif:-0.998*, 2:6021381219407629477.gif:-1.058*, 3:6021764420684746125.gif:-1.091*, 4:6140903824178546373.png:-1.203*, 5:5843978729117716639.gif:-1.431*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=4940 top=1:6140903824178546373.png:-0.671*, 2:5893364264541882913.png:-1.292*, 3:5792171536513239474.gif:-1.431*, 4:5792098831306852445.gif:-1.479*, 5:6021698441397144863.gif:-1.602*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=227 top=1:5974234315427418172.png:2.927*, 2:202331403893877286.png:2.886*, 3:202331403893877459.png:2.752*, 4:202331403893876653.png:2.689, 5:202331403893877207.png:2.670*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=2248 top=1:5893364264541882913.png:0.945*, 2:202331403893877286.png:0.622*, 3:202331403893877293.png:0.562*, 4:202331403893875018.png:0.489*, 5:202331403893873518.png:0.472*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=3051 top=1:6140903824178546373.png:-0.417*, 2:5447104131556707598.gif:-0.721, 3:1017943490086044335.png:-0.763*, 4:5024051356139258308.png:-0.890*, 5:5792098831306852445.gif:-0.915*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=206 top=1:6140903824178546373.png:1.062*, 2:773947703670341879.gif:0.354*, 3:5463352701507089046.gif:0.342*, 4:773947703670341882.gif:0.252*, 5:5877263037739571302.png:0.093*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=486 top=1:773947703670341883.gif:1.010*, 2:773947703670341874.gif:0.957*, 3:773947703670342222.gif:0.890*, 4:773947703670341875.gif:0.865*, 5:773947703670341879.gif:0.798*
+[am] epoch 2 checkpoint saved (best_score=0.9610, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_image_lora_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_image_lora_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 3: re-encoding image bank (no-grad bank; positives re-encoded per batch)
+[am] epoch 3 step 0 seen=96/28819 loss=7.3670 avg_loss=7.3670 samples/s=0.0
+[am] epoch 3 step 25 seen=2496/28819 loss=3.9110 avg_loss=4.6969 samples/s=0.7
+[am] epoch 3 step 50 seen=4896/28819 loss=3.4918 avg_loss=4.1755 samples/s=1.2
+[am] epoch 3 step 75 seen=7296/28819 loss=3.3064 avg_loss=3.9316 samples/s=1.6
+[am] epoch 3 step 100 seen=9696/28819 loss=3.2194 avg_loss=3.7747 samples/s=1.8
+[am] epoch 3 step 125 seen=12096/28819 loss=2.9361 avg_loss=3.6734 samples/s=2.0
+[am] epoch 3 step 150 seen=14496/28819 loss=3.4504 avg_loss=3.6047 samples/s=2.1
+[am] epoch 3 step 175 seen=16896/28819 loss=3.3773 avg_loss=3.5465 samples/s=2.2
+[am] epoch 3 step 200 seen=19296/28819 loss=3.5079 avg_loss=3.5064 samples/s=2.4
+[am] epoch 3 step 225 seen=21696/28819 loss=3.2483 avg_loss=3.4681 samples/s=2.5
+[am] epoch 3 step 250 seen=24096/28819 loss=3.2054 avg_loss=3.4389 samples/s=2.5
+[am] epoch 3 step 275 seen=26496/28819 loss=3.0167 avg_loss=3.4161 samples/s=2.6
+[am] epoch 3 step 300 seen=28819/28819 loss=1.8956 avg_loss=3.3868 samples/s=2.7
+[am] epoch 3 summary {'epoch': 3, 'train_loss': 3.3868, 'val_recall@1': 0.0074, 'val_recall@5': 0.0226, 'val_recall@30': 0.0736, 'val_group_recall@30': 0.9314, 'epoch_seconds': 10749.44, 'train_samples_per_second': 2.68}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep   samples/s
+-----  ------  ------  ------  ------  ------  -------  ---------
+1      4.0427  0.0008  0.0060  0.0258  0.9610  9459.1   3.0      
+2      3.6173  0.0040  0.0176  0.0618  0.9440  10548.0  2.7      
+3      3.3868  0.0074  0.0226  0.0736  0.9314  10749.4  2.7      
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0018  0.0060  0.0251  0.9558  
+gif    2284   0.0149  0.0451  0.1410  0.9426  
+webm   1038   0.0000  0.0000  0.0039  0.8671  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=330 top=1:5859721790007298912.png:3.092, 2:6048626567788105389.png:2.841, 3:202331403893872627.png:2.803, 4:202331403893877868.png:2.800, 5:202331403893877181.png:2.789
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=2435 top=1:6021764420684746125.gif:0.342*, 2:6021381219407629477.gif:0.032*, 3:5843978729117716639.gif:-0.196*, 4:6021698441397144863.gif:-0.443*, 5:6023732950225390868.gif:-0.509*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=1166 top=1:6021764420684746125.gif:-0.493*, 2:1833563040931381727.png:-0.631*, 3:5843978729117716639.gif:-0.932*, 4:6021381219407629477.gif:-0.944*, 5:6023765278444227815.gif:-1.134*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=313 top=1:6007895739357727509.png:2.548*, 2:5859721790007298912.png:2.542*, 3:6048626567788105389.png:2.539*, 4:202331403893877868.png:2.439*, 5:6007956422950653248.png:2.434*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=1044 top=1:5332579249515671002.webm:0.059*, 2:5332747882816611457.webm:-0.119*, 3:5332720510990035415.webm:-0.139*, 4:5460725719120221290.webm:-0.246, 5:6005831925967621724.png:-0.322
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=3323 top=1:5796609569169871108.webm:-0.603, 2:2193800188773011679.gif:-1.000, 3:2193800188773011268.gif:-1.000*, 4:6039711736100030583.gif:-1.000*, 5:5956047645779692731.png:-1.000*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=84 top=1:5877738305935644555.png:1.165, 2:5877600050938385265.png:0.833, 3:773947703670341879.gif:0.624*, 4:1137162165791228149.gif:0.432*, 5:5877665523419846004.png:0.224*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=941 top=1:773947703670341874.gif:0.872*, 2:773947703670342222.gif:0.771*, 3:773947703670341879.gif:0.686*, 4:773947703670341890.gif:0.685*, 5:773947703670341892.gif:0.658*
+[am] epoch 3 checkpoint saved (best_score=0.9610, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_image_lora_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_image_lora_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 4: re-encoding image bank (no-grad bank; positives re-encoded per batch)
+[am] epoch 4 step 0 seen=96/28819 loss=7.2667 avg_loss=7.2667 samples/s=0.0
+[am] epoch 4 step 25 seen=2496/28819 loss=3.9338 avg_loss=4.7809 samples/s=0.7
+[am] epoch 4 step 50 seen=4896/28819 loss=3.3847 avg_loss=4.2073 samples/s=1.2
+[am] epoch 4 step 75 seen=7296/28819 loss=3.3045 avg_loss=3.8896 samples/s=1.5
+[am] epoch 4 step 100 seen=9696/28819 loss=2.9767 avg_loss=3.7000 samples/s=1.8
+[am] epoch 4 step 125 seen=12096/28819 loss=3.0864 avg_loss=3.5682 samples/s=2.0
+[am] epoch 4 step 150 seen=14496/28819 loss=2.8102 avg_loss=3.4836 samples/s=2.1
+[am] epoch 4 step 175 seen=16896/28819 loss=3.2394 avg_loss=3.4279 samples/s=2.2
+[am] epoch 4 step 200 seen=19296/28819 loss=3.1506 avg_loss=3.3827 samples/s=2.3
+[am] epoch 4 step 225 seen=21696/28819 loss=2.7855 avg_loss=3.3462 samples/s=2.4
+[am] epoch 4 step 250 seen=24096/28819 loss=2.9801 avg_loss=3.3104 samples/s=2.5
+[am] epoch 4 step 275 seen=26496/28819 loss=2.9860 avg_loss=3.2808 samples/s=2.5
+[am] epoch 4 step 300 seen=28819/28819 loss=1.4685 avg_loss=3.2488 samples/s=2.6
+[am] epoch 4 summary {'epoch': 4, 'train_loss': 3.2488, 'val_recall@1': 0.008, 'val_recall@5': 0.0246, 'val_recall@30': 0.0772, 'val_group_recall@30': 0.9476, 'epoch_seconds': 11111.08, 'train_samples_per_second': 2.59}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep   samples/s
+-----  ------  ------  ------  ------  ------  -------  ---------
+1      4.0427  0.0008  0.0060  0.0258  0.9610  9459.1   3.0      
+2      3.6173  0.0040  0.0176  0.0618  0.9440  10548.0  2.7      
+3      3.3868  0.0074  0.0226  0.0736  0.9314  10749.4  2.7      
+4      3.2488  0.0080  0.0246  0.0772  0.9476  11111.1  2.6      
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0030  0.0137  0.0644  0.9648  
+gif    2284   0.0149  0.0433  0.1169  0.9496  
+webm   1038   0.0010  0.0010  0.0106  0.9152  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=217 top=1:5859721790007298912.png:4.005, 2:5810100340619479392.png:3.948, 3:202331403893877866.png:3.944, 4:5976800597041482139.png:3.938, 5:5820981627378995574.png:3.926
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=1927 top=1:6021764420684746125.gif:2.333*, 2:6021530765873909298.gif:1.933*, 3:6021381219407629477.gif:1.487*, 4:5843978729117716639.gif:1.463*, 5:6021698441397144863.gif:1.377*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=610 top=1:6021764420684746125.gif:1.582*, 2:4918063696556589586.webm:1.446*, 3:1591656923608907785.png:1.356, 4:5791788738963050377.png:1.355*, 5:5469760539309642555.webm:1.332*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=64 top=1:202331403893877866.png:4.430*, 2:5857005309091908747.png:4.312*, 3:202331403893874569.png:4.224*, 4:5820981627378995574.png:4.222*, 5:202331403893877459.png:4.212*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=317 top=1:5893050079094246785.png:0.747, 2:5893364264541882913.png:0.537*, 3:5197210886892171550.webm:0.246*, 4:6091608526017268203.webm:0.246*, 5:189890103408066652.png:0.205*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=1670 top=1:1017943490086044347.png:0.960*, 2:1017943490086044350.png:0.918*, 3:6021764420684746125.gif:0.756*, 4:1017943490086044348.png:0.710*, 5:674369926294667305.png:0.703*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=63 top=1:5843978729117716639.gif:2.575*, 2:6021381219407629477.gif:2.409*, 3:6021764420684746125.gif:2.358*, 4:5877738305935644555.png:2.003, 5:773947703670341879.gif:1.899*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=194 top=1:773947703670341879.gif:3.427*, 2:773947703670341886.gif:3.332*, 3:773947703670341892.gif:3.023*, 4:773947703670341890.gif:3.014*, 5:773947703670342216.gif:3.012
+[am] epoch 4 checkpoint saved (best_score=0.9610, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_image_lora_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_image_lora_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 5: re-encoding image bank (no-grad bank; positives re-encoded per batch)
+[am] epoch 5 step 0 seen=96/28819 loss=6.8229 avg_loss=6.8229 samples/s=0.0
+[am] epoch 5 step 25 seen=2496/28819 loss=3.6371 avg_loss=4.5541 samples/s=0.7
+[am] epoch 5 step 50 seen=4896/28819 loss=3.1182 avg_loss=3.9823 samples/s=1.2
+[am] epoch 5 step 75 seen=7296/28819 loss=3.0155 avg_loss=3.6758 samples/s=1.5
+[am] epoch 5 step 100 seen=9696/28819 loss=2.9049 avg_loss=3.4922 samples/s=1.7
+[am] epoch 5 step 125 seen=12096/28819 loss=3.1221 avg_loss=3.3785 samples/s=1.9
+[am] epoch 5 step 150 seen=14496/28819 loss=3.0195 avg_loss=3.2942 samples/s=2.0
+[am] epoch 5 step 175 seen=16896/28819 loss=2.8561 avg_loss=3.2406 samples/s=2.1
+[am] epoch 5 step 200 seen=19296/28819 loss=2.7588 avg_loss=3.1924 samples/s=2.2
+[am] epoch 5 step 225 seen=21696/28819 loss=2.8256 avg_loss=3.1551 samples/s=2.3
+[am] epoch 5 step 250 seen=24096/28819 loss=3.0655 avg_loss=3.1277 samples/s=2.3
+[am] epoch 5 step 275 seen=26496/28819 loss=2.8681 avg_loss=3.1069 samples/s=2.4
+[am] epoch 5 step 300 seen=28819/28819 loss=1.0354 avg_loss=3.0730 samples/s=2.4
+[am] epoch 5 summary {'epoch': 5, 'train_loss': 3.073, 'val_recall@1': 0.0086, 'val_recall@5': 0.0214, 'val_recall@30': 0.0712, 'val_group_recall@30': 0.9434, 'epoch_seconds': 11791.48, 'train_samples_per_second': 2.44}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep   samples/s
+-----  ------  ------  ------  ------  ------  -------  ---------
+1      4.0427  0.0008  0.0060  0.0258  0.9610  9459.1   3.0      
+2      3.6173  0.0040  0.0176  0.0618  0.9440  10548.0  2.7      
+3      3.3868  0.0074  0.0226  0.0736  0.9314  10749.4  2.7      
+4      3.2488  0.0080  0.0246  0.0772  0.9476  11111.1  2.6      
+5      3.0730  0.0086  0.0214  0.0712  0.9434  11791.5  2.4      
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0107  0.0167  0.0585  0.9588  
+gif    2284   0.0105  0.0333  0.1077  0.9479  
+webm   1038   0.0010  0.0029  0.0116  0.9085  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=323 top=1:5974578230638677813.png:3.689, 2:5974234315427418172.png:3.582, 3:202331403893877181.png:3.501, 4:202331403893873546.png:3.491, 5:202331403893877286.png:3.490
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=1796 top=1:1833563040931381714.png:1.473*, 2:1833563040931381719.png:1.173*, 3:1833563040931381737.png:0.914*, 4:1833563040931381752.png:0.863*, 5:1017943490086044335.png:0.587*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=562 top=1:1833563040931381714.png:2.472*, 2:586332391035896153.png:2.230*, 3:2051906018480226414.png:2.160, 4:5463021482219161784.webm:2.008, 5:1833563040931381752.png:1.915*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=110 top=1:202331403893873856.png:1.259, 2:5974578230638677813.png:1.137*, 3:5974234315427418172.png:1.084*, 4:202331403893875338.png:1.081*, 5:5857005309091908747.png:1.081*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=452 top=1:2345073579797774953.png:0.086*, 2:307123821322699114.png:-0.314*, 3:270220985574101171.png:-0.760*, 4:2193800188773013414.gif:-0.873*, 5:5460725719120221290.webm:-0.880
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=186 top=1:2654794005203648793.png:1.299*, 2:2654794005203648820.png:1.014*, 3:2654794005203648783.png:0.877*, 4:1833563040931381714.png:0.651*, 5:1833563040931381719.png:0.619*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=133 top=1:773947703670341882.gif:2.445*, 2:773947703670341879.gif:2.349*, 3:1391391008142393350.gif:2.240, 4:750766425144033701.gif:2.063, 5:750766425144033734.gif:1.897*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=407 top=1:773947703670342222.gif:1.837*, 2:773947703670341882.gif:1.799*, 3:773947703670341879.gif:1.676*, 4:773947703670341891.gif:1.342, 5:773947703670342216.gif:1.256
+[am] epoch 5 checkpoint saved (best_score=0.9610, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_image_lora_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_image_lora_retrieved_topk_rebuild_medium_history.csv)
+[am] DONE am_image_lora_retrieved_topk_rebuild_medium best_score=0.9610
+{
+  "recall@1": 0.0108,
+  "recall@3": 0.0262,
+  "recall@5": 0.0376,
+  "recall@10": 0.0576,
+  "recall@30": 0.1188,
+  "map": 0.0302,
+  "mrr": 0.0302
+}

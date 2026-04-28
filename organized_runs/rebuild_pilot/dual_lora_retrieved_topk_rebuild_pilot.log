@@ -1,0 +1,65 @@
+[am] embedding_cache=/scratch/rl182/mutlisticker/embedding_cache
+[am] mode=dual_lora memory=retrieved_topk run=rebuild_pilot device=cuda torch_threads=16
+[am] sticker_bank=1873 train=4774 val=1997
+[am] lora injected; trainable clip params=1474560 sample_names=['visual.transformer.resblocks.0.attn.out_proj.lora_A.default.weight', 'visual.transformer.resblocks.0.attn.out_proj.lora_B.default.weight', 'visual.transformer.resblocks.0.mlp.c_fc.lora_A.default.weight']
+[am] epoch 1: re-encoding image bank (no-grad bank; positives re-encoded per batch)
+[am] epoch 1 step 0 seen=64/4774 loss=8.1407 avg_loss=8.1407 samples/s=0.1
+[am] epoch 1 step 25 seen=1664/4774 loss=4.0516 avg_loss=5.5113 samples/s=1.1
+[am] epoch 1 step 50 seen=3264/4774 loss=3.5003 avg_loss=4.6657 samples/s=1.5
+[am] epoch 1 summary {'epoch': 1, 'train_loss': 4.3202, 'val_recall@1': 0.0125, 'val_recall@5': 0.032, 'val_recall@30': 0.1302, 'val_group_recall@30': 0.967, 'epoch_seconds': 2626.18, 'train_samples_per_second': 1.82}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      4.3202  0.0125  0.0320  0.1302  0.9670  2626.2  1.8      
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    635    0.0047  0.0094  0.1039  0.9732  
+gif    1111   0.0198  0.0522  0.1746  0.9694  
+webm   251    0.0000  0.0000  0.0000  0.9402  
+[am] validation examples
+[am]   sample=62_session_0018#turn30546 intent=neutral_acknowledgment gold=1494180970083909689.gif rank=400 top=1:5974227297450854964.png:1.279*, 2:5269449908938609831.gif:1.043*, 3:5792171536513239474.gif:0.825*, 4:5792098831306852445.gif:0.731*, 5:773947703670341879.gif:0.680*
+[am]   sample=62_session_0018#turn5540 intent=celebration_approval gold=1391391008142393363.gif rank=692 top=1:5792098831306852445.gif:1.329*, 2:5267233443820868410.gif:1.197*, 3:5792171536513239474.gif:1.159*, 4:6294214150688081246.gif:1.125*, 5:6278298981869029932.png:1.117*
+[am]   sample=62_session_0018#turn66728 intent=neutral_acknowledgment gold=773947703670341878.gif rank=44 top=1:773947703670341879.gif:2.640*, 2:773947703670341886.gif:2.425*, 3:773947703670341901.gif:2.332*, 4:773947703670341883.gif:2.267, 5:773947703670342219.gif:2.262*
+[am]   sample=19_session_0008#turn1276 intent=neutral_acknowledgment gold=6005992957176450249.png rank=344 top=1:6048626567788105389.png:2.547*, 2:6028627748358983261.png:1.937*, 3:5897731576267019548.png:1.919*, 4:6008238134150564910.png:1.841*, 5:202331403893873518.png:1.657*
+[am]   sample=62_session_0018#turn24796 intent=disappointment_sadness gold=773947703670341886.gif rank=2 top=1:773947703670341879.gif:2.158*, 2:773947703670341886.gif:1.881*, 3:773947703670342217.gif:1.862*, 4:773947703670341901.gif:1.860*, 5:773947703670341883.gif:1.843
+[am]   sample=58_session_0003#turn5934 intent=celebration_approval gold=5911179252014779708.png rank=223 top=1:6048626567788105389.png:2.313*, 2:5974578230638677813.png:2.130, 3:5897731576267019548.png:1.790*, 4:6028627748358983261.png:1.647*, 5:6048865359379828804.png:1.522*
+[am]   sample=62_session_0018#turn26426 intent=gratitude gold=1391391008142393350.gif rank=20 top=1:773947703670341879.gif:1.733, 2:773947703670341901.gif:1.677, 3:773947703670341883.gif:1.612*, 4:773947703670341874.gif:1.537, 5:773947703670341886.gif:1.528
+[am]   sample=62_session_0018#turn61293 intent=neutral_acknowledgment gold=773947703670341874.gif rank=9 top=1:773947703670341901.gif:2.232*, 2:773947703670341879.gif:2.123*, 3:773947703670341886.gif:2.117*, 4:773947703670342219.gif:2.084*, 5:773947703670341883.gif:1.987
+[am] epoch 1 checkpoint saved (best_score=0.9670, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_dual_lora_retrieved_topk_rebuild_pilot_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_dual_lora_retrieved_topk_rebuild_pilot_history.csv)
+[am] epoch 2: re-encoding image bank (no-grad bank; positives re-encoded per batch)
+[am] epoch 2 step 0 seen=64/4774 loss=6.7823 avg_loss=6.7823 samples/s=0.1
+[am] epoch 2 step 25 seen=1664/4774 loss=3.6355 avg_loss=4.4811 samples/s=1.1
+[am] epoch 2 step 50 seen=3264/4774 loss=3.3397 avg_loss=3.9899 samples/s=1.6
+[am] epoch 2 summary {'epoch': 2, 'train_loss': 3.7456, 'val_recall@1': 0.0155, 'val_recall@5': 0.0416, 'val_recall@30': 0.1187, 'val_group_recall@30': 0.974, 'epoch_seconds': 2554.3, 'train_samples_per_second': 1.87}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      4.3202  0.0125  0.0320  0.1302  0.9670  2626.2  1.8      
+2      3.7456  0.0155  0.0416  0.1187  0.9740  2554.3  1.9      
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    635    0.0047  0.0126  0.0693  0.9591  
+gif    1111   0.0243  0.0666  0.1728  0.9856  
+webm   251    0.0040  0.0040  0.0040  0.9602  
+[am] validation examples
+[am]   sample=62_session_0018#turn30546 intent=neutral_acknowledgment gold=1494180970083909689.gif rank=513 top=1:5269449908938609831.gif:-1.005*, 2:5827946157367627315.gif:-1.421*, 3:5024051356139258308.png:-1.434, 4:5465315179438813054.gif:-1.450, 5:773947703670341879.gif:-1.562*
+[am]   sample=62_session_0018#turn5540 intent=celebration_approval gold=1391391008142393363.gif rank=385 top=1:6278537451338205812.png:0.927*, 2:5792098831306852445.gif:0.450*, 3:6287148693262959018.gif:0.400*, 4:5267233443820868410.gif:0.329*, 5:5269449908938609831.gif:0.287*
+[am]   sample=62_session_0018#turn66728 intent=neutral_acknowledgment gold=773947703670341878.gif rank=21 top=1:773947703670341879.gif:2.209*, 2:773947703670341886.gif:2.109*, 3:773947703670341889.gif:2.052*, 4:773947703670341874.gif:1.856*, 5:773947703670341883.gif:1.846
+[am]   sample=19_session_0008#turn1276 intent=neutral_acknowledgment gold=6005992957176450249.png rank=549 top=1:6046506125254201166.png:0.300*, 2:6048865359379828804.png:0.054*, 3:6028627748358983261.png:-0.175*, 4:6008238134150564910.png:-0.279*, 5:1220028319907447045.gif:-0.312*
+[am]   sample=62_session_0018#turn24796 intent=disappointment_sadness gold=773947703670341886.gif rank=2 top=1:773947703670341879.gif:2.172*, 2:773947703670341886.gif:1.924*, 3:773947703670341889.gif:1.871*, 4:773947703670342219.gif:1.692*, 5:773947703670341883.gif:1.677
+[am]   sample=58_session_0003#turn5934 intent=celebration_approval gold=5911179252014779708.png rank=353 top=1:6048865359379828804.png:-0.152*, 2:6046506125254201166.png:-0.723*, 3:5893157539175992440.png:-0.938*, 4:2562980648230846537.gif:-1.040*, 5:5974407398314478588.png:-1.046*
+[am]   sample=62_session_0018#turn26426 intent=gratitude gold=1391391008142393350.gif rank=42 top=1:773947703670341879.gif:2.010, 2:773947703670341886.gif:1.756, 3:773947703670341889.gif:1.677, 4:773947703670342219.gif:1.530, 5:773947703670341883.gif:1.478*
+[am]   sample=62_session_0018#turn61293 intent=neutral_acknowledgment gold=773947703670341874.gif rank=5 top=1:773947703670341879.gif:2.369*, 2:773947703670341886.gif:2.165*, 3:773947703670341889.gif:2.062*, 4:773947703670342219.gif:1.892*, 5:773947703670341874.gif:1.877*
+[am] epoch 2 checkpoint saved (best_score=0.9740, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_dual_lora_retrieved_topk_rebuild_pilot_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_dual_lora_retrieved_topk_rebuild_pilot_history.csv)
+[am] DONE am_dual_lora_retrieved_topk_rebuild_pilot best_score=0.9740
+{
+  "recall@1": 0.015,
+  "recall@3": 0.0486,
+  "recall@5": 0.0701,
+  "recall@10": 0.0991,
+  "recall@30": 0.1963,
+  "map": 0.0495,
+  "mrr": 0.0495
+}

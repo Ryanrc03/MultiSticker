@@ -1,0 +1,23 @@
+[direct_clip] query_mode=clip_context run=rebuild_medium device=cuda
+[direct_clip] sticker_bank=6758 val=4998
+[direct_clip] encoding sticker image bank
+[direct_clip] encoding 4998 val queries
+[direct_clip] DONE direct_clip_clip_context_rebuild_medium
+{
+  "recall@1": 0.0002,
+  "recall@3": 0.001,
+  "recall@5": 0.0012,
+  "recall@10": 0.0014,
+  "recall@30": 0.0028,
+  "map": 0.0013,
+  "mrr": 0.0013
+}
+[direct_clip] group metrics: {
+  "recall@1": 0.6335,
+  "recall@3": 0.8469,
+  "recall@5": 0.8778,
+  "recall@10": 0.9084,
+  "recall@30": 0.9588,
+  "map": 0.7469,
+  "mrr": 0.7469
+}

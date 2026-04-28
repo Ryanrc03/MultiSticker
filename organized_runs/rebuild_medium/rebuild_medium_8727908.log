@@ -1,0 +1,7 @@
+[rebuild] START scale=medium mode=head_only memory=retrieved_topk train_bs=256 infer_bs=256 threads=16 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/head_only_retrieved_topk_rebuild_medium.log
+[rebuild] DONE mode=head_only memory=retrieved_topk
+[rebuild] START scale=medium direct_clip query=clip_context infer_bs=256 threads=16 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/direct_clip_clip_context_rebuild_medium.log
+[rebuild] DONE direct_clip query=clip_context
+[rebuild] START scale=medium mode=image_lora memory=retrieved_topk train_bs=96 infer_bs=256 threads=16 log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/image_lora_retrieved_topk_rebuild_medium.log
+[rebuild] DONE mode=image_lora memory=retrieved_topk
+/home/rl182/dl/V2L/Project-meme/MultiSticker/scripts/run_rebuild_pilot.sh: line 140: $3: unbound variable

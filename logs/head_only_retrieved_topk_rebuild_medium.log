@@ -1,0 +1,387 @@
+[am] mode=head_only memory=retrieved_topk run=rebuild_medium device=cuda torch_threads=16
+[prepare] building raw sessions
+[prepare] loading 01.json (1/67)
+[prepare] 01.json: rows=289858 sessions=10 cumulative_sessions=10
+[prepare] loading 02.json (2/67)
+[prepare] 02.json: rows=999729 sessions=2 cumulative_sessions=12
+[prepare] loading 03.json (3/67)
+[prepare] 03.json: rows=85714 sessions=65 cumulative_sessions=77
+[prepare] loading 04.json (4/67)
+[prepare] 04.json: rows=475465 sessions=1 cumulative_sessions=78
+[prepare] loading 05.json (5/67)
+[prepare] 05.json: rows=35 sessions=22 cumulative_sessions=100
+[prepare] loading 06.json (6/67)
+[prepare] 06.json: rows=349932 sessions=1 cumulative_sessions=101
+[prepare] loading 07.json (7/67)
+[prepare] 07.json: rows=48 sessions=6 cumulative_sessions=107
+[prepare] loading 08.json (8/67)
+[prepare] 08.json: rows=5639 sessions=416 cumulative_sessions=523
+[prepare] loading 09.json (9/67)
+[prepare] 09.json: rows=6474 sessions=82 cumulative_sessions=605
+[prepare] loading 10.json (10/67)
+[prepare] 10.json: rows=245405 sessions=92 cumulative_sessions=697
+[prepare] loading 11.json (11/67)
+[prepare] 11.json: rows=79 sessions=36 cumulative_sessions=733
+[prepare] loading 12.json (12/67)
+[prepare] 12.json: rows=39032 sessions=26 cumulative_sessions=759
+[prepare] loading 13.json (13/67)
+[prepare] 13.json: rows=603 sessions=183 cumulative_sessions=942
+[prepare] loading 14.json (14/67)
+[prepare] 14.json: rows=291888 sessions=2 cumulative_sessions=944
+[prepare] loading 15.json (15/67)
+[prepare] 15.json: rows=727120 sessions=1 cumulative_sessions=945
+[prepare] loading 16.json (16/67)
+[prepare] 16.json: rows=672134 sessions=94 cumulative_sessions=1039
+[prepare] loading 17.json (17/67)
+[prepare] 17.json: rows=32478 sessions=282 cumulative_sessions=1321
+[prepare] loading 18.json (18/67)
+[prepare] 18.json: rows=4266 sessions=329 cumulative_sessions=1650
+[prepare] loading 19.json (19/67)
+[prepare] 19.json: rows=35469 sessions=13 cumulative_sessions=1663
+[prepare] loading 20.json (20/67)
+[prepare] 20.json: rows=4566 sessions=204 cumulative_sessions=1867
+[prepare] loading 21.json (21/67)
+[prepare] 21.json: rows=3834 sessions=449 cumulative_sessions=2316
+[prepare] loading 22.json (22/67)
+[prepare] 22.json: rows=71604 sessions=116 cumulative_sessions=2432
+[prepare] loading 23.json (23/67)
+[prepare] 23.json: rows=15058 sessions=261 cumulative_sessions=2693
+[prepare] loading 24.json (24/67)
+[prepare] 24.json: rows=973354 sessions=1 cumulative_sessions=2694
+[prepare] loading 25.json (25/67)
+[prepare] 25.json: rows=12493 sessions=425 cumulative_sessions=3119
+[prepare] loading 26.json (26/67)
+[prepare] 26.json: rows=106984 sessions=48 cumulative_sessions=3167
+[prepare] loading 27.json (27/67)
+[prepare] 27.json: rows=108679 sessions=124 cumulative_sessions=3291
+[prepare] loading 28.json (28/67)
+[prepare] 28.json: rows=19734 sessions=133 cumulative_sessions=3424
+[prepare] loading 29.json (29/67)
+[prepare] 29.json: rows=240683 sessions=63 cumulative_sessions=3487
+[prepare] loading 30.json (30/67)
+[prepare] 30.json: rows=183 sessions=32 cumulative_sessions=3519
+[prepare] loading 31.json (31/67)
+[prepare] 31.json: rows=16616 sessions=171 cumulative_sessions=3690
+[prepare] loading 32.json (32/67)
+[prepare] 32.json: rows=417754 sessions=7 cumulative_sessions=3697
+[prepare] loading 33.json (33/67)
+[prepare] 33.json: rows=50922 sessions=4 cumulative_sessions=3701
+[prepare] loading 34.json (34/67)
+[prepare] 34.json: rows=10403 sessions=9 cumulative_sessions=3710
+[prepare] loading 35.json (35/67)
+[prepare] 35.json: rows=2796 sessions=126 cumulative_sessions=3836
+[prepare] loading 36.json (36/67)
+[prepare] 36.json: rows=48190 sessions=218 cumulative_sessions=4054
+[prepare] loading 37.json (37/67)
+[prepare] 37.json: rows=26585 sessions=76 cumulative_sessions=4130
+[prepare] loading 38.json (38/67)
+[prepare] 38.json: rows=20349 sessions=187 cumulative_sessions=4317
+[prepare] loading 39.json (39/67)
+[prepare] 39.json: rows=4284 sessions=48 cumulative_sessions=4365
+[prepare] loading 40.json (40/67)
+[prepare] 40.json: rows=999786 sessions=2 cumulative_sessions=4367
+[prepare] loading 41.json (41/67)
+[prepare] 41.json: rows=3753 sessions=476 cumulative_sessions=4843
+[prepare] loading 42.json (42/67)
+[prepare] 42.json: rows=91847 sessions=5 cumulative_sessions=4848
+[prepare] loading 43.json (43/67)
+[prepare] 43.json: rows=18772 sessions=111 cumulative_sessions=4959
+[prepare] loading 44.json (44/67)
+[prepare] 44.json: rows=38735 sessions=227 cumulative_sessions=5186
+[prepare] loading 45.json (45/67)
+[prepare] 45.json: rows=22583 sessions=191 cumulative_sessions=5377
+[prepare] loading 46.json (46/67)
+[prepare] 46.json: rows=57363 sessions=298 cumulative_sessions=5675
+[prepare] loading 47.json (47/67)
+[prepare] 47.json: rows=503 sessions=96 cumulative_sessions=5771
+[prepare] loading 48.json (48/67)
+[prepare] 48.json: rows=16948 sessions=168 cumulative_sessions=5939
+[prepare] loading 49.json (49/67)
+[prepare] 49.json: rows=19104 sessions=29 cumulative_sessions=5968
+[prepare] loading 50.json (50/67)
+[prepare] 50.json: rows=1272 sessions=13 cumulative_sessions=5981
+[prepare] loading 51.json (51/67)
+[prepare] 51.json: rows=38672 sessions=194 cumulative_sessions=6175
+[prepare] loading 52.json (52/67)
+[prepare] 52.json: rows=34054 sessions=52 cumulative_sessions=6227
+[prepare] loading 53.json (53/67)
+[prepare] 53.json: rows=182632 sessions=24 cumulative_sessions=6251
+[prepare] loading 54.json (54/67)
+[prepare] 54.json: rows=15789 sessions=194 cumulative_sessions=6445
+[prepare] loading 55.json (55/67)
+[prepare] 55.json: rows=978 sessions=57 cumulative_sessions=6502
+[prepare] loading 56.json (56/67)
+[prepare] 56.json: rows=2797 sessions=461 cumulative_sessions=6963
+[prepare] loading 57.json (57/67)
+[prepare] 57.json: rows=1140 sessions=280 cumulative_sessions=7243
+[prepare] loading 58.json (58/67)
+[prepare] 58.json: rows=34627 sessions=34 cumulative_sessions=7277
+[prepare] loading 59.json (59/67)
+[prepare] 59.json: rows=202 sessions=123 cumulative_sessions=7400
+[prepare] loading 60.json (60/67)
+[prepare] 60.json: rows=22352 sessions=44 cumulative_sessions=7444
+[prepare] loading 61.json (61/67)
+[prepare] 61.json: rows=3723 sessions=92 cumulative_sessions=7536
+[prepare] loading 62.json (62/67)
+[prepare] 62.json: rows=123891 sessions=94 cumulative_sessions=7630
+[prepare] loading 63.json (63/67)
+[prepare] 63.json: rows=6094 sessions=441 cumulative_sessions=8071
+[prepare] loading 64.json (64/67)
+[prepare] 64.json: rows=148602 sessions=7 cumulative_sessions=8078
+[prepare] loading 65.json (65/67)
+[prepare] 65.json: rows=58 sessions=24 cumulative_sessions=8102
+[prepare] loading 66.json (66/67)
+[prepare] 66.json: rows=67 sessions=26 cumulative_sessions=8128
+[prepare] loading 67.json (67/67)
+[prepare] 67.json: rows=648950 sessions=1 cumulative_sessions=8129
+[prepare] media counts json_files=67 total_rows=8951733 supported_media=['.gif', '.png', '.webm'] supported_sticker_rows=370222 unsupported_sticker_rows=0 png_rows=194033 gif_rows=58160 webm_rows=118029 offensive_rows=141970
+[prepare] scanned sessions=100/8129 provisional_samples=39973
+[prepare] scanned sessions=200/8129 provisional_samples=54085
+[prepare] scanned sessions=300/8129 provisional_samples=54348
+[prepare] scanned sessions=400/8129 provisional_samples=54554
+[prepare] scanned sessions=500/8129 provisional_samples=55933
+[prepare] scanned sessions=600/8129 provisional_samples=59204
+[prepare] scanned sessions=700/8129 provisional_samples=69886
+[prepare] scanned sessions=800/8129 provisional_samples=71482
+[prepare] scanned sessions=900/8129 provisional_samples=71501
+[prepare] scanned sessions=1000/8129 provisional_samples=131595
+[prepare] scanned sessions=1100/8129 provisional_samples=139550
+[prepare] scanned sessions=1200/8129 provisional_samples=139650
+[prepare] scanned sessions=1300/8129 provisional_samples=140496
+[prepare] scanned sessions=1400/8129 provisional_samples=141106
+[prepare] scanned sessions=1500/8129 provisional_samples=141206
+[prepare] scanned sessions=1600/8129 provisional_samples=141247
+[prepare] scanned sessions=1700/8129 provisional_samples=150592
+[prepare] scanned sessions=1800/8129 provisional_samples=150962
+[prepare] scanned sessions=1900/8129 provisional_samples=151269
+[prepare] scanned sessions=2000/8129 provisional_samples=151269
+[prepare] scanned sessions=2100/8129 provisional_samples=151269
+[prepare] scanned sessions=2200/8129 provisional_samples=151269
+[prepare] scanned sessions=2300/8129 provisional_samples=151270
+[prepare] scanned sessions=2400/8129 provisional_samples=151612
+[prepare] scanned sessions=2500/8129 provisional_samples=153505
+[prepare] scanned sessions=2600/8129 provisional_samples=154117
+[prepare] scanned sessions=2700/8129 provisional_samples=158715
+[prepare] scanned sessions=2800/8129 provisional_samples=158733
+[prepare] scanned sessions=2900/8129 provisional_samples=158733
+[prepare] scanned sessions=3000/8129 provisional_samples=158733
+[prepare] scanned sessions=3100/8129 provisional_samples=158966
+[prepare] scanned sessions=3200/8129 provisional_samples=160085
+[prepare] scanned sessions=3300/8129 provisional_samples=163549
+[prepare] scanned sessions=3400/8129 provisional_samples=163668
+[prepare] scanned sessions=3500/8129 provisional_samples=165180
+[prepare] scanned sessions=3600/8129 provisional_samples=165298
+[prepare] scanned sessions=3700/8129 provisional_samples=251746
+[prepare] scanned sessions=3800/8129 provisional_samples=252448
+[prepare] scanned sessions=3900/8129 provisional_samples=253156
+[prepare] scanned sessions=4000/8129 provisional_samples=253157
+[prepare] scanned sessions=4100/8129 provisional_samples=253983
+[prepare] scanned sessions=4200/8129 provisional_samples=254320
+[prepare] scanned sessions=4300/8129 provisional_samples=254321
+[prepare] scanned sessions=4400/8129 provisional_samples=276040
+[prepare] scanned sessions=4500/8129 provisional_samples=276055
+[prepare] scanned sessions=4600/8129 provisional_samples=276105
+[prepare] scanned sessions=4700/8129 provisional_samples=276138
+[prepare] scanned sessions=4800/8129 provisional_samples=276149
+[prepare] scanned sessions=4900/8129 provisional_samples=278356
+[prepare] scanned sessions=5000/8129 provisional_samples=278858
+[prepare] scanned sessions=5100/8129 provisional_samples=278967
+[prepare] scanned sessions=5200/8129 provisional_samples=279297
+[prepare] scanned sessions=5300/8129 provisional_samples=279499
+[prepare] scanned sessions=5400/8129 provisional_samples=280219
+[prepare] scanned sessions=5500/8129 provisional_samples=280341
+[prepare] scanned sessions=5600/8129 provisional_samples=280369
+[prepare] scanned sessions=5700/8129 provisional_samples=280377
+[prepare] scanned sessions=5800/8129 provisional_samples=280437
+[prepare] scanned sessions=5900/8129 provisional_samples=280498
+[prepare] scanned sessions=6000/8129 provisional_samples=282746
+[prepare] scanned sessions=6100/8129 provisional_samples=282909
+[prepare] scanned sessions=6200/8129 provisional_samples=303927
+[prepare] scanned sessions=6300/8129 provisional_samples=320666
+[prepare] scanned sessions=6400/8129 provisional_samples=322473
+[prepare] scanned sessions=6500/8129 provisional_samples=323866
+[prepare] scanned sessions=6600/8129 provisional_samples=324072
+[prepare] scanned sessions=6700/8129 provisional_samples=324222
+[prepare] scanned sessions=6800/8129 provisional_samples=324474
+[prepare] scanned sessions=6900/8129 provisional_samples=324537
+[prepare] scanned sessions=7000/8129 provisional_samples=324572
+[prepare] scanned sessions=7100/8129 provisional_samples=324573
+[prepare] scanned sessions=7200/8129 provisional_samples=324574
+[prepare] scanned sessions=7300/8129 provisional_samples=346472
+[prepare] scanned sessions=7400/8129 provisional_samples=346472
+[prepare] scanned sessions=7500/8129 provisional_samples=347239
+[prepare] scanned sessions=7600/8129 provisional_samples=354083
+[prepare] scanned sessions=7700/8129 provisional_samples=354097
+[prepare] scanned sessions=7800/8129 provisional_samples=354097
+[prepare] scanned sessions=7900/8129 provisional_samples=354102
+[prepare] scanned sessions=8000/8129 provisional_samples=354103
+[prepare] scanned sessions=8100/8129 provisional_samples=361124
+[prepare] scanned sessions=8129/8129 provisional_samples=368503
+[prepare] full split sizes before label filtering train=328953 val=39550 test=0
+[prepare] full_train_size_before_cap=181758 train_size_after_cap=30000 valid_size_after_filtering=5000 final_sticker_pool=7011
+[prepare] loading memory retriever
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10658.76it/s]
+[1mBertModel LOAD REPORT[0m from: intfloat/multilingual-e5-small
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+[prepare] encoding 8129 session summaries
+[prepare] encoding 35000 sample queries
+[prepare] manifest saved to /scratch/rl182/meme/usticker_igsr/data/usticker_manifest_rebuild_medium.json
+[am] sticker_bank=6758 train=28819 val=4998
+[am] precomputing frozen text embeddings
+[am] precomputing frozen image bank
+[am] epoch 1 step 0 seen=256/28819 loss=9.4542 avg_loss=9.4542 samples/s=3606.5
+[am] epoch 1 step 25 seen=6656/28819 loss=8.1816 avg_loss=8.4982 samples/s=45277.9
+[am] epoch 1 step 50 seen=13056/28819 loss=7.8487 avg_loss=8.2940 samples/s=60045.3
+[am] epoch 1 step 75 seen=19456/28819 loss=7.6951 avg_loss=8.1683 samples/s=67222.6
+[am] epoch 1 step 100 seen=25856/28819 loss=7.9030 avg_loss=8.0874 samples/s=72377.1
+[am] epoch 1 summary {'epoch': 1, 'train_loss': 8.0537, 'val_recall@1': 0.0054, 'val_recall@5': 0.015, 'val_recall@30': 0.0552, 'val_group_recall@30': 0.9206, 'epoch_seconds': 2.71, 'train_samples_per_second': 10616.46}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      8.0537  0.0054  0.0150  0.0552  0.9206  2.7     10616.5  
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0036  0.0089  0.0650  0.9511  
+gif    2284   0.0092  0.0263  0.0714  0.9247  
+webm   1038   0.0000  0.0000  0.0039  0.8622  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=549 top=1:5974286628129083332.png:3.923, 2:202331403893877192.png:3.323, 3:202331403893876653.png:2.926*, 4:202331403893877459.png:2.920, 5:6048865359379828804.png:2.870
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=2236 top=1:6021381219407629477.gif:4.738*, 2:6021698441397144863.gif:4.631*, 3:6023765278444227815.gif:4.487*, 4:6021764420684746125.gif:4.372*, 5:6023735656054787127.gif:4.176*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=5411 top=1:6305336866149239638.webm:4.622*, 2:6021764420684746125.gif:4.599*, 3:6021698441397144863.gif:4.514*, 4:6021381219407629477.gif:4.396*, 5:6062035885182944564.webm:4.353
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=110 top=1:5974286628129083332.png:3.984*, 2:202331403893877192.png:3.247*, 3:6048626567788105389.png:2.968*, 4:202331403893870823.png:2.932*, 5:5787528676866264709.png:2.760*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=3506 top=1:5332725183914453473.webm:2.896*, 2:5332720510990035415.webm:2.855*, 3:5332747882816611457.webm:2.558*, 4:5460725719120221290.webm:2.500, 5:5330138621464822567.webm:2.458*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=821 top=1:6021764420684746125.gif:4.471*, 2:6021530765873909298.gif:4.460*, 3:6021381219407629477.gif:4.436*, 4:6021698441397144863.gif:4.420*, 5:6023735656054787127.gif:4.127*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=945 top=1:6194828598868709293.png:3.560*, 2:6195109987946074578.png:3.460, 3:6192972039125471381.png:3.329, 4:5465188911695271478.gif:3.054*, 5:6194758784175313049.png:2.961*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=93 top=1:5974227297450854964.png:4.005*, 2:5974287276669144007.png:3.861*, 3:773947703670341879.gif:3.742*, 4:773947703670342222.gif:3.723*, 5:773947703670341874.gif:3.591*
+[am] epoch 1 checkpoint saved (best_score=0.9206, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_head_only_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_head_only_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 2 step 0 seen=256/28819 loss=7.5740 avg_loss=7.5740 samples/s=59878.5
+[am] epoch 2 step 25 seen=6656/28819 loss=7.4784 avg_loss=7.6224 samples/s=91265.8
+[am] epoch 2 step 50 seen=13056/28819 loss=7.4686 avg_loss=7.6013 samples/s=92468.4
+[am] epoch 2 step 75 seen=19456/28819 loss=7.6043 avg_loss=7.5934 samples/s=92452.1
+[am] epoch 2 step 100 seen=25856/28819 loss=7.6772 avg_loss=7.5933 samples/s=92975.0
+[am] epoch 2 summary {'epoch': 2, 'train_loss': 7.5887, 'val_recall@1': 0.0114, 'val_recall@5': 0.0344, 'val_recall@30': 0.1034, 'val_group_recall@30': 0.9212, 'epoch_seconds': 2.63, 'train_samples_per_second': 10963.29}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      8.0537  0.0054  0.0150  0.0552  0.9206  2.7     10616.5  
+2      7.5887  0.0114  0.0344  0.1034  0.9212  2.6     10963.3  
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0054  0.0233  0.1092  0.9469  
+gif    2284   0.0210  0.0569  0.1384  0.9321  
+webm   1038   0.0000  0.0029  0.0173  0.8555  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=774 top=1:5974286628129083332.png:4.228, 2:202331403893877192.png:3.567, 3:202331403893877459.png:3.561, 4:6048865359379828804.png:3.419, 5:2562980648230846537.gif:3.345
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=1880 top=1:6021381219407629477.gif:5.219*, 2:6021698441397144863.gif:5.043*, 3:6021530765873909298.gif:4.731*, 4:6021764420684746125.gif:4.598*, 5:6023732950225390868.gif:4.499*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=5406 top=1:6305336866149239638.webm:5.097*, 2:6062035885182944564.webm:4.448, 3:6021530765873909298.gif:4.279*, 4:5843530416136394118.webm:4.254*, 5:5985741675274703134.webm:4.247
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=31 top=1:5974286628129083332.png:4.207*, 2:202331403893877192.png:3.743*, 3:202331403893877459.png:3.541*, 4:202331403893877857.png:3.537*, 5:5974478110656039677.png:3.460*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=4931 top=1:5460792334062981498.webm:3.685*, 2:5350346567146548967.webm:3.685*, 3:6226329826047822003.webm:3.265, 4:5782807927987376193.webm:3.265*, 5:675168768736887035.png:3.143*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=418 top=1:6021530765873909298.gif:4.925*, 2:1833563040931381773.png:4.702*, 3:5240069321861908949.webm:4.691*, 4:6183817771600579939.png:4.657*, 5:674369926294667305.png:4.633*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=295 top=1:773947703670341879.gif:3.962*, 2:773947703670342222.gif:3.656*, 3:5436023536839828911.gif:3.543, 4:773947703670342405.gif:3.500, 5:773947703670341886.gif:3.421*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=69 top=1:773947703670341874.gif:4.918*, 2:773947703670342222.gif:4.553*, 3:773947703670341889.gif:4.534*, 4:773947703670342216.gif:4.468, 5:773947703670341881.gif:4.443*
+[am] epoch 2 checkpoint saved (best_score=0.9212, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_head_only_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_head_only_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 3 step 0 seen=256/28819 loss=7.3376 avg_loss=7.3376 samples/s=60904.2
+[am] epoch 3 step 25 seen=6656/28819 loss=7.2424 avg_loss=7.3729 samples/s=92477.2
+[am] epoch 3 step 50 seen=13056/28819 loss=7.3333 avg_loss=7.3778 samples/s=93444.1
+[am] epoch 3 step 75 seen=19456/28819 loss=7.5340 avg_loss=7.3947 samples/s=93566.8
+[am] epoch 3 step 100 seen=25856/28819 loss=7.5094 avg_loss=7.3905 samples/s=93380.0
+[am] epoch 3 summary {'epoch': 3, 'train_loss': 7.3876, 'val_recall@1': 0.0088, 'val_recall@5': 0.0286, 'val_recall@30': 0.1126, 'val_group_recall@30': 0.9384, 'epoch_seconds': 2.63, 'train_samples_per_second': 10948.14}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      8.0537  0.0054  0.0150  0.0552  0.9206  2.7     10616.5  
+2      7.5887  0.0114  0.0344  0.1034  0.9212  2.6     10963.3  
+3      7.3876  0.0088  0.0286  0.1126  0.9384  2.6     10948.1  
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0036  0.0143  0.1056  0.9588  
+gif    2284   0.0166  0.0504  0.1559  0.9418  
+webm   1038   0.0000  0.0039  0.0289  0.8979  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=528 top=1:5974286628129083332.png:3.973, 2:202331403893877864.png:3.790, 3:202331403893877192.png:3.646, 4:202331403893873368.png:3.552, 5:5996589680332639395.png:3.495*
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=1396 top=1:6021381219407629477.gif:5.727*, 2:6021698441397144863.gif:5.697*, 3:6021530765873909298.gif:5.387*, 4:6021764420684746125.gif:5.182*, 5:6023765278444227815.gif:4.845*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=6041 top=1:6305336866149239638.webm:5.407*, 2:6062035885182944564.webm:4.976, 3:6021764420684746125.gif:4.862*, 4:5985741675274703134.webm:4.856, 5:5427016341880057475.webm:4.833*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=138 top=1:5974286628129083332.png:3.910*, 2:6048626567788105389.png:3.678*, 3:202331403893874028.png:3.654*, 4:202331403893870300.png:3.610*, 5:5897731576267019548.png:3.412*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=923 top=1:5893157539175992440.png:2.999*, 2:3297424398058782725.png:2.856*, 3:5458475809092155697.webm:2.700, 4:5215445956526359761.webm:2.700*, 5:5893059875914647467.png:2.662*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=348 top=1:1833563040931381773.png:6.130*, 2:1833563040931381719.png:6.004*, 3:1833563040931381721.png:5.829*, 4:1833563040931381752.png:5.775*, 5:6091277023261492067.png:5.741*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=64 top=1:773947703670341886.gif:4.754*, 2:773947703670342405.gif:4.415, 3:5436023536839828911.gif:4.403, 4:773947703670341882.gif:4.308*, 5:773947703670341879.gif:4.282*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=316 top=1:773947703670341874.gif:5.043*, 2:773947703670341897.gif:4.819, 3:773947703670341875.gif:4.739*, 4:773947703670342216.gif:4.728, 5:5276130773517213254.gif:4.665*
+[am] epoch 3 checkpoint saved (best_score=0.9384, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_head_only_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_head_only_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 4 step 0 seen=256/28819 loss=7.3963 avg_loss=7.3963 samples/s=56920.2
+[am] epoch 4 step 25 seen=6656/28819 loss=7.0861 avg_loss=7.1748 samples/s=86710.4
+[am] epoch 4 step 50 seen=13056/28819 loss=7.4659 avg_loss=7.1820 samples/s=89404.3
+[am] epoch 4 step 75 seen=19456/28819 loss=7.2811 avg_loss=7.2036 samples/s=90435.6
+[am] epoch 4 step 100 seen=25856/28819 loss=7.1639 avg_loss=7.2101 samples/s=90730.1
+[am] epoch 4 summary {'epoch': 4, 'train_loss': 7.2113, 'val_recall@1': 0.0116, 'val_recall@5': 0.0376, 'val_recall@30': 0.1405, 'val_group_recall@30': 0.9414, 'epoch_seconds': 2.65, 'train_samples_per_second': 10886.62}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      8.0537  0.0054  0.0150  0.0552  0.9206  2.7     10616.5  
+2      7.5887  0.0114  0.0344  0.1034  0.9212  2.6     10963.3  
+3      7.3876  0.0088  0.0286  0.1126  0.9384  2.6     10948.1  
+4      7.2113  0.0116  0.0376  0.1405  0.9414  2.6     10886.6  
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0042  0.0298  0.1181  0.9606  
+gif    2284   0.0201  0.0556  0.2062  0.9418  
+webm   1038   0.0048  0.0106  0.0318  0.9094  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=378 top=1:5974286628129083332.png:4.008, 2:2562980648230846537.gif:3.720, 3:202331403893877864.png:3.695, 4:5996589680332639395.png:3.502*, 5:202331403893874028.png:3.496
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=1357 top=1:6021698441397144863.gif:6.015*, 2:6021381219407629477.gif:5.933*, 3:6021530765873909298.gif:5.603*, 4:6021764420684746125.gif:5.012*, 5:5843978729117716639.gif:4.959*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=5347 top=1:6305336866149239638.webm:5.728*, 2:6021530765873909298.gif:5.590*, 3:6062035885182944564.webm:5.432, 4:6021764420684746125.gif:5.364*, 5:6023732950225390868.gif:5.354*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=116 top=1:5974286628129083332.png:4.029*, 2:6048626567788105389.png:3.297*, 3:5897731576267019548.png:3.296*, 4:202331403893877192.png:3.278*, 5:5812307524312894395.png:3.252*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=4102 top=1:4906829303355802062.gif:3.347*, 2:1398066688695468222.png:3.241*, 3:3332387025281090104.png:3.240*, 4:545248250005815494.png:3.181*, 5:773947703670341901.gif:3.032*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=468 top=1:1833563040931381719.png:5.841*, 2:1269403972611866873.gif:5.769*, 3:1017943490086044343.png:5.684*, 4:6228825811932152690.gif:5.658, 5:1833563040931381752.png:5.643*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=75 top=1:773947703670341882.gif:5.180*, 2:773947703670341886.gif:5.090*, 3:5436023536839828911.gif:5.066, 4:773947703670341879.gif:5.007*, 5:773947703670342216.gif:4.981
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=483 top=1:773947703670342216.gif:6.053, 2:773947703670341874.gif:6.026*, 3:773947703670341875.gif:5.958*, 4:773947703670341897.gif:5.915, 5:5276130773517213254.gif:5.842*
+[am] epoch 4 checkpoint saved (best_score=0.9414, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_head_only_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_head_only_retrieved_topk_rebuild_medium_history.csv)
+[am] epoch 5 step 0 seen=256/28819 loss=6.8869 avg_loss=6.8869 samples/s=61539.5
+[am] epoch 5 step 25 seen=6656/28819 loss=6.9607 avg_loss=6.9646 samples/s=88565.3
+[am] epoch 5 step 50 seen=13056/28819 loss=7.0529 avg_loss=6.9782 samples/s=91284.5
+[am] epoch 5 step 75 seen=19456/28819 loss=6.9869 avg_loss=7.0007 samples/s=92320.0
+[am] epoch 5 step 100 seen=25856/28819 loss=7.3031 avg_loss=7.0318 samples/s=93180.9
+[am] epoch 5 summary {'epoch': 5, 'train_loss': 7.0296, 'val_recall@1': 0.011, 'val_recall@5': 0.0296, 'val_recall@30': 0.1263, 'val_group_recall@30': 0.9406, 'epoch_seconds': 2.62, 'train_samples_per_second': 10986.02}
+[am] metric history
+epoch  loss    r@1     r@5     r@30    grp@30  sec/ep  samples/s
+-----  ------  ------  ------  ------  ------  ------  ---------
+1      8.0537  0.0054  0.0150  0.0552  0.9206  2.7     10616.5  
+2      7.5887  0.0114  0.0344  0.1034  0.9212  2.6     10963.3  
+3      7.3876  0.0088  0.0286  0.1126  0.9384  2.6     10948.1  
+4      7.2113  0.0116  0.0376  0.1405  0.9414  2.6     10886.6  
+5      7.0296  0.0110  0.0296  0.1263  0.9406  2.6     10986.0  
+[am] per-media validation
+media  count  r@1     r@5     r@30    group@30
+-----  -----  ------  ------  ------  --------
+png    1676   0.0048  0.0197  0.1062  0.9594  
+gif    2284   0.0201  0.0499  0.1935  0.9422  
+webm   1038   0.0010  0.0010  0.0106  0.9066  
+[am] validation examples
+[am]   sample=58_session_0003#turn2247 intent=celebration_approval gold=202331403893875224.png rank=1155 top=1:2562980648230846537.gif:4.689, 2:5974034655282728539.png:3.740, 3:202331403893877192.png:3.727, 4:5974286628129083332.png:3.712, 5:202331403893877864.png:3.712
+[am]   sample=40_session_0001#turn524076 intent=encouragement_support gold=359541685262226181.gif rank=2315 top=1:6021381219407629477.gif:7.523*, 2:6021698441397144863.gif:7.392*, 3:6021764420684746125.gif:6.743*, 4:5843978729117716639.gif:6.275*, 5:6023735656054787127.gif:6.098*
+[am]   sample=40_session_0001#turn35277 intent=confusion_curiosity gold=244604348921809134.png rank=6193 top=1:6021764420684746125.gif:5.202*, 2:6021698441397144863.gif:4.899*, 3:6021381219407629477.gif:4.716*, 4:5985741675274703134.webm:4.507, 5:6305336866149239638.webm:4.383*
+[am]   sample=58_session_0003#turn2497 intent=neutral_acknowledgment gold=5807453270670576035.png rank=148 top=1:5974286628129083332.png:4.035*, 2:202331403893877192.png:3.704*, 3:5974478110656039677.png:3.633*, 4:202331403893876577.png:3.357*, 5:202331403893877868.png:3.273*
+[am]   sample=52_session_0001#turn2840 intent=neutral_acknowledgment gold=5911179252014779708.png rank=5348 top=1:1621864712796897307.png:3.937*, 2:545248250005815494.png:3.932*, 3:5350346567146548967.webm:3.915*, 4:5460792334062981498.webm:3.915*, 5:5206442227605184475.webm:3.674*
+[am]   sample=40_session_0001#turn575946 intent=humor_teasing gold=5217480246311271496.webm rank=1227 top=1:6021381219407629477.gif:6.623*, 2:6021764420684746125.gif:6.575*, 3:6021698441397144863.gif:6.467*, 4:6023735656054787127.gif:6.049*, 5:1833563040931381719.png:5.782*
+[am]   sample=62_session_0018#turn51173 intent=neutral_acknowledgment gold=1391391008142393351.gif rank=70 top=1:773947703670341879.gif:5.106*, 2:5436023536839828911.gif:4.868, 3:773947703670342216.gif:4.799, 4:773947703670341886.gif:4.704*, 5:773947703670341882.gif:4.551*
+[am]   sample=62_session_0018#turn47900 intent=neutral_acknowledgment gold=5447662683463618227.gif rank=391 top=1:773947703670342217.gif:5.152*, 2:5996838878630119901.gif:4.616*, 3:773947703670342218.gif:4.591*, 4:6001572276187695369.gif:4.406*, 5:5402238082843944282.gif:4.247*
+[am] epoch 5 checkpoint saved (best_score=0.9414, epoch_log=/home/rl182/dl/V2L/Project-meme/MultiSticker/logs/am_head_only_retrieved_topk_rebuild_medium_epochs.jsonl, history_csv=/home/rl182/dl/V2L/Project-meme/MultiSticker/results/am_head_only_retrieved_topk_rebuild_medium_history.csv)
+[am] DONE am_head_only_retrieved_topk_rebuild_medium best_score=0.9414
+{
+  "recall@1": 0.011,
+  "recall@3": 0.02,
+  "recall@5": 0.0296,
+  "recall@10": 0.054,
+  "recall@30": 0.1263,
+  "map": 0.0282,
+  "mrr": 0.0282
+}
