@@ -1,0 +1,72 @@
+{
+  "row_idx": 846,
+  "sample_id": "52_session_0001#turn4453",
+  "domain": "Media Sharing",
+  "intent_label": "frustration_disapproval",
+  "intent_text": "Expresses annoyance or irritation, likely showing a sticker with an angry or upset face.",
+  "context_text": "96db0d27: [sticker:6264779932354742537.webm] || 0be614be: [sticker:5327816856633872803.png] || 388804ee: [sticker:5197541655208535110.webm] || 96db0d27: || dfe574c2: Sticker pack miakhalifanormalingdife44 has been disabled || 288d6920: [sticker:5765157759884463353.webm] || c9327094: || bc545aa2: || 2200c894: [sticker:5222072992279824346.gif] || a788e0c8: [sticker:5913754969671994557.webm] || bc545aa2: [sticker:5913743502109314171.png] || b171cd84: [sticker:5915668583760793441.webm]",
+  "context_preview": "96db0d27: [sticker:6264779932354742537.webm] || 0be614be: [sticker:5327816856633872803.png] || 388804ee: [sticker:5197541655208535110.webm] || 96db0d27: || dfe574c2: Sticker pack miakhalifanormalingdife44 has been dis...",
+  "memory_text": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+  "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+  "context_sticker_ids": [
+    "6264779932354742537.webm",
+    "5327816856633872803.png",
+    "5197541655208535110.webm",
+    "5765157759884463353.webm",
+    "5222072992279824346.gif",
+    "5913754969671994557.webm",
+    "5913743502109314171.png",
+    "5915668583760793441.webm"
+  ],
+  "gold": "675168768736887035.png",
+  "gold_rank": 2,
+  "gold_score": 8.5616,
+  "top_margin": 0.0214,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "6064203997558867130.webm",
+      "score": 8.583,
+      "same_group": false,
+      "group": "humor_teasing"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "675168768736887035.png",
+      "score": 8.5616,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "5792016741596926703.webm",
+      "score": 8.5073,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "6233206949157013374.webm",
+      "score": 8.473,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "5291750409931600369.webm",
+      "score": 8.473,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": [
+    "5913743502109314171.png",
+    "6264779932354742537.webm",
+    "5327816856633872803.png",
+    "5197541655208535110.webm",
+    "5765157759884463353.webm",
+    "5222072992279824346.gif",
+    "5913754969671994557.webm",
+    "5915668583760793441.webm"
+  ]
+}

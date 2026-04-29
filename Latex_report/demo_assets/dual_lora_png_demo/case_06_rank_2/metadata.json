@@ -1,0 +1,54 @@
+{
+  "row_idx": 842,
+  "sample_id": "03_session_0037#turn873",
+  "domain": "Media Sharing",
+  "intent_label": "humor_teasing",
+  "intent_text": "The reply is a playful laugh, fitting a sticker with a laughing or teasing emoji.",
+  "context_text": "3d03a55b: Hallo Mark, Vielen Dank für Dein breites Angebot illegaler Güter. Hast du auch heftig-deftige Memes im Angebot, welche zu gut sind, um legal zu sein, und welche wir hier einer Anal || 0f82d9c3: eat shit || 3d12cd35: PFFFFFTTTT || 3167a3c1: Back Market is a site where people can sell their used devices, and others can then buy said devices after they've been refurbished. || bb482d85: I have an attention deficit disorder. Everyone please give me attention thanks || 17374888: hiiii :3 || 17374888: is that enough attention || d9f3f839: yes thank you || ff835b6f: check dm's || 7930f6a7: petting you || 5a2fa5aa: HELLO || d9f3f839: hiii",
+  "context_preview": "3d03a55b: Hallo Mark, Vielen Dank für Dein breites Angebot illegaler Güter. Hast du auch heftig-deftige Memes im Angebot, welche zu gut sind, um legal zu sein, und welche wir hier einer Anal || 0f82d9c3: eat shit || 3...",
+  "memory_text": "The chat veered from grandparents playing with the Polish flag to random topics like solar eclipses and ancient architects. 3ecb9e07 shared an unfortunate situation of skipping classes due to car issues, specifically lacking the right nuts to tighten something, but has a spare wheel. There was also a mention of a Home Depot employee reacting oddly to a query about RJ45 windows. || The chat started with references to The Simpsons, a sign designer, and the CEO of Lacoste. Later, 2b6d38c6 fixed a PC issue using an Arch install stick, feeling relieved despite self-deprecating about their initial oversight. They also discussed a capitalized EFI folder as a potential cause of a previous issue, with a humorous reference to capitalism. || Chat session mixed Finnish, Arabic, and English with playful wordplay and a joke about 'labia franca.' Tension arose with a request to leave, followed by a sarcastic 'Rude' response.",
+  "memory_preview": "The chat veered from grandparents playing with the Polish flag to random topics like solar eclipses and ancient architects. 3ecb9e07 shared an unfortunate situation of skipping classes due to car issues, specifically ...",
+  "context_sticker_ids": [],
+  "gold": "586332391035896109.png",
+  "gold_rank": 2,
+  "gold_score": 7.6361,
+  "top_margin": 0.1468,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "1833747660100599875.png",
+      "score": 7.7829,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "586332391035896109.png",
+      "score": 7.6361,
+      "same_group": true,
+      "group": "humor_teasing"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "5327759986971908500.webm",
+      "score": 7.5762,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "5463267974687231154.gif",
+      "score": 7.5546,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "5028566165631271510.webm",
+      "score": 7.5431,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": []
+}

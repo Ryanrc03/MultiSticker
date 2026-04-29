@@ -1,0 +1,58 @@
+{
+  "row_idx": 1814,
+  "sample_id": "37_session_0010#turn625",
+  "domain": "Anime",
+  "intent_label": "surprise_reaction",
+  "intent_text": "The sticker likely expresses shock or disbelief at the unexpected news about the anime season, with a tone of excitement mixed with surprise.",
+  "context_text": "3de88128: merde ils nous ont gater cette serie || 3de88128: on veut voir le sang pas les herbes ! || 483e4d37: S'il vous plaît personne ici n'a le film ou le lien pour Suzume ? || fe08ca80: || e634d6f7: Bonjour! J'viens d'me rendre compte que la S02 de Nagatoro est en diffusion sur voiranime depuis le 7 Janvier😱 || e634d6f7: et j'ai l'impression que ça figure pas dans la liste des anime de la semaine😱 || baae072b: Abon les gas c le pire ça vaut pas la peine d’être Télécharger ? || d60c359d: Xa c’est du manga 😂😊😊😊😊🤩🤩🤩🤩🤩🤩🤩🤩🤩 || eb2a53fb: Pourquoi les critiques pourtant c'est un superbe épisode? || eb2a53fb: [sticker:6037376171539172883.png] || 85ee1b17: || 85ee1b17: Hi",
+  "context_preview": "3de88128: merde ils nous ont gater cette serie || 3de88128: on veut voir le sang pas les herbes ! || 483e4d37: S'il vous plaît personne ici n'a le film ou le lien pour Suzume ? || fe08ca80: || e634d6f7: Bonjour! J'vie...",
+  "memory_text": "Users discussed Hyouken no Majutsushi episode 3 VOSTFR, with one facing file reading issues, solved by using the mp4 format. There was a query about episode 2's release date, met with a skeptical reaction. Other anime episodes mentioned included Eiyuu Densetsu Sen no Kiseki, Ars no Kyojuu, and Buddy Daddies. || {\"session_memory_text\":\"In the chat about anime, 885a7e39 compared a character's ability to Megumi from Konosuba, and joked about demanding something. 4c5ffc0c agreed with laughter. Ebbf4ed0 shared episode details for Eiyuu Densetsu Sen no Kiseki Northern War, Ars no Kyojuu, and Buddy Daddies. D44ce865 used || A user discussed episode 4 of 'Ningen Fushin no Boukenshatachi ga Sekai wo Sukuu Youdesu' in VOSTFR. Another asked about the availability of 'Zuo shou shang' anime. There was also a query about who plays Dokkan Battle.",
+  "memory_preview": "Users discussed Hyouken no Majutsushi episode 3 VOSTFR, with one facing file reading issues, solved by using the mp4 format. There was a query about episode 2's release date, met with a skeptical reaction. Other anime...",
+  "context_sticker_ids": [
+    "6037376171539172883.png"
+  ],
+  "gold": "1650176364118016154.png",
+  "gold_rank": 2,
+  "gold_score": 7.9929,
+  "top_margin": 0.0577,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "5904490759574260959.webm",
+      "score": 8.0506,
+      "same_group": false,
+      "group": "celebration_approval"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "1650176364118016154.png",
+      "score": 7.9929,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "1650176364118016152.png",
+      "score": 7.8922,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "6102939057766008344.webm",
+      "score": 7.8577,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "239526293123639684.png",
+      "score": 7.8423,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": [
+    "6037376171539172883.png"
+  ]
+}

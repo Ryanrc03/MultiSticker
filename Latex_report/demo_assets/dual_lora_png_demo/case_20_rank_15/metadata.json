@@ -1,0 +1,74 @@
+{
+  "row_idx": 2831,
+  "sample_id": "52_session_0018#turn180",
+  "domain": "Media Sharing",
+  "intent_label": "neutral_acknowledgment",
+  "intent_text": "The reply is a simple acknowledgment without strong emotional content.",
+  "context_text": "None: [sticker:1621864712796897343.png] || 280be97b: [sticker:1621864712796897341.png] || None: [sticker:1621864712796897341.png] || 98a90540: [sticker:6168125125037132167.webm] || None: [sticker:6170316666459653776.webm] || 036f7380: [sticker:5206346003157890385.webm] || 0d6da018: [sticker:5201779177316956187.webm] || ffb1175b: || 7773821c: [sticker:643524467607210270.gif] || ffb1175b: [sticker:6039635375876476882.gif] || 280be97b: [sticker:6039461580024844037.gif] || dfe574c2: Sticker pack stotv has been disabled",
+  "context_preview": "None: [sticker:1621864712796897343.png] || 280be97b: [sticker:1621864712796897341.png] || None: [sticker:1621864712796897341.png] || 98a90540: [sticker:6168125125037132167.webm] || None: [sticker:6170316666459653776.w...",
+  "memory_text": "Stickers were shared back and forth, with a mix of animated webms and gifs. The session ended with a note about a sticker pack being disabled. || Sticker exchange session. Sticker pack webp_14 was disabled. Multiple stickers were shared. || Sticker packs rushist_huilo and emtikaka_by_fstikbot were disabled. Two stickers were shared during the conversation.",
+  "memory_preview": "Stickers were shared back and forth, with a mix of animated webms and gifs. The session ended with a note about a sticker pack being disabled. || Sticker exchange session. Sticker pack webp_14 was disabled. Multiple s...",
+  "context_sticker_ids": [
+    "1621864712796897343.png",
+    "1621864712796897341.png",
+    "6168125125037132167.webm",
+    "6170316666459653776.webm",
+    "5206346003157890385.webm",
+    "5201779177316956187.webm",
+    "643524467607210270.gif",
+    "6039635375876476882.gif",
+    "6039461580024844037.gif"
+  ],
+  "gold": "2345073579797774953.png",
+  "gold_rank": 15,
+  "gold_score": 8.5721,
+  "top_margin": 0.1553,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "675168768736887035.png",
+      "score": 9.0615,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "5472006553802380397.webm",
+      "score": 8.9061,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "5291750409931600369.webm",
+      "score": 8.9011,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "6233206949157013374.webm",
+      "score": 8.9011,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "5460792334062981498.webm",
+      "score": 8.8818,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": [
+    "1621864712796897341.png",
+    "643524467607210270.gif",
+    "1621864712796897343.png",
+    "6168125125037132167.webm",
+    "6170316666459653776.webm",
+    "5206346003157890385.webm",
+    "5201779177316956187.webm",
+    "6039635375876476882.gif",
+    "6039461580024844037.gif"
+  ]
+}

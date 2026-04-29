@@ -1,0 +1,54 @@
+{
+  "row_idx": 3581,
+  "sample_id": "51_session_0157#turn91",
+  "domain": "Social",
+  "intent_label": "humor_teasing",
+  "intent_text": "The reply is playful and teasing, likely with a humorous sticker that mocks or jokes about the situation.",
+  "context_text": "25426742: Wait all take MC the next day.. 😂 || 9c426795: @#USER sponsor her || 1407c9dd: Siao || 1407c9dd: Waste money de || 1407c9dd: || 1407c9dd: || 1407c9dd: Hmmmmmm || 2b5075ee: who? || 9c426795: You lol 😜 || 2b5075ee: sponsor myself || 2b5075ee: i go jay chou concert lol || 9c426795: U-Sticker detects this as offensive text.",
+  "context_preview": "25426742: Wait all take MC the next day.. 😂 || 9c426795: @#USER sponsor her || 1407c9dd: Siao || 1407c9dd: Waste money de || 1407c9dd: || 1407c9dd: || 1407c9dd: Hmmmmmm || 2b5075ee: who? || 9c426795: You lol 😜 || 2b50...",
+  "memory_text": "They anticipate a nonsensical reply, with a playful tone. A user mentions sending a nonsense email about an app, already having received their own, with a satisfied tone. Morning greetings are exchanged with positive emotions. A link is detected, and there's a comment about someone's good network. || Someone joked about a link being edible, then mentioned a Yakiniku-GO deal at an outlet. A friend was surprised to see the deal. Another person mentioned a bus passing by and accidentally swapping, leading to an empty seat and a last-minute decision to switch stops. || User 9adfa1cb expressed frustration about low-level accounts and redeeming codes, using multiple 'Pui' and vomit emojis. User 2ffefa05 shared about redeeming a YouTube code needing a Twitch account. User da152cad clarified the Twitch account issue and the 8-day completion window. User 9adfa1cb also mentioned opening a shiny shadow and queried about XP stacking.",
+  "memory_preview": "They anticipate a nonsensical reply, with a playful tone. A user mentions sending a nonsense email about an app, already having received their own, with a satisfied tone. Morning greetings are exchanged with positive ...",
+  "context_sticker_ids": [],
+  "gold": "511189687629522624.png",
+  "gold_rank": 32,
+  "gold_score": 8.2211,
+  "top_margin": 0.1677,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "5463267974687231154.gif",
+      "score": 8.7712,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "1153520807163462039.gif",
+      "score": 8.6035,
+      "same_group": false,
+      "group": "affection_care"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "1269403972611866950.gif",
+      "score": 8.5889,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "2737268664460902466.gif",
+      "score": 8.5761,
+      "same_group": false,
+      "group": "celebration_approval"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "1153520807163462059.gif",
+      "score": 8.5717,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": []
+}

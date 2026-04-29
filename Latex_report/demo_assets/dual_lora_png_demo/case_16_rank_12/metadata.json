@@ -1,0 +1,74 @@
+{
+  "row_idx": 1837,
+  "sample_id": "58_session_0003#turn2906",
+  "domain": "Media Sharing",
+  "intent_label": "neutral_acknowledgment",
+  "intent_text": "The reply is a simple acknowledgment without strong emotional content, likely a sticker showing a neutral or slightly positive reaction.",
+  "context_text": "None: [sticker:202331403893873357.png] || None: [sticker:202331403893877233.png] || c9327094: || None: [sticker:202331403893874216.png] || c9327094: || 1df6e146: [sticker:6291545464168777471.png] || None: [sticker:5974286628129083332.png] || None: [sticker:202331403893873323.png] || None: U-Sticker detects a link. || None: [sticker:202331403893877886.png] || None: [sticker:6007994798483442350.png] || None: [sticker:202331403893877837.png]",
+  "context_preview": "None: [sticker:202331403893873357.png] || None: [sticker:202331403893877233.png] || c9327094: || None: [sticker:202331403893874216.png] || c9327094: || 1df6e146: [sticker:6291545464168777471.png] || None: [sticker:597...",
+  "memory_text": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. || A brief welcome was exchanged, followed by two sticker exchanges, with U-Sticker detecting a link.",
+  "memory_preview": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. ||...",
+  "context_sticker_ids": [
+    "202331403893873357.png",
+    "202331403893877233.png",
+    "202331403893874216.png",
+    "6291545464168777471.png",
+    "5974286628129083332.png",
+    "202331403893873323.png",
+    "202331403893877886.png",
+    "6007994798483442350.png",
+    "202331403893877837.png"
+  ],
+  "gold": "202331403893877868.png",
+  "gold_rank": 12,
+  "gold_score": 8.5981,
+  "top_margin": 0.3295,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "202331403893877459.png",
+      "score": 9.3072,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "202331403893876219.png",
+      "score": 8.9777,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "202331403893872627.png",
+      "score": 8.9442,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "5830064379403438492.png",
+      "score": 8.8045,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "202331403893872327.png",
+      "score": 8.7541,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": [
+    "202331403893877233.png",
+    "5974286628129083332.png",
+    "202331403893873323.png",
+    "202331403893873357.png",
+    "202331403893874216.png",
+    "6291545464168777471.png",
+    "202331403893877886.png",
+    "6007994798483442350.png",
+    "202331403893877837.png"
+  ]
+}

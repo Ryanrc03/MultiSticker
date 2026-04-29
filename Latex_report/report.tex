@@ -40,18 +40,33 @@ correct reply depends on long-range conversational state rather than just the
 last turn, and (iii)~each context typically has only one observed positive even
 though many semantically equivalent stickers exist. We present
 \textbf{MultiSticker}, an intent-guided sticker retrieval system that combines
-three text streams---recent dialogue context, retrieved long-term session
-memory, and an LLM-generated reply intent---against a frozen-or-adapted
-OpenCLIP image bank covering \texttt{.png}, \texttt{.gif} and \texttt{.webm}
-stickers. We compare a frozen-CLIP zero-shot baseline against a learned
-retrieval head and three parameter-efficient fine-tuning variants
-(text-side LoRA, image-side LoRA, dual LoRA) on the U-Sticker corpus
-(8{,}129 sessions). On the completed medium-scale run, dual LoRA gives the
-best trained-model semantic Group@5/10 performance, while image-side LoRA
-gives the strongest exact top-5 ranking. We argue that for a chat sticker
-panel, semantic Group@5/10 is the right north-star metric and exact retrieval
-should be treated as a secondary within-group ranking diagnostic.
+recent dialogue context, retrieved long-term session memory, and an
+LLM-generated reply intent with a frozen-or-adapted OpenCLIP sticker bank. The
+paper is organized around two experiments. First, we test whether dialogue
+memory is useful by comparing frozen CLIP and a learned retrieval head with and
+without retrieved memory. Frozen CLIP already retrieves semantically related
+stickers (Group@10 = 0.9078), but fails at exact sticker selection
+(Exact@30 = 0.0028); adding a learned head and retrieved memory raises
+Exact@30 to 0.1263. Second, we ask which parameter-efficient SFT direction is
+best: text-side LoRA, image-side LoRA, or dual LoRA. On the completed
+medium-scale U-Sticker run, dual LoRA gives the best trained-model semantic
+Group@5/10 performance, while image-side LoRA gives the strongest exact top-5
+ranking. We argue that for a chat sticker panel, semantic Group@5/10 is the
+right north-star metric and exact retrieval should be treated as a secondary
+within-group ranking diagnostic.
 \end{abstract}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{fig1_multisticker_teaser.png}
+\caption{\textbf{MultiSticker at a glance.} A real validation dialogue is
+converted into three retrieval signals: local dialogue context, retrieved
+long-term memory, and an LLM-generated reply intent. The dual-LoRA OpenCLIP
+retriever projects these signals into the sticker embedding space and returns
+a ranked panel of real sticker candidates; animated \texttt{.webm} and
+\texttt{.gif} media are shown by their first frame.}
+\label{fig:teaser}
+\end{figure*}
 
 %%%%%%%%% BODY TEXT
 \section{Introduction}
@@ -88,15 +103,14 @@ plus a small learned head, and extend it in three directions:
 \end{itemize}
 
 \noindent\textbf{Contributions.}
-(1)~A clean five-row experiment matrix (zero-shot CLIP, learned head with
-memory, text-LoRA, image-LoRA, dual-LoRA) on a unified all-media sticker
-bank.
-(2)~A medium-scale benchmark showing that dual LoRA gives the most balanced
-group-level retrieval, while image-side LoRA is strongest for exact top-5
-ranking.
-(3)~A reusable, self-contained MultiSticker codebase including data
-manifest construction, memory retrieval, OpenCLIP wrapping, multi-frame
-decoding, and SLURM-friendly run scripts.
+(1)~A memory ablation showing that retrieved long-term dialogue memory mainly
+improves fine-grained sticker-id selection, not only coarse semantic matching.
+(2)~A modality-SFT study comparing text-side, image-side, and dual LoRA on the
+same all-media sticker bank, showing that dual LoRA is most balanced for
+semantic panel retrieval while image LoRA is best for exact top-5 ranking.
+(3)~A reusable, self-contained MultiSticker codebase including data manifest
+construction, memory retrieval, OpenCLIP wrapping, multi-frame decoding,
+LoRA-capable training modes, and SLURM-friendly run scripts.
 
 %-------------------------------------------------------------------------
 \section{Related Work}
@@ -207,15 +221,19 @@ we additionally re-encode only the unique \emph{positive} stickers with
 gradients (animated positives capped at 4 frames) and patch them into a
 cloned bank, which keeps backprop tractable for a 42K-sticker bank.
 
-\subsection{Tuning modes}
+\subsection{Tuning modes and experimental axes}
 
-We compare four tuning modes against a zero-shot CLIP baseline.
-\textbf{direct\_clip} uses no learned head: the query is just $f_T(c_t)$
-scored against the frozen image bank.
-\textbf{head\_only} (\emph{memory}) trains the retrieval head on top of frozen
-OpenCLIP encoders.
-\textbf{text\_lora} additionally injects LoRA ($r{=}8$, $\alpha{=}16$) into
-the text branch.
+The code exposes two independent axes. The first is the memory strategy:
+\texttt{retrieved\_topk} uses E5 retrieval over previous session summaries,
+while \texttt{disabled} replaces the memory stream with a null placeholder.
+This gives a clean memory ablation because the architecture, data split, and
+training objective remain unchanged.
+
+The second axis is the SFT mode. \textbf{direct\_clip} uses no learned head:
+the query is just $f_T(c_t)$ scored against the frozen image bank, giving a
+strong off-the-shelf VLM baseline. \textbf{head\_only} trains the retrieval
+head on top of frozen OpenCLIP encoders. \textbf{text\_lora} additionally
+injects LoRA ($r{=}8$, $\alpha{=}16$) into the text branch.
 \textbf{image\_lora} injects LoRA into the visual branch only, while
 \textbf{dual\_lora} adapts both branches. Only LoRA parameters and the head
 are trainable; all original OpenCLIP weights are frozen.
@@ -240,13 +258,14 @@ rank $r{=}8$, $\alpha{=}16$, dropout $0.05$, LoRA LR $10^{-4}$, and head LR
 $10^{-3}$.
 
 \noindent\textbf{Compared models.}
-We evaluate five rows. \texttt{direct\_clip} is a zero-shot baseline with no
-learned parameters. \texttt{head\_only} freezes OpenCLIP and trains only the
-retrieval and intent heads. \texttt{text\_lora}, \texttt{image\_lora}, and
-\texttt{dual\_lora} train the head plus LoRA adapters on the text branch, the
-visual branch, or both branches respectively. This design isolates whether
-domain adaptation is more useful on chat text, sticker imagery, or the shared
-alignment geometry.
+We report two experiments. Experiment~1 isolates memory. \texttt{direct\_clip}
+is the context-only off-the-shelf baseline, while \texttt{head\_only} is
+evaluated with memory disabled and with retrieved memory. This separates what
+frozen CLIP already solves from the extra value of the memory-aware retriever.
+Experiment~2 fixes \texttt{retrieved\_topk} memory and
+compares \texttt{head\_only}, \texttt{text\_lora}, \texttt{image\_lora}, and
+\texttt{dual\_lora}. This isolates whether SFT helps more on chat text,
+sticker imagery, or both modalities together.
 
 \subsection{Metrics}
 
@@ -263,6 +282,34 @@ are conservative because many unobserved stickers may be equally valid. All
 Hit@K metrics are higher-is-better.
 
 \subsection{Results}
+
+\begin{table*}[t]
+\setlength{\tabcolsep}{3.5pt}
+\centering
+\scriptsize
+\begin{tabular}{l l l c c c c c c}
+\toprule
+\textbf{Model} & \textbf{Memory} & \textbf{Trainable}
+ & \textbf{Group@5}$\uparrow$ & \textbf{Group@10}$\uparrow$
+ & \textbf{Group@30}$\uparrow$ & \textbf{Exact@5}$\uparrow$
+ & \textbf{Exact@30}$\uparrow$ & \textbf{MAP}$\uparrow$ \\
+\midrule
+\texttt{direct\_clip} & disabled & none
+ & 0.8778 & 0.9078 & \best{0.9592} & 0.0012 & 0.0028 & 0.0013 \\
+\texttt{head\_only} & disabled & head
+ & 0.8567 & 0.8754 & 0.9324 & 0.0082 & 0.0412 & 0.0107 \\
+\texttt{head\_only} & retrieved & head
+ & 0.8619 & 0.8780 & 0.9406 & \best{0.0296} & \best{0.1263} & \best{0.0282} \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Experiment 1: memory ablation and off-the-shelf baseline.}
+Frozen CLIP is a sensible VLM baseline: it already retrieves semantically
+related stickers, but does not solve exact sticker-id selection. The causal
+memory ablation is \texttt{head\_only} disabled versus retrieved. With the
+same head-only architecture, retrieved memory gives a large gain in
+Exact@5/30, showing that memory is most useful for within-group ranking.}
+\label{table:memory-ablation}
+\end{table*}
 
 \begin{table*}[t]
 \setlength{\tabcolsep}{3.5pt}
@@ -287,12 +334,12 @@ Hit@K metrics are higher-is-better.
  & 0.6275 & \best{0.8816} & \second{0.9064} & 0.9540 & \second{0.0326} & \best{0.1315} & \second{0.0286} \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Main \texttt{rebuild\_medium} results.} The north-star
+\caption{\textbf{Experiment 2: modality-SFT results on \texttt{rebuild\_medium}.} The north-star
 metrics are Group@5 and Group@10, matching a chat UI that displays a small
 panel of sticker candidates. Exact metrics are stricter single-positive
 diagnostics. \best{Red bold} marks the best method per column and
 \second{blue bold} marks the runner-up. T/V denote text/visual LoRA.}
-\label{table:medium-main}
+\label{table:sft-main}
 \end{table*}
 
 \begin{table*}[t]
@@ -328,76 +375,96 @@ WEBM remains the hardest exact-retrieval format.}
 \label{table:medium-media}
 \end{table*}
 
-Table~\ref{table:medium-main} and Table~\ref{table:medium-media} summarise
-the completed medium-scale run. The key result is that \texttt{dual\_lora}
-is the best trained model under the panel-recommendation objective: it wins
-overall Group@5 and is second only to the zero-shot baseline on Group@10.
-At the same time, \texttt{image\_lora} has the strongest exact top-5 ranking,
-which suggests that visual adaptation is especially useful for ordering
-near-duplicate stickers within a semantic group.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.78\linewidth,trim=55 215 55 35,clip]%
+  {demo_assets/dual_lora_png_demo/case_06_rank_2/case_06_rank_2_demo.pdf}
+\caption{\textbf{Qualitative example (case~06, \texttt{dual\_lora}).} A
+\texttt{humor\_teasing} turn from a Media-Sharing chat. The retriever places
+the gold sticker at rank~2 (green frame); rank~1 is a visually similar
+\texttt{neutral\_acknowledgment} sticker (red). All five candidates are
+plausible reactions for the conversation, illustrating why Group@5 is more
+informative than Exact@1 for sticker-panel UX. Seven additional
+cases (success $\to$ near-miss $\to$ failure) are listed in
+Appendix~\ref{app:cases}.}
+\label{fig:case06}
+\end{figure}
+
+Table~\ref{table:memory-ablation} answers whether memory is useful, while
+Table~\ref{table:sft-main} and Table~\ref{table:medium-media} answer which
+SFT modality is best. Figure~\ref{fig:case06} shows a representative
+\texttt{dual\_lora} retrieval on a real validation turn. The memory ablation shows that off-the-shelf CLIP is
+already strong at coarse semantic matching, but retrieved memory is crucial
+for exact sticker-id selection in the learned retriever. The SFT experiment shows that
+\texttt{dual\_lora} is the best trained model under the panel-recommendation
+objective: it wins overall Group@5 and is second only to the zero-shot
+baseline on Group@10. At the same time, \texttt{image\_lora} has the strongest
+exact top-5 ranking, suggesting that visual adaptation is especially useful
+for ordering near-duplicate stickers within a semantic group.
 
 %-------------------------------------------------------------------------
 \section{Analysis and Discussion}
 
-\noindent\textbf{Group retrieval is the right north star.}
-The most important deployment regime is not auto-sending a single sticker;
-it is filling a chat panel with 5--10 plausible choices. In this regime,
-recovering the \emph{semantic group} of the desired reply is more important
-than recovering the exact historical sticker id. The results support this
-framing: exact retrieval remains difficult for all methods, but Group@5 and
-Group@10 are already near the level required for a usable recommendation
-panel. Under this criterion, \texttt{dual\_lora} is the best trained model:
-it achieves the strongest Group@5 (0.8816) and the strongest trained-model
-Group@10 (0.9064). The zero-shot \texttt{direct\_clip} baseline slightly
-exceeds it on Group@10, but its exact ranking is nearly unusable, indicating
-that CLIP recognises coarse semantic neighborhoods while failing to
-distinguish the concrete sticker vocabulary.
+\noindent\textbf{Experiment 1: memory helps exact sticker selection.}
+The off-the-shelf frozen CLIP baseline is a strong and necessary comparison:
+with no training and no memory, it reaches Group@10 = 0.9078 and Group@30 =
+0.9592. This means CLIP already understands the coarse visual-language
+semantics of many sticker replies. However, it does not solve the actual
+sticker-retrieval problem: Exact@30 is only 0.0028. The learned
+\texttt{head\_only} model without memory improves Exact@30 to 0.0412, but
+adding retrieved memory raises it further to 0.1263. Group metrics move much
+less. The non-obvious lesson is therefore that memory is not mainly a coarse
+semantic booster; it helps the model choose the concrete sticker id inside an
+already plausible semantic neighborhood.
 
-\noindent\textbf{Exact metrics are secondary but still diagnostic.}
-Exact Hit@K should not be treated as the primary objective because U-Sticker
-contains only one logged positive per context. A different sticker with the
-same intent may be a perfectly good recommendation but is counted as wrong
-by Exact Hit@K. Still, exact metrics reveal how well a model orders siblings
-inside a group. Here \texttt{image\_lora} has the best Exact@5 and MAP,
-suggesting that visual adaptation improves fine-grained ordering among
-similar stickers. \texttt{dual\_lora}, meanwhile, has the best Exact@30,
-which is attractive for a two-stage system: first retrieve a semantically
-correct candidate pool, then rerank or diversify it for display.
+\noindent\textbf{Experiment 2: visual and dual SFT answer different needs.}
+Once memory is fixed to \texttt{retrieved\_topk}, the SFT question is which
+OpenCLIP branch to adapt. For a chat panel, semantic Group@5/10 should be the
+north star because users see multiple plausible stickers. Under that criterion,
+\texttt{dual\_lora} is the best trained model, with Group@5 = 0.8816 and
+trained-model Group@10 = 0.9064. For stricter within-group ranking,
+\texttt{image\_lora} is strongest: it has the best Exact@5 and MAP, suggesting
+that adapting the visual branch is especially useful for separating visually
+similar stickers and animated variants. Thus dual LoRA is the better first-stage
+retriever, while image LoRA is the strongest reference for exact top-5 ranking.
 
-\noindent\textbf{Why LoRA helps different media differently.}
+\noindent\textbf{Why modalities behave differently.}
 The per-media table shows that GIF is the most responsive format to visual
 adaptation: \texttt{image\_lora} wins GIF Exact@5 and Group@5, while
-\texttt{dual\_lora} wins GIF Exact@30 and Group@10. This is intuitive:
-animated stickers encode much of their intent in character pose, motion, and
-style, so adapting the visual branch makes the embedding space more
-sticker-specific. PNG behaves differently. The frozen CLIP space already
-separates many static stickers well, so \texttt{head\_only} remains strong
-on PNG Exact@30, while \texttt{dual\_lora} gives the best PNG Group@5/10.
-WEBM remains the hardest exact-retrieval case; frame sampling and video
-compression likely erase cues needed to distinguish close variants.
+\texttt{dual\_lora} wins GIF Exact@30 and Group@10. Animated stickers encode
+much of their intent in character pose, motion, and style, so adapting the
+visual branch makes the embedding space more sticker-specific. PNG behaves
+differently. The frozen CLIP space already separates many static stickers
+well, so \texttt{head\_only} remains strong on PNG Exact@30, while
+\texttt{dual\_lora} gives the best PNG Group@5/10. WEBM remains the hardest
+exact-retrieval case; frame sampling and video compression likely erase cues
+needed to distinguish close variants.
 
 \noindent\textbf{Recommended retrieval design.}
-For a production-style sticker panel, the cleanest design is to use
-\texttt{dual\_lora} as the group-aware first-stage retriever and optimize
-the system around Group@5/10. Exact@5 and MAP should be tracked as secondary
-ranking signals, where \texttt{image\_lora} currently sets the strongest
-reference point. A future reranker can combine these strengths: use
-\texttt{dual\_lora} to guarantee semantic coverage, then apply a lightweight
-visual/textual reranker or diversity rule to choose the final 5--10 stickers.
+The two experiments suggest a two-stage design. First, keep retrieved memory
+because it materially improves exact selection over a no-memory head. Second,
+use \texttt{dual\_lora} as the group-aware first-stage retriever and optimize
+around Group@5/10. Exact@5 and MAP should be tracked as secondary ranking
+signals, where \texttt{image\_lora} currently sets the strongest reference
+point. A future reranker can combine these strengths: use \texttt{dual\_lora}
+to guarantee semantic coverage, then apply a lightweight visual/textual
+reranker or diversity rule to choose the final 5--10 stickers.
 
 %-------------------------------------------------------------------------
 \section{Conclusion}
 
 We presented MultiSticker, an intent-guided dialogue-aware sticker
 retrieval system that combines OpenCLIP, retrieved long-term memory, and
-LLM-generated intent into a single trainable head with optional LoRA
-adaptation on either encoder branch. On the completed medium-scale U-Sticker
-run, dual LoRA is the strongest trained model for group-level panel
-recommendation, while image-side LoRA gives the best exact top-5 ordering.
-This supports a two-stage view of sticker retrieval: optimize the first stage
-for semantically correct 5--10 item panels, then use exact metrics as
-secondary diagnostics for fine-grained reranking. The released code makes the
-five-row comparison reproducible end-to-end.
+LLM-generated intent into a trainable retrieval head with optional LoRA
+adaptation. The report is organized as two experiments. The memory experiment
+shows that a strong frozen CLIP baseline already finds semantic neighbors, but
+retrieved dialogue memory is what substantially improves exact sticker-id
+selection. The modality-SFT experiment shows that dual LoRA is the strongest
+trained model for group-level panel recommendation, while image-side LoRA gives
+the best exact top-5 ordering. Together, these results support a two-stage view
+of sticker retrieval: keep memory for fine-grained selection, optimize the
+first-stage retriever for semantically correct 5--10 item panels, and use exact
+metrics as diagnostics for reranking.
 
 \noindent
 {\bf Acknowledgments.} We thank the authors of OpenCLIP and PEFT, and the
@@ -408,5 +475,29 @@ produced with Qwen2.5-32B-GPTQ; all experimental decisions are our own.
 \bibliographystyle{ieee}
 \bibliography{egbib}
 }
+
+\appendix
+\section{Additional qualitative cases}
+\label{app:cases}
+Seven additional rendered demos (chat bubble + retrieved top-5 panel +
+session memory + intent) accompany the case shown in
+Figure~\ref{fig:case06}. They span a success$\to$near-miss$\to$failure
+gradient across the Game and Media-Sharing domains and the
+\texttt{humor\_teasing}, \texttt{neutral\_acknowledgment}, and
+\texttt{frustration\_disapproval} intent groups:
+
+\begin{itemize}\itemsep1pt\parsep0pt
+\item \href{demo_assets/dual_lora_png_demo/case_01_rank_1/case_01_rank_1_demo.pdf}{Case~01} — Media Sharing, \texttt{humor\_teasing}, gold rank~1 (success).
+\item \href{demo_assets/dual_lora_png_demo/case_09_rank_3/case_09_rank_3_demo.pdf}{Case~09} — Game, \texttt{neutral\_acknowledgment}, gold rank~3.
+\item \href{demo_assets/dual_lora_png_demo/case_10_rank_4/case_10_rank_4_demo.pdf}{Case~10} — Game, \texttt{frustration\_disapproval}, gold rank~4.
+\item \href{demo_assets/dual_lora_png_demo/case_14_rank_9/case_14_rank_9_demo.pdf}{Case~14} — Game, \texttt{frustration\_disapproval}, gold rank~9.
+\item \href{demo_assets/dual_lora_png_demo/case_15_rank_11/case_15_rank_11_demo.pdf}{Case~15} — Game, \texttt{frustration\_disapproval}, gold rank~11 (near-miss).
+\item \href{demo_assets/dual_lora_png_demo/case_26_rank_19/case_26_rank_19_demo.pdf}{Case~26} — Game, \texttt{frustration\_disapproval}, gold rank~19 (failure).
+\item \href{demo_assets/dual_lora_png_demo/case_27_rank_20/case_27_rank_20_demo.pdf}{Case~27} — Game, \texttt{neutral\_acknowledgment}, gold rank~20 (failure).
+\end{itemize}
+
+The PDFs live under
+\path{Latex_report/demo_assets/dual_lora_png_demo/<case>/} in the source
+release.
 
 \end{document}

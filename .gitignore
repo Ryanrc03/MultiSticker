@@ -3,3 +3,14 @@ __pycache__/
 logs/
 results/
 archives/
+
+# LaTeX qualitative demo intermediates/raw media. Keep curated PDFs/metadata.
+Latex_report/demo_assets/dual_lora_png_demo/.claude/
+Latex_report/demo_assets/dual_lora_png_demo/**/*.aux
+Latex_report/demo_assets/dual_lora_png_demo/**/*.log
+Latex_report/demo_assets/dual_lora_png_demo/**/*.out
+Latex_report/demo_assets/dual_lora_png_demo/**/*_demo*.tex
+Latex_report/demo_assets/dual_lora_png_demo/case_*/gold_*
+Latex_report/demo_assets/dual_lora_png_demo/case_*/top*_*
+Latex_report/demo_assets/dual_lora_png_demo/**/context_stickers/
+Latex_report/demo_assets/dual_lora_png_demo/**/previews/

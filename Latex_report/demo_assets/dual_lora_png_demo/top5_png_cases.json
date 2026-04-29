@@ -1,0 +1,318 @@
+[
+  {
+    "row_idx": 4222,
+    "sample_id": "03_session_0053#turn952",
+    "domain": "Media Sharing",
+    "intent_label": "humor_teasing",
+    "intent_text": "The reply is a playful joke, likely a sticker with a humorous face or a funny meme.",
+    "context_text": "ff835b6f: this is good || d9f3f839: I would prefer this be more common because I run into this exact thing quite often || ff835b6f: yeah || 0d1fc891: i just use a flag because it’s more obvious to me || d9f3f839: well that's more things to parse || d9f3f839: one pattern I still don't quite have a good solution for is the comma || ff835b6f: comma in your butt || d9f3f839: if I wanna print something like a,b,c in a loop, I either have to use a terminal comma, or use a flag || 5f12b56e: Momma || d9f3f839: std::mem::take is actually quite useful for this || d9f3f839: but it is still bulky || d9f3f839: hmm they should add .take() on bool",
+    "context_preview": "ff835b6f: this is good || d9f3f839: I would prefer this be more common because I run into this exact thing quite often || ff835b6f: yeah || 0d1fc891: i just use a flag because it’s more obvious to me || d9f3f839: well...",
+    "memory_text": "A user shared a quote about TF2 engineers, another mentioned confusing F-Droid with F-List, and there were detections of a link and offensive text. || A user shared a stickers pack, which was appreciated. U-Sticker detected a link. Another user reminisced about finding patterns in wallpaper as a child. There was a brief mention of fireworks. || U-Sticker detected two links shared in the chat. The conversation revolved around a game, with one participant praising its impact, mentioning it attracts smart CEOs, helps smart people excel, and can motivate personal growth, leading to better job opportunities.",
+    "memory_preview": "A user shared a quote about TF2 engineers, another mentioned confusing F-Droid with F-List, and there were detections of a link and offensive text. || A user shared a stickers pack, which was appreciated. U-Sticker de...",
+    "context_sticker_ids": [],
+    "gold": "1466512661914058777.png",
+    "gold_rank": 1,
+    "gold_score": 8.7938,
+    "top_margin": 0.0004,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "1466512661914058777.png",
+        "score": 8.7938,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "586332391035896109.png",
+        "score": 8.7934,
+        "same_group": false,
+        "group": "humor_teasing"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "1466512661914058790.png",
+        "score": 8.7591,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6098242201790187820.png",
+        "score": 8.7372,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5463059350945798634.webm",
+        "score": 8.6675,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ],
+    "context_sticker_files": []
+  },
+  {
+    "row_idx": 267,
+    "sample_id": "52_session_0001#turn5588",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong emotional content.",
+    "context_text": "c23f52e7: [sticker:6046091055319746612.gif] || None: [sticker:2345073579797775165.png] || c23f52e7: [sticker:5931563853996362737.webm] || None: [sticker:5913589523236786063.webm] || 32e260bf: || None: [sticker:2345073579797774953.png] || 32e260bf: || None: [sticker:2345073579797775489.png] || 0c526064: || 2a9d2b8c: [sticker:5945104739124383384.png] || None: [sticker:5422703193987491801.png] || 2a9d2b8c: [sticker:5877569943217638759.webm]",
+    "context_preview": "c23f52e7: [sticker:6046091055319746612.gif] || None: [sticker:2345073579797775165.png] || c23f52e7: [sticker:5931563853996362737.webm] || None: [sticker:5913589523236786063.webm] || 32e260bf: || None: [sticker:2345073...",
+    "memory_text": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "context_sticker_ids": [
+      "6046091055319746612.gif",
+      "2345073579797775165.png",
+      "5931563853996362737.webm",
+      "5913589523236786063.webm",
+      "2345073579797774953.png",
+      "2345073579797775489.png",
+      "5945104739124383384.png",
+      "5422703193987491801.png",
+      "5877569943217638759.webm"
+    ],
+    "gold": "182536080015233511.png",
+    "gold_rank": 1,
+    "gold_score": 8.182,
+    "top_margin": 0.01,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.182,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "6262723386049300502.webm",
+        "score": 8.1721,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "2562980648230846762.gif",
+        "score": 8.1173,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6228654245168547482.webm",
+        "score": 8.1014,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5904490759574260959.webm",
+        "score": 8.0953,
+        "same_group": false,
+        "group": "celebration_approval"
+      }
+    ],
+    "context_sticker_files": [
+      "6046091055319746612.gif",
+      "2345073579797775165.png",
+      "2345073579797774953.png",
+      "2345073579797775489.png"
+    ]
+  },
+  {
+    "row_idx": 846,
+    "sample_id": "52_session_0001#turn4453",
+    "domain": "Media Sharing",
+    "intent_label": "frustration_disapproval",
+    "intent_text": "Expresses annoyance or irritation, likely showing a sticker with an angry or upset face.",
+    "context_text": "96db0d27: [sticker:6264779932354742537.webm] || 0be614be: [sticker:5327816856633872803.png] || 388804ee: [sticker:5197541655208535110.webm] || 96db0d27: || dfe574c2: Sticker pack miakhalifanormalingdife44 has been disabled || 288d6920: [sticker:5765157759884463353.webm] || c9327094: || bc545aa2: || 2200c894: [sticker:5222072992279824346.gif] || a788e0c8: [sticker:5913754969671994557.webm] || bc545aa2: [sticker:5913743502109314171.png] || b171cd84: [sticker:5915668583760793441.webm]",
+    "context_preview": "96db0d27: [sticker:6264779932354742537.webm] || 0be614be: [sticker:5327816856633872803.png] || 388804ee: [sticker:5197541655208535110.webm] || 96db0d27: || dfe574c2: Sticker pack miakhalifanormalingdife44 has been dis...",
+    "memory_text": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "context_sticker_ids": [
+      "6264779932354742537.webm",
+      "5327816856633872803.png",
+      "5197541655208535110.webm",
+      "5765157759884463353.webm",
+      "5222072992279824346.gif",
+      "5913754969671994557.webm",
+      "5913743502109314171.png",
+      "5915668583760793441.webm"
+    ],
+    "gold": "675168768736887035.png",
+    "gold_rank": 2,
+    "gold_score": 8.5616,
+    "top_margin": 0.0214,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "6064203997558867130.webm",
+        "score": 8.583,
+        "same_group": false,
+        "group": "humor_teasing"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.5616,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "5792016741596926703.webm",
+        "score": 8.5073,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6233206949157013374.webm",
+        "score": 8.473,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5291750409931600369.webm",
+        "score": 8.473,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ],
+    "context_sticker_files": [
+      "5913743502109314171.png"
+    ]
+  },
+  {
+    "row_idx": 961,
+    "sample_id": "58_session_0003#turn912",
+    "domain": "Media Sharing",
+    "intent_label": "frustration_disapproval",
+    "intent_text": "Expresses annoyance or irritation, likely using a sticker that shows a disappointed or upset face.",
+    "context_text": "None: [sticker:202331403893873507.png] || 13970572: #USER_ID, #USER_ID has reduced your reputation. Your reputation 21 || None: [sticker:6030550373289168190.png] || c9327094: || None: [sticker:202331403893873090.png] || None: [sticker:6030391253340785594.png] || None: [sticker:6030785557108362190.png] || None: [sticker:202331403893874583.png] || None: [sticker:5811920504809851756.png] || None: [sticker:202331403893875163.png] || None: [sticker:202331403893874533.png] || None: [sticker:202331403893874156.png]",
+    "context_preview": "None: [sticker:202331403893873507.png] || 13970572: #USER_ID, #USER_ID has reduced your reputation. Your reputation 21 || None: [sticker:6030550373289168190.png] || c9327094: || None: [sticker:202331403893873090.png] ...",
+    "memory_text": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. || A brief welcome was exchanged, followed by two sticker exchanges, with U-Sticker detecting a link.",
+    "memory_preview": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. ||...",
+    "context_sticker_ids": [
+      "202331403893873507.png",
+      "6030550373289168190.png",
+      "202331403893873090.png",
+      "6030391253340785594.png",
+      "6030785557108362190.png",
+      "202331403893874583.png",
+      "5811920504809851756.png",
+      "202331403893875163.png",
+      "202331403893874533.png",
+      "202331403893874156.png"
+    ],
+    "gold": "202331403893876219.png",
+    "gold_rank": 2,
+    "gold_score": 8.5435,
+    "top_margin": 0.2248,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "202331403893877459.png",
+        "score": 8.7682,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "202331403893876219.png",
+        "score": 8.5435,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "202331403893872627.png",
+        "score": 8.5126,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "202331403893872327.png",
+        "score": 8.4278,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5893157539175992440.png",
+        "score": 8.3898,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ],
+    "context_sticker_files": [
+      "6030550373289168190.png",
+      "202331403893873090.png",
+      "202331403893874583.png",
+      "202331403893874533.png"
+    ]
+  },
+  {
+    "row_idx": 1814,
+    "sample_id": "37_session_0010#turn625",
+    "domain": "Anime",
+    "intent_label": "surprise_reaction",
+    "intent_text": "The sticker likely expresses shock or disbelief at the unexpected news about the anime season, with a tone of excitement mixed with surprise.",
+    "context_text": "3de88128: merde ils nous ont gater cette serie || 3de88128: on veut voir le sang pas les herbes ! || 483e4d37: S'il vous plaît personne ici n'a le film ou le lien pour Suzume ? || fe08ca80: || e634d6f7: Bonjour! J'viens d'me rendre compte que la S02 de Nagatoro est en diffusion sur voiranime depuis le 7 Janvier😱 || e634d6f7: et j'ai l'impression que ça figure pas dans la liste des anime de la semaine😱 || baae072b: Abon les gas c le pire ça vaut pas la peine d’être Télécharger ? || d60c359d: Xa c’est du manga 😂😊😊😊😊🤩🤩🤩🤩🤩🤩🤩🤩🤩 || eb2a53fb: Pourquoi les critiques pourtant c'est un superbe épisode? || eb2a53fb: [sticker:6037376171539172883.png] || 85ee1b17: || 85ee1b17: Hi",
+    "context_preview": "3de88128: merde ils nous ont gater cette serie || 3de88128: on veut voir le sang pas les herbes ! || 483e4d37: S'il vous plaît personne ici n'a le film ou le lien pour Suzume ? || fe08ca80: || e634d6f7: Bonjour! J'vie...",
+    "memory_text": "Users discussed Hyouken no Majutsushi episode 3 VOSTFR, with one facing file reading issues, solved by using the mp4 format. There was a query about episode 2's release date, met with a skeptical reaction. Other anime episodes mentioned included Eiyuu Densetsu Sen no Kiseki, Ars no Kyojuu, and Buddy Daddies. || {\"session_memory_text\":\"In the chat about anime, 885a7e39 compared a character's ability to Megumi from Konosuba, and joked about demanding something. 4c5ffc0c agreed with laughter. Ebbf4ed0 shared episode details for Eiyuu Densetsu Sen no Kiseki Northern War, Ars no Kyojuu, and Buddy Daddies. D44ce865 used || A user discussed episode 4 of 'Ningen Fushin no Boukenshatachi ga Sekai wo Sukuu Youdesu' in VOSTFR. Another asked about the availability of 'Zuo shou shang' anime. There was also a query about who plays Dokkan Battle.",
+    "memory_preview": "Users discussed Hyouken no Majutsushi episode 3 VOSTFR, with one facing file reading issues, solved by using the mp4 format. There was a query about episode 2's release date, met with a skeptical reaction. Other anime...",
+    "context_sticker_ids": [
+      "6037376171539172883.png"
+    ],
+    "gold": "1650176364118016154.png",
+    "gold_rank": 2,
+    "gold_score": 7.9929,
+    "top_margin": 0.0577,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "5904490759574260959.webm",
+        "score": 8.0506,
+        "same_group": false,
+        "group": "celebration_approval"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "1650176364118016154.png",
+        "score": 7.9929,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "1650176364118016152.png",
+        "score": 7.8922,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6102939057766008344.webm",
+        "score": 7.8577,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "239526293123639684.png",
+        "score": 7.8423,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ],
+    "context_sticker_files": [
+      "6037376171539172883.png"
+    ]
+  }
+]

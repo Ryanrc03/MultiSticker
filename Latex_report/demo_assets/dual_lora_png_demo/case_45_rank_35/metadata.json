@@ -1,0 +1,62 @@
+{
+  "row_idx": 3638,
+  "sample_id": "58_session_0003#turn6567",
+  "domain": "Media Sharing",
+  "intent_label": "frustration_disapproval",
+  "intent_text": "The sticker likely expresses annoyance or irritation at the confusing situation or the messages in a mix of languages.",
+  "context_text": "f7d15a6f: Alo eblani, kak i suda popal || f7d15a6f: I russkii blyat I ebal vashi rti || 7c5dba02: why was I added here? || 7c5dba02: and why the hell can't you write messages in Russian || None: || c9327094: To grow the group || 7c5dba02: what is this about || c9327094: Sticker || c9327094: Enter the channel || 7c5dba02: [sticker:5278252667750067181.png] || None: [sticker:5278546460692982424.png] || None: [sticker:202331403893874745.png]",
+  "context_preview": "f7d15a6f: Alo eblani, kak i suda popal || f7d15a6f: I russkii blyat I ebal vashi rti || 7c5dba02: why was I added here? || 7c5dba02: and why the hell can't you write messages in Russian || None: || c9327094: To grow t...",
+  "memory_text": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. || A brief welcome was exchanged, followed by two sticker exchanges, with U-Sticker detecting a link.",
+  "memory_preview": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. ||...",
+  "context_sticker_ids": [
+    "5278252667750067181.png",
+    "5278546460692982424.png",
+    "202331403893874745.png"
+  ],
+  "gold": "202331403893870089.png",
+  "gold_rank": 35,
+  "gold_score": 7.4109,
+  "top_margin": 0.1018,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "202331403893877739.png",
+      "score": 8.2055,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "5893427997561587841.png",
+      "score": 8.1036,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "5893157539175992440.png",
+      "score": 8.0241,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "202331403893872327.png",
+      "score": 7.8252,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "202331403893877459.png",
+      "score": 7.8004,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": [
+    "202331403893874745.png",
+    "5278252667750067181.png",
+    "5278546460692982424.png"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "row_idx": 235,
+  "sample_id": "19_session_0008#turn1014",
+  "domain": "Media Sharing",
+  "intent_label": "neutral_acknowledgment",
+  "intent_text": "The reply is a simple acknowledgment without strong emotional content.",
+  "context_text": "7bcb06c0: || 7bcb06c0: || bc545aa2: || 7bcb06c0: || 7bcb06c0: || bc545aa2: || bc545aa2: || 7bcb06c0: || 7bcb06c0: || 7bcb06c0: || 6938e747: || 1f5ce2c1: [sticker:5461085461285974254.webm]",
+  "context_preview": "7bcb06c0: || 7bcb06c0: || bc545aa2: || 7bcb06c0: || 7bcb06c0: || bc545aa2: || bc545aa2: || 7bcb06c0: || 7bcb06c0: || 7bcb06c0: || 6938e747: || 1f5ce2c1: [sticker:5461085461285974254.webm]",
+  "memory_text": "A series of stickers were shared, with two distinct sticker IDs noted: 5879492739946515745.webm and 6102541111866165121.webm. || The chat involved media sharing with multiple users sending various media files and a sticker. || A user requested a specific GIF featuring two huskies, one running around while the other is lying down, with a caption about drug references. They asked for help finding it.",
+  "memory_preview": "A series of stickers were shared, with two distinct sticker IDs noted: 5879492739946515745.webm and 6102541111866165121.webm. || The chat involved media sharing with multiple users sending various media files and a st...",
+  "context_sticker_ids": [
+    "5461085461285974254.webm"
+  ],
+  "gold": "202331403893875174.png",
+  "gold_rank": 34,
+  "gold_score": 7.9323,
+  "top_margin": 0.0043,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "6028506376878164971.png",
+      "score": 8.5572,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "5823580692478431132.png",
+      "score": 8.5529,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "202331403893877764.png",
+      "score": 8.4652,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "202331403893877739.png",
+      "score": 8.4636,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "5999082277487775017.png",
+      "score": 8.3465,
+      "same_group": false,
+      "group": "celebration_approval"
+    }
+  ],
+  "context_sticker_files": [
+    "5461085461285974254.webm"
+  ]
+}

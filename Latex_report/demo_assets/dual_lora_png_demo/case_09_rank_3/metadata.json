@@ -1,0 +1,54 @@
+{
+  "row_idx": 1868,
+  "sample_id": "53_session_0019#turn464",
+  "domain": "Game",
+  "intent_label": "neutral_acknowledgment",
+  "intent_text": "Acknowledging the reminder of the remote raid pass with a neutral emoji, neither showing strong emotion nor providing additional information.",
+  "context_text": "8a23b6b1: So I can buy remote raid pass 😜 || 66180102: Lol || c910d520: the gold box not worth it || a5b38070: How to know whether it's shundo or hundo || b3c0b113: Depends when it's shiny or not || a5b38070: I tot some non shiny also not max stats || a5b38070: how do u even know whether it's perfect || af2cef8f: Frm CP || 909d0984: Anyone gg chinatown to raid at 6pm? || af2cef8f: Details of the raid boss...perfect CP means a hundo || 8a23b6b1: Can use remote raid pass? || 8a23b6b1: Totally forgot 💀",
+  "context_preview": "8a23b6b1: So I can buy remote raid pass 😜 || 66180102: Lol || c910d520: the gold box not worth it || a5b38070: How to know whether it's shundo or hundo || b3c0b113: Depends when it's shiny or not || a5b38070: I tot so...",
+  "memory_text": "8a23b6b1 achieved a Shadow Shiny Hundo, excited about the accomplishment. 7a4ae1f6 mentions a one-day Rayquaza raid on 29th June. 2cc1cd77 briefly mentions getting a Shiny Komala. || One client's house has 3 PokeStops and 2 gyms near a void deck. The speaker finds it cool but notes one gym needs GPS adjustment. Another suggests flooding the neighborhood with PokeStops and gyms, while cautioning about cell limits and spam nominations turning into waypoints for other games. || In a game chat, users discuss trading and shiny luck. One user expresses disappointment about not finding a trade, while another suggests adding them as a friend. The conversation ends with a joke about using up luck and not buying lottery tickets the next day.",
+  "memory_preview": "8a23b6b1 achieved a Shadow Shiny Hundo, excited about the accomplishment. 7a4ae1f6 mentions a one-day Rayquaza raid on 29th June. 2cc1cd77 briefly mentions getting a Shiny Komala. || One client's house has 3 PokeStops...",
+  "context_sticker_ids": [],
+  "gold": "1833563040931381707.png",
+  "gold_rank": 3,
+  "gold_score": 8.6755,
+  "top_margin": 0.111,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "1833563040931381714.png",
+      "score": 8.8368,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "1833563040931381773.png",
+      "score": 8.7258,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "1833563040931381707.png",
+      "score": 8.6755,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "1833563040931381721.png",
+      "score": 8.5577,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "6091277023261492067.png",
+      "score": 8.4874,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": []
+}

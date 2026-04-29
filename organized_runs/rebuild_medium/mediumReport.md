@@ -2,11 +2,11 @@
 
 ## 1. 实验设计
 
-本轮 `rebuild_medium` 目标是在同一份 medium 数据切分上比较 5 个检索方案：
+本轮 `rebuild_medium` 目标是在同一份 medium 数据切分上比较 5 个检索方案，并加入 frozen CLIP / no-memory 对照作为 sensible off-the-shelf VLM baseline：
 
 | 方法 | 说明 |
 | --- | --- |
-| `direct_clip` | 不训练，直接用 CLIP 文本查询匹配 sticker 图像 embedding，作为 zero-shot baseline。 |
+| `direct_clip` | 不训练，直接用 CLIP 文本查询匹配 sticker 图像 embedding，作为 zero-shot/off-the-shelf VLM baseline；同时报告 `memory=disabled` 版本，用来验证是否仅靠 frozen CLIP 已经解决任务。 |
 | `head_only` | 冻结 CLIP，只训练检索 head / intent head。 |
 | `image_lora` | 训练图像侧 CLIP LoRA + 检索 head，文本侧冻结。 |
 | `text_lora` | 训练文本侧 CLIP LoRA + 检索 head，图像侧冻结。 |
@@ -103,6 +103,23 @@
 Exact 指标作为副指标看，`image_lora` 的 Exact R@5 = **0.0376**、MAP/MRR = **0.0302** 最高，说明它更擅长把具体 sticker 排到前面；`dual_lora` 的 Exact R@30 = **0.1315** 最高，说明它更擅长扩大候选池覆盖。对于只做 retrieval 的阶段，这两个现象都可以接受：先保证 5-10 个推荐的语义组正确，再在后续 rerank 或 UI 展示中优化具体 sticker 排序。
 
 `head_only` 的 Exact R@1 最高但优势很小，Group R@5/R@10 又不如 `dual_lora` 和 `image_lora`，因此更像一个强 baseline，而不是最终推荐方案。
+
+
+### Sensible baseline 与 memory ablation
+
+按照课程报告建议，结果需要和一个合理 baseline 对比。这里把 `direct_clip + memory=disabled` 作为 frozen CLIP/off-the-shelf VLM baseline：它不训练任何参数，也不使用 semantic memory，只用 CLIP 文本 embedding 检索 sticker 图像 embedding。`head_only + memory=disabled` 则是训练 head 的 ablation，用来分离“训练检索头”和“使用 retrieved semantic memory”的贡献。
+
+| 方法 | Memory | Exact R@1 | Exact R@5 | Exact R@30 | MAP/MRR | Group R@1 | Group R@5 | Group R@10 | Group R@30 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `direct_clip` | disabled / off-the-shelf baseline | 0.0002 | 0.0012 | 0.0028 | 0.0013 | 0.6347 | 0.8778 | 0.9078 | 0.9592 |
+| `direct_clip` | retrieved context | 0.0002 | 0.0012 | 0.0028 | 0.0013 | 0.6335 | 0.8778 | **0.9084** | 0.9588 |
+| `head_only` | disabled, final epoch 5 | 0.0048 | 0.0082 | 0.0412 | 0.0107 | 0.7915 | 0.8567 | 0.8754 | 0.9324 |
+| `head_only` | disabled, best semantic epoch 4 | 0.0040 | 0.0108 | 0.0440 | 0.0114 | 0.7835 | 0.8551 | 0.8756 | 0.9348 |
+| `head_only` | retrieved top-k | **0.0110** | **0.0296** | **0.1263** | **0.0282** | **0.7933** | **0.8619** | 0.8780 | **0.9406** |
+
+这个对照说明 frozen CLIP 已经能解决“语义组是否相近”的大方向：no-memory direct CLIP 的 Group R@10 达到 0.9078，和 retrieved-context direct CLIP 几乎一样。但它没有解决最终任务里的 exact sticker selection，Exact R@30 只有 0.0028。因此项目不是在证明 CLIP 能不能理解 sticker 语义，而是在学习一个更细粒度的问题：如何从语义正确的一组 sticker 中选到具体 ID。
+
+`head_only` 对 memory 明显更敏感。和 retrieved top-k 版本相比，no-memory final epoch 的 Exact R@5 从 0.0296 降到 0.0082，Exact R@30 从 0.1263 降到 0.0412，MAP/MRR 从 0.0282 降到 0.0107；Group 指标下降较小，Group R@5 从 0.8619 到 0.8567，Group R@10 从 0.8780 到 0.8754。这说明 semantic memory/retrieved top-k 主要帮助模型在同一语义组内定位具体 sticker，而不是单纯提高大的语义方向。
 
 ### 可能原因
 

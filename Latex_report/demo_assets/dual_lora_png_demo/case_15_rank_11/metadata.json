@@ -1,0 +1,54 @@
+{
+  "row_idx": 1176,
+  "sample_id": "40_session_0001#turn335459",
+  "domain": "Game",
+  "intent_label": "frustration_disapproval",
+  "intent_text": "The reply expresses annoyance and a critical tone, suggesting a sticker that conveys irritation or disapproval would fit.",
+  "context_text": "9d47b65d: you talk the most but you got friends outside ? || ed90d0e0: UwU yes || e4d440b3: gas aja || 5fb35712: need me carry again? || be64d543: I am not 74%1 || 9d47b65d: got friends outside won’t be playing ml la boy || 9d47b65d: don’t act act all || e4d440b3: @#USER whr u || 9d47b65d: your gf look any indian construction worker boy also can grab one || e4d440b3: @#USER tan kin lian pm gw || 9d47b65d: think don’t ego so much in here ok 107* peak keep jio 80-90%^ when ownself trash || ed90d0e0: Pm alr",
+  "context_preview": "9d47b65d: you talk the most but you got friends outside ? || ed90d0e0: UwU yes || e4d440b3: gas aja || 5fb35712: need me carry again? || be64d543: I am not 74%1 || 9d47b65d: got friends outside won’t be playing ml la ...",
+  "memory_text": "Player f20ea2bd initiated an FBI raid on Ady, causing confusion and frustration among other players. Player 5fb35712 expressed disbelief and anger, seeking how to report the incident. Player c50657ba commented on the possibility of a temporary group ban. f20ea2bd acknowledged the situation and suggested using the /report command.",
+  "memory_preview": "Player f20ea2bd initiated an FBI raid on Ady, causing confusion and frustration among other players. Player 5fb35712 expressed disbelief and anger, seeking how to report the incident. Player c50657ba commented on the ...",
+  "context_sticker_ids": [],
+  "gold": "674369926294667276.png",
+  "gold_rank": 11,
+  "gold_score": 7.3303,
+  "top_margin": 0.2495,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "674369926294667297.png",
+      "score": 7.8207,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "6037557084151613844.webm",
+      "score": 7.5713,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "586332391035896109.png",
+      "score": 7.489,
+      "same_group": false,
+      "group": "humor_teasing"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "5800890513397650347.webm",
+      "score": 7.4521,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "1833563040931381721.png",
+      "score": 7.3982,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": []
+}

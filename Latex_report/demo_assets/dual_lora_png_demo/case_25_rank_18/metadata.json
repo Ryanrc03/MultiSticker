@@ -1,0 +1,74 @@
+{
+  "row_idx": 2129,
+  "sample_id": "58_session_0003#turn5395",
+  "domain": "Media Sharing",
+  "intent_label": "celebration_approval",
+  "intent_text": "The reply expresses approval and excitement about the reputation increase, likely using celebratory or congratulatory stickers.",
+  "context_text": "5ef59e1c: || 116d0311: [sticker:646297242658930853.png] || 116d0311: [sticker:646297242658930851.png] || None: [sticker:202331403893874564.png] || dd81edc8: Thx || None: [sticker:202331403893874469.png] || None: [sticker:5978851349436042176.png] || 13970572: #USER_ID, #USER_ID has increased your reputation. 🏆 Your reputation 1 || None: [sticker:202331403893873236.png] || 116d0311: [sticker:5015031624169947772.png] || None: [sticker:202331403893871609.png] || 5ef59e1c: [sticker:1423623200100581680.png]",
+  "context_preview": "5ef59e1c: || 116d0311: [sticker:646297242658930853.png] || 116d0311: [sticker:646297242658930851.png] || None: [sticker:202331403893874564.png] || dd81edc8: Thx || None: [sticker:202331403893874469.png] || None: [stic...",
+  "memory_text": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. || A brief welcome was exchanged, followed by two sticker exchanges, with U-Sticker detecting a link.",
+  "memory_preview": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. ||...",
+  "context_sticker_ids": [
+    "646297242658930853.png",
+    "646297242658930851.png",
+    "202331403893874564.png",
+    "202331403893874469.png",
+    "5978851349436042176.png",
+    "202331403893873236.png",
+    "5015031624169947772.png",
+    "202331403893871609.png",
+    "1423623200100581680.png"
+  ],
+  "gold": "5899776788153765374.png",
+  "gold_rank": 18,
+  "gold_score": 7.8868,
+  "top_margin": 0.0479,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "5893157539175992440.png",
+      "score": 8.7116,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "202331403893877459.png",
+      "score": 8.6636,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "5893427997561587841.png",
+      "score": 8.2374,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "5893059875914647467.png",
+      "score": 8.209,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "202331403893875225.png",
+      "score": 8.1432,
+      "same_group": false,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": [
+    "202331403893874564.png",
+    "202331403893874469.png",
+    "5978851349436042176.png",
+    "646297242658930853.png",
+    "646297242658930851.png",
+    "202331403893873236.png",
+    "5015031624169947772.png",
+    "202331403893871609.png",
+    "1423623200100581680.png"
+  ]
+}

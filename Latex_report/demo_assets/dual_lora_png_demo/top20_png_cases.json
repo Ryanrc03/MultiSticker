@@ -1,0 +1,1002 @@
+[
+  {
+    "row_idx": 3343,
+    "sample_id": "03_session_0053#turn952",
+    "domain": "Media Sharing",
+    "intent_label": "humor_teasing",
+    "intent_text": "The reply is a playful joke, likely a sticker with a humorous face or a funny meme.",
+    "context_preview": "ff835b6f: this is good || d9f3f839: I would prefer this be more common because I run into this exact thing quite often || ff835b6f: yeah || 0d1fc891: i just use a flag because it’s more obvious to me || d9f3f839: well...",
+    "memory_preview": "A user shared a quote about TF2 engineers, another mentioned confusing F-Droid with F-List, and there were detections of a link and offensive text. || A user shared a stickers pack, which was appreciated. U-Sticker de...",
+    "gold": "1466512661914058777.png",
+    "gold_rank": 1,
+    "gold_score": 8.7938,
+    "top_margin": 0.0004,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "1466512661914058777.png",
+        "score": 8.7938,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "586332391035896109.png",
+        "score": 8.7934,
+        "same_group": false,
+        "group": "humor_teasing"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "1466512661914058790.png",
+        "score": 8.7591,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6098242201790187820.png",
+        "score": 8.7372,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5069220290240709210.png",
+        "score": 8.6299,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 665,
+    "sample_id": "52_session_0001#turn4453",
+    "domain": "Media Sharing",
+    "intent_label": "frustration_disapproval",
+    "intent_text": "Expresses annoyance or irritation, likely showing a sticker with an angry or upset face.",
+    "context_preview": "96db0d27: [sticker:6264779932354742537.webm] || 0be614be: [sticker:5327816856633872803.png] || 388804ee: [sticker:5197541655208535110.webm] || 96db0d27: || dfe574c2: Sticker pack miakhalifanormalingdife44 has been dis...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.5616,
+    "top_margin": 0.5199,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.5616,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "182536080015232944.png",
+        "score": 8.0416,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "6089402227087115009.png",
+        "score": 8.0295,
+        "same_group": false,
+        "group": "frustration_disapproval"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6039352844337811638.png",
+        "score": 8.0264,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "509623132668036548.png",
+        "score": 7.9742,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 193,
+    "sample_id": "52_session_0001#turn5262",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong affect or emotion.",
+    "context_preview": "None: [sticker:6179134960167814379.png] || 96db0d27: [sticker:6179081934501577838.png] || None: [sticker:6181752089899697117.png] || 5fb42181: [sticker:6156576460489361061.png] || None: [sticker:6181752089899697117.pn...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.518,
+    "top_margin": 0.2157,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.518,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.3024,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "5846029052015545121.png",
+        "score": 8.232,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "675168768736887148.png",
+        "score": 8.1993,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "182536080015232944.png",
+        "score": 8.1672,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 3702,
+    "sample_id": "52_session_0001#turn5089",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong emotional content, likely a sticker showing a neutral or slightly positive reaction.",
+    "context_preview": "0bf4df22: || None: [sticker:1398066688695468203.png] || 2a8f6efc: [sticker:5327932627477343312.png] || None: [sticker:6001572276187695369.gif] || 2a9d2b8c: [sticker:5945235817231289600.png] || d1f5e86d: || None: [stic...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.511,
+    "top_margin": 0.1488,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.511,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.3622,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "3297424398058782734.png",
+        "score": 8.3055,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6053016264882782727.png",
+        "score": 8.2936,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "1621864712796897307.png",
+        "score": 8.1924,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 254,
+    "sample_id": "52_session_0003#turn242",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong emotional content.",
+    "context_preview": "0168cbe1: [sticker:6084694040987567262.png] || dc5bcc38: [sticker:5433684317261805127.webm] || 2200c894: [sticker:6107423347220415430.webm] || 96db0d27: || None: [sticker:6107326796355602098.webm] || None: [sticker:61...",
+    "memory_preview": "A series of stickers were shared, each depicting various animated expressions and reactions, without any accompanying text. The stickers seemed to convey a mix of playful and excited emotions. || A user reported that ...",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.3681,
+    "top_margin": 0.206,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.3681,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.1621,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "6039352844337811638.png",
+        "score": 8.1481,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "675168768736887148.png",
+        "score": 8.0797,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "1621864712796897307.png",
+        "score": 8.0374,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 1514,
+    "sample_id": "52_session_0001#turn1288",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "A simple acknowledgment without strong emotion, likely a sticker showing a neutral or slightly curious expression.",
+    "context_preview": "bc545aa2: || bc545aa2: || bc545aa2: [sticker:5890917133910542526.png] || dfe574c2: Sticker pack cthuznopbj_by_stikeri_stikeri_bot has been disabled || c87b3b7c: User `:3` has been banned || None: [sticker:182536080015...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.3558,
+    "top_margin": 0.0652,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.3558,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.2906,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "6039352844337811638.png",
+        "score": 8.1506,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "5974180542436872201.png",
+        "score": 8.1306,
+        "same_group": false,
+        "group": "affection_care"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "675168768736887148.png",
+        "score": 8.1071,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 391,
+    "sample_id": "52_session_0001#turn5117",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The sticker likely serves as a simple acknowledgment or reaction without strong emotional content.",
+    "context_preview": "None: [sticker:1398066688695468093.png] || 96db0d27: || None: [sticker:1398066688695468243.png] || cbdd685d: [sticker:5017042437663621682.webm] || 96db0d27: [sticker:5017176681161425533.webm] || cbdd685d: [sticker:501...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.3079,
+    "top_margin": 0.1529,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.3079,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "5846029052015545121.png",
+        "score": 8.155,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.0546,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "3297424398058782734.png",
+        "score": 7.9987,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "6053016264882782727.png",
+        "score": 7.9716,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 1294,
+    "sample_id": "52_session_0001#turn1481",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong emotional content, likely a sticker showing a neutral or slightly positive reaction.",
+    "context_preview": "9e559ac4: [sticker:5233745175792066545.webm] || None: [sticker:441671243897241933.gif] || 9e559ac4: [sticker:5764665427783323135.webm] || None: [sticker:5776150535405047314.webm] || 2a9d2b8c: [sticker:5767192114093886...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.3033,
+    "top_margin": 0.0783,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.3033,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "3297424398058782734.png",
+        "score": 8.2251,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "6053016264882782727.png",
+        "score": 8.1455,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.1138,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "6039352844337811638.png",
+        "score": 8.063,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 1477,
+    "sample_id": "52_session_0001#turn4531",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The sticker likely serves as a simple acknowledgment or reaction without strong emotional content.",
+    "context_preview": "None: [sticker:5805465851863764676.png] || 9bace18a: || None: [sticker:2345073579797775165.png] || 717c1358: [sticker:5915669481408958482.webm] || bc545aa2: || 1cfac842: [sticker:5913615898630950911.webm] || 96db0d27:...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.3032,
+    "top_margin": 0.0534,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.3032,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "5846029052015545121.png",
+        "score": 8.2498,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "3297424398058782734.png",
+        "score": 8.1942,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.1815,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "6053016264882782727.png",
+        "score": 8.13,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 2302,
+    "sample_id": "52_session_0003#turn468",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The sticker likely acknowledges something without strong emotion, possibly a simple reaction or agreement.",
+    "context_preview": "66b6dc22: [sticker:6141086394648364710.webm] || 96db0d27: [sticker:6021792943562558969.gif] || c23f52e7: [sticker:6140785076922746303.webm] || fb5dbd4b: [sticker:6141086394648364710.webm] || a0c89613: [sticker:1391391...",
+    "memory_preview": "A user reported that the sticker pack 'saerifishingbyfarechetti' has been disabled. Multiple users shared various stickers throughout the conversation. || A series of stickers were shared, mostly animated gifs and web...",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.2535,
+    "top_margin": 0.3401,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.2535,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "6039352844337811638.png",
+        "score": 7.9133,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "1621864712796897307.png",
+        "score": 7.8374,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "2345073579797774953.png",
+        "score": 7.8014,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "6233213941363770140.gif",
+        "score": 7.7712,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 3875,
+    "sample_id": "52_session_0001#turn1131",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The sticker likely acknowledges something without strong emotion, possibly a simple 'got it' or 'okay'.",
+    "context_preview": "ea4323f9: [sticker:6055161794320664317.webm] || None: [sticker:6138829161701049537.webm] || bc545aa2: [sticker:202331403893877858.png] || 9e559ac4: || None: [sticker:441671243897241933.gif] || ea4323f9: [sticker:62379...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.2473,
+    "top_margin": 0.2251,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.2473,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "6039352844337811638.png",
+        "score": 8.0222,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "3297424398058782734.png",
+        "score": 8.0104,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "182536080015233511.png",
+        "score": 7.9616,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "1621864712796897307.png",
+        "score": 7.9375,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 1660,
+    "sample_id": "52_session_0001#turn4737",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The sticker likely serves as a simple acknowledgment or reaction without strong emotional content.",
+    "context_preview": "a29254c6: || None: [sticker:675168768736887035.png] || 2200c894: [sticker:5206448343638609243.gif] || None: [sticker:441671243897241906.gif] || b088b557: [sticker:5206397894952750326.gif] || 96db0d27: [sticker:6334872...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.2002,
+    "top_margin": 0.1387,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.2002,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.0616,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "2562980648230846762.gif",
+        "score": 8.0315,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "2562980648230846759.gif",
+        "score": 8.0065,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "3297424398058782734.png",
+        "score": 7.9512,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 218,
+    "sample_id": "52_session_0001#turn5588",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong emotional content.",
+    "context_preview": "c23f52e7: [sticker:6046091055319746612.gif] || None: [sticker:2345073579797775165.png] || c23f52e7: [sticker:5931563853996362737.webm] || None: [sticker:5913589523236786063.webm] || 32e260bf: || None: [sticker:2345073...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "182536080015233511.png",
+    "gold_rank": 1,
+    "gold_score": 8.182,
+    "top_margin": 0.0647,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.182,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "2562980648230846762.gif",
+        "score": 8.1173,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "3297424398058782734.png",
+        "score": 8.0584,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "2562980648230846759.gif",
+        "score": 8.0432,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "3323402743995698.gif",
+        "score": 8.0123,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 1994,
+    "sample_id": "52_session_0001#turn2954",
+    "domain": "Media Sharing",
+    "intent_label": "frustration_disapproval",
+    "intent_text": "Expresses annoyance or disapproval towards the situation, likely using a sticker that shows a frowning or upset face.",
+    "context_preview": "9e559ac4: || b7cb4dcb: [sticker:5805692566007451919.png] || c87b3b7c: User `Mike` has been banned || None: [sticker:675168768736887048.png] || 2a9d2b8c: [sticker:5839223689219935826.png] || 6494e579: || 9e559ac4: [sti...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.1772,
+    "top_margin": 0.4581,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.1772,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "6089402227087115009.png",
+        "score": 7.7191,
+        "same_group": false,
+        "group": "frustration_disapproval"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "6010109009019799334.png",
+        "score": 7.7023,
+        "same_group": false,
+        "group": "frustration_disapproval"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "5190751681280742352.png",
+        "score": 7.6289,
+        "same_group": false,
+        "group": "frustration_disapproval"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5782998985312570797.png",
+        "score": 7.5883,
+        "same_group": false,
+        "group": "confusion_curiosity"
+      }
+    ]
+  },
+  {
+    "row_idx": 2229,
+    "sample_id": "52_session_0001#turn312",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong affect, likely a sticker showing a neutral or slightly positive reaction.",
+    "context_preview": "9e559ac4: [sticker:6003479160062742425.png] || None: [sticker:6006086621823241900.png] || bc545aa2: [sticker:5893157539175992440.png] || None: [sticker:182536080015232944.png] || bc545aa2: [sticker:5893037035278567456...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.1625,
+    "top_margin": 0.0088,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.1625,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "5846029052015545121.png",
+        "score": 8.1537,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "3297424398058782734.png",
+        "score": 8.137,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "675168768736887148.png",
+        "score": 8.1106,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "6053016264882782727.png",
+        "score": 8.0957,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 1987,
+    "sample_id": "52_session_0032#turn661",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The sticker is likely a simple acknowledgment or reaction without strong affect, fitting for a neutral response.",
+    "context_preview": "41a41249: [sticker:6307441288455130033.webm] || bbb587b8: [sticker:5335006395664179964.gif] || None: [sticker:5301278678913652950.gif] || 7e0f3165: [sticker:6264724471442050978.gif] || None: [sticker:23579791275935670...",
+    "memory_preview": "A series of stickers were shared, each conveying different emotions and reactions, with no accompanying text. The stickers ranged from playful to excited. || A series of stickers were shared, mostly by b5b5ccec, with ...",
+    "gold": "675168768736887035.png",
+    "gold_rank": 1,
+    "gold_score": 8.0404,
+    "top_margin": 0.2847,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.0404,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "2562980648230846759.gif",
+        "score": 7.7557,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "2562980648230846762.gif",
+        "score": 7.7103,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6233213941363770140.gif",
+        "score": 7.6182,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5859685944210230134.gif",
+        "score": 7.6182,
+        "same_group": false,
+        "group": "encouragement_support"
+      }
+    ]
+  },
+  {
+    "row_idx": 1440,
+    "sample_id": "37_session_0010#turn625",
+    "domain": "Anime",
+    "intent_label": "surprise_reaction",
+    "intent_text": "The sticker likely expresses shock or disbelief at the unexpected news about the anime season, with a tone of excitement mixed with surprise.",
+    "context_preview": "3de88128: merde ils nous ont gater cette serie || 3de88128: on veut voir le sang pas les herbes ! || 483e4d37: S'il vous plaît personne ici n'a le film ou le lien pour Suzume ? || fe08ca80: || e634d6f7: Bonjour! J'vie...",
+    "memory_preview": "Users discussed Hyouken no Majutsushi episode 3 VOSTFR, with one facing file reading issues, solved by using the mp4 format. There was a query about episode 2's release date, met with a skeptical reaction. Other anime...",
+    "gold": "1650176364118016154.png",
+    "gold_rank": 1,
+    "gold_score": 7.9929,
+    "top_margin": 0.1007,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "1650176364118016154.png",
+        "score": 7.9929,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "1650176364118016152.png",
+        "score": 7.8922,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "239526293123639684.png",
+        "score": 7.8423,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "5773948716125787593.png",
+        "score": 7.6162,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5411352256849120495.png",
+        "score": 7.5794,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 804,
+    "sample_id": "52_session_0001#turn5495",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong emotional content.",
+    "context_preview": "667af153: [sticker:5204378650438276053.webm] || 2a9d2b8c: [sticker:5958362822130798353.png] || None: [sticker:5017234766299137024.webm] || c23f52e7: [sticker:452520296927199444.png] || 4745f528: || 4596c939: [sticker:...",
+    "memory_preview": "A series of stickers were shared, mostly animated gifs and webms, with no accompanying text. The stickers were playful and lively, indicating a fun, light-hearted exchange.",
+    "gold": "675168768736887035.png",
+    "gold_rank": 2,
+    "gold_score": 8.6766,
+    "top_margin": 0.0023,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "182536080015233511.png",
+        "score": 8.6789,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "675168768736887035.png",
+        "score": 8.6766,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "3297424398058782734.png",
+        "score": 8.5479,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "1621864712796897307.png",
+        "score": 8.5291,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "6053016264882782727.png",
+        "score": 8.5184,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 2242,
+    "sample_id": "52_session_0018#turn180",
+    "domain": "Media Sharing",
+    "intent_label": "neutral_acknowledgment",
+    "intent_text": "The reply is a simple acknowledgment without strong emotional content.",
+    "context_preview": "None: [sticker:1621864712796897343.png] || 280be97b: [sticker:1621864712796897341.png] || None: [sticker:1621864712796897341.png] || 98a90540: [sticker:6168125125037132167.webm] || None: [sticker:6170316666459653776.w...",
+    "memory_preview": "Stickers were shared back and forth, with a mix of animated webms and gifs. The session ended with a note about a sticker pack being disabled. || Sticker exchange session. Sticker pack webp_14 was disabled. Multiple s...",
+    "gold": "2345073579797774953.png",
+    "gold_rank": 2,
+    "gold_score": 8.5721,
+    "top_margin": 0.4893,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "675168768736887035.png",
+        "score": 9.0615,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "2345073579797774953.png",
+        "score": 8.5721,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "1621864712796897307.png",
+        "score": 8.5386,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "6098340393332507481.png",
+        "score": 8.4956,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "182536080015232944.png",
+        "score": 8.4851,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  },
+  {
+    "row_idx": 759,
+    "sample_id": "58_session_0003#turn912",
+    "domain": "Media Sharing",
+    "intent_label": "frustration_disapproval",
+    "intent_text": "Expresses annoyance or irritation, likely using a sticker that shows a disappointed or upset face.",
+    "context_preview": "None: [sticker:202331403893873507.png] || 13970572: #USER_ID, #USER_ID has reduced your reputation. Your reputation 21 || None: [sticker:6030550373289168190.png] || c9327094: || None: [sticker:202331403893873090.png] ...",
+    "memory_preview": "#USER_ID increased your reputation twice, raising it from 18 to 19. 🏆 || Two stickers were shared, one animated GIF and one webm video. U-Sticker detected a link, but there was no further discussion or interaction. ||...",
+    "gold": "202331403893876219.png",
+    "gold_rank": 2,
+    "gold_score": 8.5435,
+    "top_margin": 0.2248,
+    "top_predictions": [
+      {
+        "rank": 1,
+        "sticker_id": "202331403893877459.png",
+        "score": 8.7682,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 2,
+        "sticker_id": "202331403893876219.png",
+        "score": 8.5435,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 3,
+        "sticker_id": "202331403893872627.png",
+        "score": 8.5126,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 4,
+        "sticker_id": "202331403893872327.png",
+        "score": 8.4278,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      },
+      {
+        "rank": 5,
+        "sticker_id": "5893157539175992440.png",
+        "score": 8.3898,
+        "same_group": true,
+        "group": "neutral_acknowledgment"
+      }
+    ]
+  }
+]

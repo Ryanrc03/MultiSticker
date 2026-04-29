@@ -1,0 +1,54 @@
+{
+  "row_idx": 982,
+  "sample_id": "40_session_0001#turn569003",
+  "domain": "Game",
+  "intent_label": "frustration_disapproval",
+  "intent_text": "Expresses annoyance and disagreement with the burst damage complaint, defending their character choice.",
+  "context_text": "6d7c349d: U FLICKER || 0c964165: just that they got too much burst damage || 6d7c349d: 50 SECS AFTER KICK || 0c964165: bobian hais || 0c964165: wtf anyhow don’t slander my chou || 0c964165: SMLJ || 6d7c349d: Ok sorry boss. || b9cb1cab: mythic -1 jungle or gold || f1c249aa: its true… || 152d5d6e: halp mi || 152d5d6e: m gettin cooked || b9cb1cab: mythic -1 jungle or gold",
+  "context_preview": "6d7c349d: U FLICKER || 0c964165: just that they got too much burst damage || 6d7c349d: 50 SECS AFTER KICK || 0c964165: bobian hais || 0c964165: wtf anyhow don’t slander my chou || 0c964165: SMLJ || 6d7c349d: Ok sorry ...",
+  "memory_text": "Player f20ea2bd initiated an FBI raid on Ady, causing confusion and frustration among other players. Player 5fb35712 expressed disbelief and anger, seeking how to report the incident. Player c50657ba commented on the possibility of a temporary group ban. f20ea2bd acknowledged the situation and suggested using the /report command.",
+  "memory_preview": "Player f20ea2bd initiated an FBI raid on Ady, causing confusion and frustration among other players. Player 5fb35712 expressed disbelief and anger, seeking how to report the incident. Player c50657ba commented on the ...",
+  "context_sticker_ids": [],
+  "gold": "1833563040931381796.png",
+  "gold_rank": 19,
+  "gold_score": 7.515,
+  "top_margin": 0.2116,
+  "top_predictions": [
+    {
+      "rank": 1,
+      "sticker_id": "5852749413113401777.webm",
+      "score": 8.1916,
+      "same_group": false,
+      "group": "frustration_disapproval"
+    },
+    {
+      "rank": 2,
+      "sticker_id": "1833563040931381707.png",
+      "score": 7.98,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 3,
+      "sticker_id": "1833563040931381726.png",
+      "score": 7.8672,
+      "same_group": false,
+      "group": "confusion_curiosity"
+    },
+    {
+      "rank": 4,
+      "sticker_id": "1833563040931381749.png",
+      "score": 7.8471,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    },
+    {
+      "rank": 5,
+      "sticker_id": "1833563040931381719.png",
+      "score": 7.8196,
+      "same_group": true,
+      "group": "neutral_acknowledgment"
+    }
+  ],
+  "context_sticker_files": []
+}
