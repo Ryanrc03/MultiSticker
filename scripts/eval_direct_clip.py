@@ -8,6 +8,7 @@ Query modes:
   clip_context_intent        : context_text + intent_text
   clip_context_memory_intent : context_text + memory_text + intent_text
 """
+
 from __future__ import annotations
 
 import argparse
@@ -40,7 +41,14 @@ from src.multisticker import (  # noqa: E402
     prepare_manifest,
 )
 from src.utils import save_json  # noqa: E402
-from embedding_cache import cache_path, describe_cache, digest_rows, digest_stickers, load_npz, save_npz  # noqa: E402
+from embedding_cache import (
+    cache_path,
+    describe_cache,
+    digest_rows,
+    digest_stickers,
+    load_npz,
+    save_npz,
+)  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
@@ -63,9 +71,20 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument("--infer-batch-size", type=int, default=64)
     p.add_argument("--seed", type=int, default=42)
-    p.add_argument("--results-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "results"))
-    p.add_argument("--embedding-cache-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "embedding_cache"), help="Directory for reusable frozen CLIP embeddings.")
-    p.add_argument("--no-embedding-cache", action="store_true", help="Disable disk cache for frozen direct CLIP embeddings.")
+    p.add_argument(
+        "--results-dir", type=str, default=str(SCRATCH_ARTIFACT_ROOT / "results")
+    )
+    p.add_argument(
+        "--embedding-cache-dir",
+        type=str,
+        default=str(SCRATCH_ARTIFACT_ROOT / "embedding_cache"),
+        help="Directory for reusable frozen CLIP embeddings.",
+    )
+    p.add_argument(
+        "--no-embedding-cache",
+        action="store_true",
+        help="Disable disk cache for frozen direct CLIP embeddings.",
+    )
     return p.parse_args()
 
 
@@ -77,7 +96,9 @@ def build_config(args):
     config.data.min_sticker_frequency = args.min_sticker_frequency
     config.data.max_train_samples = args.max_train_samples
     config.data.max_val_samples = args.max_val_samples
-    config.data.supported_media = _normalize_supported_media(args.supported_media.split(","))
+    config.data.supported_media = _normalize_supported_media(
+        args.supported_media.split(",")
+    )
     config.data.seed = args.seed
     config.model.infer_batch_size = args.infer_batch_size
     # direct_clip never needs memory retrieval; use disabled to skip expensive encoding
@@ -97,12 +118,23 @@ def _build_sticker_groups(sticker_ids, train_rows, all_rows_by_sticker):
     group_name_to_index = {}
     sticker_group_ids_list = []
     for sid in sticker_ids:
-        c = Counter(str(r.get("intent_label", "neutral_acknowledgment")) for r in train_rows if r["label_id"] == sid)
+        c = Counter(
+            str(r.get("intent_label", "neutral_acknowledgment"))
+            for r in train_rows
+            if r["label_id"] == sid
+        )
         if c:
             name = sorted(c.items(), key=lambda x: (-x[1], x[0]))[0][0]
         else:
-            c2 = Counter(str(r.get("intent_label", "neutral_acknowledgment")) for r in all_rows_by_sticker.get(sid, []))
-            name = sorted(c2.items(), key=lambda x: (-x[1], x[0]))[0][0] if c2 else "neutral_acknowledgment"
+            c2 = Counter(
+                str(r.get("intent_label", "neutral_acknowledgment"))
+                for r in all_rows_by_sticker.get(sid, [])
+            )
+            name = (
+                sorted(c2.items(), key=lambda x: (-x[1], x[0]))[0][0]
+                if c2
+                else "neutral_acknowledgment"
+            )
         if name not in group_name_to_index:
             group_name_to_index[name] = len(group_name_to_index)
         sticker_group_ids_list.append(group_name_to_index[name])
@@ -115,34 +147,51 @@ def main():
     _set_cache_env(config)
     _seed_everything(args.seed)
     device = _resolve_device(config)
-    embedding_cache_dir = Path(args.embedding_cache_dir) if args.embedding_cache_dir else SCRATCH_ARTIFACT_ROOT / "embedding_cache"
+    embedding_cache_dir = (
+        Path(args.embedding_cache_dir)
+        if args.embedding_cache_dir
+        else SCRATCH_ARTIFACT_ROOT / "embedding_cache"
+    )
     use_embedding_cache = not args.no_embedding_cache
     if use_embedding_cache:
         embedding_cache_dir.mkdir(parents=True, exist_ok=True)
         print(f"[direct_clip] embedding_cache={embedding_cache_dir}", flush=True)
-    print(f"[direct_clip] query_mode={args.query_mode} run={args.run_name} device={device}", flush=True)
+    print(
+        f"[direct_clip] query_mode={args.query_mode} run={args.run_name} device={device}",
+        flush=True,
+    )
 
     manifest = prepare_manifest(config=config, force_rebuild=args.force_rebuild)
 
     sticker_ids = manifest["sticker_ids"]
-    sticker_paths = _extract_missing_stickers(config.paths.zip_path, config.paths.sticker_root, sticker_ids)
+    sticker_paths = _extract_missing_stickers(
+        config.paths.zip_path, config.paths.sticker_root, sticker_ids
+    )
     sticker_paths, _ = _filter_decodable_stickers(sticker_paths)
     sticker_ids = [s for s in sticker_ids if s in sticker_paths]
     sticker_to_index = {s: i for i, s in enumerate(sticker_ids)}
     for split in ["train", "val", "test"]:
-        manifest["splits"][split] = [r for r in manifest["splits"][split] if r["label_id"] in sticker_to_index]
+        manifest["splits"][split] = [
+            r for r in manifest["splits"][split] if r["label_id"] in sticker_to_index
+        ]
         for r in manifest["splits"][split]:
             r["label_index"] = sticker_to_index[r["label_id"]]
     train_rows = manifest["splits"]["train"]
     val_rows = manifest["splits"]["val"]
-    print(f"[direct_clip] sticker_bank={len(sticker_ids)} val={len(val_rows)}", flush=True)
+    print(
+        f"[direct_clip] sticker_bank={len(sticker_ids)} val={len(val_rows)}", flush=True
+    )
 
-    clip_encoder = OpenClipEncoder(config.model.clip_model_name, config.model.clip_pretrained, device=device)
+    clip_encoder = OpenClipEncoder(
+        config.model.clip_model_name, config.model.clip_pretrained, device=device
+    )
 
     all_rows_by_sticker: dict = defaultdict(list)
     for r in train_rows + val_rows + manifest["splits"]["test"]:
         all_rows_by_sticker[r["label_id"]].append(r)
-    sticker_group_ids = _build_sticker_groups(sticker_ids, train_rows, all_rows_by_sticker)
+    sticker_group_ids = _build_sticker_groups(
+        sticker_ids, train_rows, all_rows_by_sticker
+    )
 
     image_paths_list = [sticker_paths[s] for s in sticker_ids]
     image_cache = None
@@ -160,14 +209,22 @@ def main():
     else:
         cached = None
     if cached is not None:
-        print(f"[direct_clip] loaded sticker image bank from {describe_cache(image_cache)}", flush=True)
+        print(
+            f"[direct_clip] loaded sticker image bank from {describe_cache(image_cache)}",
+            flush=True,
+        )
         img_np = cached["image"]
     else:
         print("[direct_clip] encoding sticker image bank", flush=True)
-        img_np = clip_encoder.encode_images(image_paths_list, batch_size=config.model.infer_batch_size)
+        img_np = clip_encoder.encode_images(
+            image_paths_list, batch_size=config.model.infer_batch_size
+        )
         if image_cache is not None:
             save_npz(image_cache, image=img_np)
-            print(f"[direct_clip] saved sticker image bank to {describe_cache(image_cache)}", flush=True)
+            print(
+                f"[direct_clip] saved sticker image bank to {describe_cache(image_cache)}",
+                flush=True,
+            )
 
     def query_text(row: dict) -> str:
         if args.query_mode == "clip_context":
@@ -175,7 +232,13 @@ def main():
         elif args.query_mode == "clip_context_intent":
             return row["context_text"] + " " + row.get("intent_text", "")
         else:
-            return row["context_text"] + " " + row.get("memory_text", "") + " " + row.get("intent_text", "")
+            return (
+                row["context_text"]
+                + " "
+                + row.get("memory_text", "")
+                + " "
+                + row.get("intent_text", "")
+            )
 
     query_texts = [query_text(r) for r in val_rows]
     query_cache = None
@@ -187,27 +250,39 @@ def main():
                 "clip_model_name": config.model.clip_model_name,
                 "clip_pretrained": config.model.clip_pretrained,
                 "query_mode": args.query_mode,
-                "rows_digest": digest_rows(val_rows, ["context_text", "memory_text", "intent_text"]),
+                "rows_digest": digest_rows(
+                    val_rows, ["context_text", "memory_text", "intent_text"]
+                ),
             },
         )
         cached = load_npz(query_cache)
     else:
         cached = None
     if cached is not None:
-        print(f"[direct_clip] loaded {len(val_rows)} val query embeddings from {describe_cache(query_cache)}", flush=True)
+        print(
+            f"[direct_clip] loaded {len(val_rows)} val query embeddings from {describe_cache(query_cache)}",
+            flush=True,
+        )
         query_np = cached["query"]
     else:
         print(f"[direct_clip] encoding {len(val_rows)} val queries", flush=True)
-        query_np = clip_encoder.encode_texts(query_texts, batch_size=config.model.infer_batch_size)
+        query_np = clip_encoder.encode_texts(
+            query_texts, batch_size=config.model.infer_batch_size
+        )
         if query_cache is not None:
             save_npz(query_cache, query=query_np)
-            print(f"[direct_clip] saved val query embeddings to {describe_cache(query_cache)}", flush=True)
+            print(
+                f"[direct_clip] saved val query embeddings to {describe_cache(query_cache)}",
+                flush=True,
+            )
     val_label_idx = np.asarray([r["label_index"] for r in val_rows], dtype=np.int64)
 
     # Pure cosine similarity (both sides already L2-normalised by encoders)
     score_matrix = query_np @ img_np.T
     metrics = _metrics_from_scores(score_matrix, val_label_idx)
-    semantic = _group_metrics_from_scores(score_matrix, val_label_idx, sticker_group_ids)
+    semantic = _group_metrics_from_scores(
+        score_matrix, val_label_idx, sticker_group_ids
+    )
 
     results = {
         "mode": "direct_clip",
@@ -226,7 +301,10 @@ def main():
             },
         },
         "dataset_summary": manifest["dataset_summary"],
-        "media_summary": {"sticker_bank_size": len(sticker_ids), "supported_media": list(config.data.supported_media)},
+        "media_summary": {
+            "sticker_bank_size": len(sticker_ids),
+            "supported_media": list(config.data.supported_media),
+        },
         "val": {
             "metrics": metrics,
             "semantic_metrics": semantic,

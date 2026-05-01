@@ -4,6 +4,7 @@ The runner writes logs and model/results into separate top-level directories.
 This helper copies the files for a single artifact prefix into a parameterized
 archive folder and writes a manifest so later analysis can find the run inputs.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -45,7 +46,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--lora-dropout", type=float, default=0.0)
     p.add_argument("--lora-lr", type=float, default=0.0)
     p.add_argument("--head-lr", type=float, default=0.0)
-    p.add_argument("--copy", action="store_true", help="Copy files instead of the default copy2 metadata-preserving behavior.")
+    p.add_argument(
+        "--copy",
+        action="store_true",
+        help="Copy files instead of the default copy2 metadata-preserving behavior.",
+    )
     return p.parse_args()
 
 
@@ -67,7 +72,12 @@ def archive_bucket(args: argparse.Namespace) -> Path:
     media_label = args.supported_media.replace(",", "-").replace(".", "")
     if media_label:
         data_label += f"__media-{media_label}"
-    return Path(args.archive_root) / slug(args.run_name) / slug(data_label) / slug(args.artifact_prefix)
+    return (
+        Path(args.archive_root)
+        / slug(args.run_name)
+        / slug(data_label)
+        / slug(args.artifact_prefix)
+    )
 
 
 def collect_sources(args: argparse.Namespace) -> list[Path]:
@@ -103,7 +113,9 @@ def main() -> None:
             shutil.copy(src, dst)
         else:
             shutil.copy2(src, dst)
-        copied.append({"source": str(src), "archive_path": str(dst), "bytes": dst.stat().st_size})
+        copied.append(
+            {"source": str(src), "archive_path": str(dst), "bytes": dst.stat().st_size}
+        )
 
     manifest = {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -121,7 +133,9 @@ def main() -> None:
             "max_val_samples": args.max_val_samples,
             "max_stickers": args.max_stickers,
             "min_sticker_frequency": args.min_sticker_frequency,
-            "supported_media": [item for item in args.supported_media.split(",") if item],
+            "supported_media": [
+                item for item in args.supported_media.split(",") if item
+            ],
             "session_memories_file": args.session_memories_file,
             "sample_intents_file": args.sample_intents_file,
         },
@@ -147,7 +161,10 @@ def main() -> None:
     with open(manifest_path, "w", encoding="utf-8") as handle:
         json.dump(manifest, handle, ensure_ascii=False, indent=2)
 
-    print(f"[archive] {args.artifact_prefix}: {len(copied)} files -> {destination}", flush=True)
+    print(
+        f"[archive] {args.artifact_prefix}: {len(copied)} files -> {destination}",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":

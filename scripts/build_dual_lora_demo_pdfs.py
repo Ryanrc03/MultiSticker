@@ -10,6 +10,7 @@ replaced by small thumbnail images. Predictions are laid out as one large
 gold sticker followed by a row of five candidate thumbnails, with a green
 or red border indicating same/different intent group.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -21,7 +22,6 @@ import subprocess
 from pathlib import Path
 
 from PIL import Image, ImageSequence
-
 
 ROOT = Path("/home/rl182/dl/V2L/Project-meme/MultiSticker")
 DEMO_DIR = ROOT / "Latex_report" / "demo_assets" / "dual_lora_png_demo"
@@ -158,7 +158,7 @@ def render_inline_message(
     sticker_count = 0
     for m in STICKER_TOKEN_RE.finditer(message):
         if m.start() > last:
-            chunk = message[last:m.start()]
+            chunk = message[last : m.start()]
             text_chars += len(chunk.strip())
             parts.append(latex_escape(chunk))
         sid = m.group(1).strip()
@@ -208,8 +208,16 @@ def render_inline_message(
 
 
 AVATAR_PALETTE = [
-    "Apricot", "SkyBlue", "Lavender", "YellowGreen", "Salmon",
-    "Goldenrod", "Aquamarine", "Orchid", "Tan", "CornflowerBlue",
+    "Apricot",
+    "SkyBlue",
+    "Lavender",
+    "YellowGreen",
+    "Salmon",
+    "Goldenrod",
+    "Aquamarine",
+    "Orchid",
+    "Tan",
+    "CornflowerBlue",
 ]
 
 
@@ -260,9 +268,7 @@ def render_dialogue(
             )
         elif is_me:
             content_inner = (
-                "\\begin{tcolorbox}[imebubble]"
-                f"{rendered_msg}"
-                "\\end{tcolorbox}"
+                "\\begin{tcolorbox}[imebubble]" f"{rendered_msg}" "\\end{tcolorbox}"
             )
             content = (
                 f"{{\\tiny\\color{{gray!70!black}}\\textsf{{{latex_escape(avatar_label)}}}}}\\par"
@@ -270,9 +276,7 @@ def render_dialogue(
             )
         else:
             content_inner = (
-                "\\begin{tcolorbox}[otherbubble]"
-                f"{rendered_msg}"
-                "\\end{tcolorbox}"
+                "\\begin{tcolorbox}[otherbubble]" f"{rendered_msg}" "\\end{tcolorbox}"
             )
             content = (
                 f"{{\\tiny\\color{{gray!60!black}}\\textsf{{{latex_escape(avatar_label)}}}}}\\par"
@@ -335,7 +339,10 @@ def media_for_case(
 
 
 def render_predictions_block(
-    case_dir: Path, metadata: dict, base_dir: Path, ffmpeg_bin: str | None,
+    case_dir: Path,
+    metadata: dict,
+    base_dir: Path,
+    ffmpeg_bin: str | None,
     column_mode: bool = False,
 ) -> str:
     items = media_for_case(case_dir, metadata)
@@ -418,7 +425,9 @@ def render_predictions_block(
     )
 
 
-def render_case_block(case_dir: Path, metadata: dict, base_dir: Path, column_mode: bool = False) -> str:
+def render_case_block(
+    case_dir: Path, metadata: dict, base_dir: Path, column_mode: bool = False
+) -> str:
     case_no = case_sort_key(case_dir)
     ffmpeg_bin = find_ffmpeg()
     context_sticker_dir = case_dir / "context_stickers"
@@ -445,7 +454,9 @@ def render_case_block(case_dir: Path, metadata: dict, base_dir: Path, column_mod
     domain = latex_escape(metadata.get("domain", ""))
     gold_rank = metadata.get("gold_rank", "?")
 
-    predictions = render_predictions_block(case_dir, metadata, base_dir, ffmpeg_bin, column_mode=column_mode)
+    predictions = render_predictions_block(
+        case_dir, metadata, base_dir, ffmpeg_bin, column_mode=column_mode
+    )
 
     inner_width = "\\linewidth" if column_mode else "0.62\\linewidth"
     return rf"""
@@ -469,16 +480,22 @@ def render_case_block(case_dir: Path, metadata: dict, base_dir: Path, column_mod
 
 def document(body: str, title: str, column: bool = False) -> str:
     if column:
-        docclass = "\\documentclass[varwidth=3.25in,border={3pt 3pt 3pt 3pt},9pt]{standalone}"
+        docclass = (
+            "\\documentclass[varwidth=3.25in,border={3pt 3pt 3pt 3pt},9pt]{standalone}"
+        )
         geometry = ""
     else:
         docclass = "\\documentclass[10pt,letterpaper]{article}"
         geometry = "\\usepackage[margin=0.75in]{geometry}"
-    title_block = "" if column else (
-        "\\begin{center}\n"
-        f"{{\\large\\bfseries\\sffamily {latex_escape(title)}}}\\\\[2pt]\n"
-        "{\\footnotesize\\itshape Dual-LoRA dialogue-conditioned sticker retrieval}\n"
-        "\\end{center}\n\\vspace{1mm}\n"
+    title_block = (
+        ""
+        if column
+        else (
+            "\\begin{center}\n"
+            f"{{\\large\\bfseries\\sffamily {latex_escape(title)}}}\\\\[2pt]\n"
+            "{\\footnotesize\\itshape Dual-LoRA dialogue-conditioned sticker retrieval}\n"
+            "\\end{center}\n\\vspace{1mm}\n"
+        )
     )
     return rf"""{docclass}
 {geometry}
@@ -537,7 +554,12 @@ def compile_tex(tex_path: Path, crop: bool = False) -> Path:
         raise FileNotFoundError(f"pdflatex not found at {PDFLATEX}")
     for _ in range(2):
         subprocess.run(
-            [str(PDFLATEX), "-interaction=nonstopmode", "-halt-on-error", tex_path.name],
+            [
+                str(PDFLATEX),
+                "-interaction=nonstopmode",
+                "-halt-on-error",
+                tex_path.name,
+            ],
             cwd=tex_path.parent,
             check=True,
             stdout=subprocess.DEVNULL,
@@ -558,9 +580,15 @@ def compile_tex(tex_path: Path, crop: bool = False) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--cases", default="all", help="Case list/range, e.g. 1-5, 6-20, or all.")
-    parser.add_argument("--combined", action="store_true", help="Also build one combined PDF.")
-    parser.add_argument("--column", action="store_true", help="Render at CVPR column width (~3.3in).")
+    parser.add_argument(
+        "--cases", default="all", help="Case list/range, e.g. 1-5, 6-20, or all."
+    )
+    parser.add_argument(
+        "--combined", action="store_true", help="Also build one combined PDF."
+    )
+    parser.add_argument(
+        "--column", action="store_true", help="Render at CVPR column width (~3.3in)."
+    )
     args = parser.parse_args()
     suffix_tag = "_col" if args.column else ""
 
@@ -584,11 +612,17 @@ def main() -> None:
         for case_dir in selected:
             with open(case_dir / "metadata.json", encoding="utf-8") as f:
                 metadata = json.load(f)
-            blocks.append(render_case_block(case_dir, metadata, DEMO_DIR, column_mode=args.column))
+            blocks.append(
+                render_case_block(case_dir, metadata, DEMO_DIR, column_mode=args.column)
+            )
         suffix = args.cases.replace(",", "_").replace("-", "_")
         tex_path = DEMO_DIR / f"cases_{suffix}_demo{suffix_tag}.tex"
         tex_path.write_text(
-            document("\\clearpage\n".join(blocks), f"Sticker Retrieval Demos {args.cases}", column=args.column),
+            document(
+                "\\clearpage\n".join(blocks),
+                f"Sticker Retrieval Demos {args.cases}",
+                column=args.column,
+            ),
             encoding="utf-8",
         )
         built.append(compile_tex(tex_path, crop=False))

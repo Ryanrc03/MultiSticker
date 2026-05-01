@@ -1,4 +1,5 @@
 """Small disk cache helpers for expensive frozen embedding passes."""
+
 from __future__ import annotations
 
 import hashlib
@@ -10,7 +11,11 @@ import numpy as np
 
 
 def _update_json(hasher, value) -> None:
-    hasher.update(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8"))
+    hasher.update(
+        json.dumps(
+            value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+    )
     hasher.update(b"\n")
 
 
@@ -39,7 +44,9 @@ def digest_stickers(sticker_ids: Sequence[str], image_paths: Sequence[str]) -> s
             file_state = {"size": stat.st_size, "mtime_ns": stat.st_mtime_ns}
         except FileNotFoundError:
             file_state = {"missing": True}
-        _update_json(hasher, {"sticker_id": sticker_id, "path": str(path), "file": file_state})
+        _update_json(
+            hasher, {"sticker_id": sticker_id, "path": str(path), "file": file_state}
+        )
     return hasher.hexdigest()[:20]
 
 

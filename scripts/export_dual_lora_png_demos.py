@@ -1,4 +1,5 @@
 """Export top PNG validation demos from the medium dual-LoRA checkpoint."""
+
 from __future__ import annotations
 
 import csv
@@ -36,7 +37,6 @@ from src.multisticker import (  # noqa: E402
     prepare_manifest,
 )
 from train_am import apply_lora, encode_image_bank, encode_texts_grad  # noqa: E402
-
 
 OUT_DIR = ROOT / "Latex_report" / "demo_assets" / "dual_lora_png_demo"
 CHECKPOINT = ROOT / "results" / "am_dual_lora_retrieved_topk_rebuild_medium.pt"
@@ -88,18 +88,30 @@ def build_sticker_groups(sticker_ids, train_rows, all_rows_by_sticker):
     sticker_group_ids = []
     sticker_group_names = []
     for sid in sticker_ids:
-        counts = Counter(str(r.get("intent_label", "neutral_acknowledgment")) for r in train_rows if r["label_id"] == sid)
+        counts = Counter(
+            str(r.get("intent_label", "neutral_acknowledgment"))
+            for r in train_rows
+            if r["label_id"] == sid
+        )
         if not counts:
             counts = Counter(
                 str(r.get("intent_label", "neutral_acknowledgment"))
                 for r in all_rows_by_sticker.get(sid, [])
             )
-        name = sorted(counts.items(), key=lambda x: (-x[1], x[0]))[0][0] if counts else "neutral_acknowledgment"
+        name = (
+            sorted(counts.items(), key=lambda x: (-x[1], x[0]))[0][0]
+            if counts
+            else "neutral_acknowledgment"
+        )
         if name not in group_name_to_index:
             group_name_to_index[name] = len(group_name_to_index)
         sticker_group_ids.append(group_name_to_index[name])
         sticker_group_names.append(name)
-    return np.asarray(sticker_group_ids, dtype=np.int64), sticker_group_names, group_name_to_index
+    return (
+        np.asarray(sticker_group_ids, dtype=np.int64),
+        sticker_group_names,
+        group_name_to_index,
+    )
 
 
 def copy_sticker(sticker_id: str, source: str, dest_dir: Path, prefix: str) -> str:
@@ -140,40 +152,70 @@ def make_contact_sheet(cases, sticker_paths):
     draw = ImageDraw.Draw(sheet)
     font = ImageFont.load_default()
     for r, case in enumerate(cases):
-        items = [("Gold", case["gold"])] + [(f"Top {p['rank']}", p["sticker_id"]) for p in case["top_predictions"][:5]]
+        items = [("Gold", case["gold"])] + [
+            (f"Top {p['rank']}", p["sticker_id"]) for p in case["top_predictions"][:5]
+        ]
         for c, (label, sid) in enumerate(items):
             x, y = c * cell_w, r * cell_h
             img = preview_image(Path(sticker_paths[sid]))
             sheet.paste(img, (x + 11, y + 22))
             draw.text((x + 8, y + 6), label, fill=(0, 0, 0), font=font)
             draw.text((x + 8, y + 154), sid[:20], fill=(40, 40, 40), font=font)
-        draw.text((8, r * cell_h + cell_h - 16), f"case {r + 1}: rank={case['gold_rank']} intent={case['intent_label']}", fill=(0, 0, 0), font=font)
+        draw.text(
+            (8, r * cell_h + cell_h - 16),
+            f"case {r + 1}: rank={case['gold_rank']} intent={case['intent_label']}",
+            fill=(0, 0, 0),
+            font=font,
+        )
     sheet.save(OUT_DIR / "dual_lora_top5_png_contact_sheet.png")
 
 
 def write_case_csv(path: Path, cases):
     with open(path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["case", "sample_id", "domain", "intent_label", "gold", "gold_rank", "gold_score", "top1", "top1_same_group", "context_preview"])
+        writer = csv.DictWriter(
+            f,
+            fieldnames=[
+                "case",
+                "sample_id",
+                "domain",
+                "intent_label",
+                "gold",
+                "gold_rank",
+                "gold_score",
+                "top1",
+                "top1_same_group",
+                "context_preview",
+            ],
+        )
         writer.writeheader()
         for i, case in enumerate(cases, start=1):
-            writer.writerow({
-                "case": i,
-                "sample_id": case["sample_id"],
-                "domain": case["domain"],
-                "intent_label": case["intent_label"],
-                "gold": case["gold"],
-                "gold_rank": case["gold_rank"],
-                "gold_score": case["gold_score"],
-                "top1": case["top_predictions"][0]["sticker_id"],
-                "top1_same_group": case["top_predictions"][0]["same_group"],
-                "context_preview": case["context_preview"],
-            })
+            writer.writerow(
+                {
+                    "case": i,
+                    "sample_id": case["sample_id"],
+                    "domain": case["domain"],
+                    "intent_label": case["intent_label"],
+                    "gold": case["gold"],
+                    "gold_rank": case["gold_rank"],
+                    "gold_score": case["gold_score"],
+                    "top1": case["top_predictions"][0]["sticker_id"],
+                    "top1_same_group": case["top_predictions"][0]["same_group"],
+                    "context_preview": case["context_preview"],
+                }
+            )
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--num-cases", type=int, default=5, help="Number of validation cases to export.")
-    parser.add_argument("--max-per-gold", type=int, default=1, help="Max cases sharing the same gold sticker.")
+    parser.add_argument(
+        "--num-cases", type=int, default=5, help="Number of validation cases to export."
+    )
+    parser.add_argument(
+        "--max-per-gold",
+        type=int,
+        default=1,
+        help="Max cases sharing the same gold sticker.",
+    )
     args = parser.parse_args()
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -185,12 +227,16 @@ def main():
     manifest = prepare_manifest(config=config, force_rebuild=False)
 
     sticker_ids = manifest["sticker_ids"]
-    sticker_paths = _extract_missing_stickers(config.paths.zip_path, config.paths.sticker_root, sticker_ids)
+    sticker_paths = _extract_missing_stickers(
+        config.paths.zip_path, config.paths.sticker_root, sticker_ids
+    )
     sticker_paths, _ = _filter_decodable_stickers(sticker_paths)
     sticker_ids = [s for s in sticker_ids if s in sticker_paths]
     sticker_to_index = {s: i for i, s in enumerate(sticker_ids)}
     for split in ["train", "val", "test"]:
-        manifest["splits"][split] = [r for r in manifest["splits"][split] if r["label_id"] in sticker_to_index]
+        manifest["splits"][split] = [
+            r for r in manifest["splits"][split] if r["label_id"] in sticker_to_index
+        ]
         for row in manifest["splits"][split]:
             row["label_index"] = sticker_to_index[row["label_id"]]
 
@@ -199,10 +245,16 @@ def main():
     all_rows_by_sticker = defaultdict(list)
     for row in train_rows + val_rows + manifest["splits"]["test"]:
         all_rows_by_sticker[row["label_id"]].append(row)
-    sticker_group_ids, sticker_group_names, group_name_to_index = build_sticker_groups(sticker_ids, train_rows, all_rows_by_sticker)
-    print(f"[export] sticker_bank={len(sticker_ids)} val={len(val_rows)} groups={len(group_name_to_index)}")
+    sticker_group_ids, sticker_group_names, group_name_to_index = build_sticker_groups(
+        sticker_ids, train_rows, all_rows_by_sticker
+    )
+    print(
+        f"[export] sticker_bank={len(sticker_ids)} val={len(val_rows)} groups={len(group_name_to_index)}"
+    )
 
-    clip_encoder = OpenClipEncoder(config.model.clip_model_name, config.model.clip_pretrained, device=device)
+    clip_encoder = OpenClipEncoder(
+        config.model.clip_model_name, config.model.clip_pretrained, device=device
+    )
     apply_lora(clip_encoder.model, "dual_lora", 8, 16, 0.05)
     retriever = IntentGuidedRetriever(
         input_dim=3 * clip_encoder.output_dim,
@@ -222,13 +274,42 @@ def main():
 
     image_paths_list = [sticker_paths[sid] for sid in sticker_ids]
     with torch.no_grad():
-        bank = encode_image_bank(clip_encoder, image_paths_list, config.model.infer_batch_size, device, with_grad=False)
-        ctx = encode_texts_grad(clip_encoder.model, clip_encoder.tokenizer, [r["context_text"] for r in val_rows], device, batch_size=config.model.infer_batch_size)
-        mem = encode_texts_grad(clip_encoder.model, clip_encoder.tokenizer, [r["memory_text"] for r in val_rows], device, batch_size=config.model.infer_batch_size)
-        intent = encode_texts_grad(clip_encoder.model, clip_encoder.tokenizer, [r["intent_text"] for r in val_rows], device, batch_size=config.model.infer_batch_size)
+        bank = encode_image_bank(
+            clip_encoder,
+            image_paths_list,
+            config.model.infer_batch_size,
+            device,
+            with_grad=False,
+        )
+        ctx = encode_texts_grad(
+            clip_encoder.model,
+            clip_encoder.tokenizer,
+            [r["context_text"] for r in val_rows],
+            device,
+            batch_size=config.model.infer_batch_size,
+        )
+        mem = encode_texts_grad(
+            clip_encoder.model,
+            clip_encoder.tokenizer,
+            [r["memory_text"] for r in val_rows],
+            device,
+            batch_size=config.model.infer_batch_size,
+        )
+        intent = encode_texts_grad(
+            clip_encoder.model,
+            clip_encoder.tokenizer,
+            [r["intent_text"] for r in val_rows],
+            device,
+            batch_size=config.model.infer_batch_size,
+        )
         chunks = []
         for start in range(0, len(val_rows), 512):
-            _, logits, _ = retriever(ctx[start:start + 512], mem[start:start + 512], intent[start:start + 512], bank)
+            _, logits, _ = retriever(
+                ctx[start : start + 512],
+                mem[start : start + 512],
+                intent[start : start + 512],
+                bank,
+            )
             chunks.append(logits.detach().cpu().numpy().astype(np.float32))
     scores = np.concatenate(chunks, axis=0)
     val_label_idx = np.asarray([r["label_index"] for r in val_rows], dtype=np.int64)
@@ -246,35 +327,47 @@ def main():
         gold_group = int(sticker_group_ids[gold_idx])
         for rank, pred_idx in enumerate(top_idx, start=1):
             pred_sid = sticker_ids[int(pred_idx)]
-            top_predictions.append({
-                "rank": rank,
-                "sticker_id": pred_sid,
-                "score": round(float(row_scores[int(pred_idx)]), 4),
-                "same_group": bool(int(sticker_group_ids[int(pred_idx)]) == gold_group),
-                "group": sticker_group_names[int(pred_idx)],
-            })
-        margin = float(row_scores[top_idx[0]] - row_scores[top_idx[1]]) if len(top_idx) > 1 else 0.0
+            top_predictions.append(
+                {
+                    "rank": rank,
+                    "sticker_id": pred_sid,
+                    "score": round(float(row_scores[int(pred_idx)]), 4),
+                    "same_group": bool(
+                        int(sticker_group_ids[int(pred_idx)]) == gold_group
+                    ),
+                    "group": sticker_group_names[int(pred_idx)],
+                }
+            )
+        margin = (
+            float(row_scores[top_idx[0]] - row_scores[top_idx[1]])
+            if len(top_idx) > 1
+            else 0.0
+        )
         context_text = str(row.get("context_text", ""))
         context_sticker_ids = extract_context_sticker_ids(context_text)
-        candidates.append({
-            "row_idx": row_idx,
-            "sample_id": row["sample_id"],
-            "domain": row.get("domain", ""),
-            "intent_label": row.get("intent_label", ""),
-            "intent_text": row.get("intent_text", ""),
-            "context_text": context_text,
-            "context_preview": short_text(context_text),
-            "memory_text": str(row.get("memory_text", "")),
-            "memory_preview": short_text(row.get("memory_text", "")),
-            "context_sticker_ids": context_sticker_ids,
-            "gold": row["label_id"],
-            "gold_rank": gold_rank,
-            "gold_score": round(gold_score, 4),
-            "top_margin": round(margin, 4),
-            "top_predictions": top_predictions,
-        })
+        candidates.append(
+            {
+                "row_idx": row_idx,
+                "sample_id": row["sample_id"],
+                "domain": row.get("domain", ""),
+                "intent_label": row.get("intent_label", ""),
+                "intent_text": row.get("intent_text", ""),
+                "context_text": context_text,
+                "context_preview": short_text(context_text),
+                "memory_text": str(row.get("memory_text", "")),
+                "memory_preview": short_text(row.get("memory_text", "")),
+                "context_sticker_ids": context_sticker_ids,
+                "gold": row["label_id"],
+                "gold_rank": gold_rank,
+                "gold_score": round(gold_score, 4),
+                "top_margin": round(margin, 4),
+                "top_predictions": top_predictions,
+            }
+        )
 
-    ranked = sorted(candidates, key=lambda x: (x["gold_rank"], -x["gold_score"], -x["top_margin"]))
+    ranked = sorted(
+        candidates, key=lambda x: (x["gold_rank"], -x["gold_score"], -x["top_margin"])
+    )
     max_per_gold = max(1, int(args.max_per_gold))
     gold_counts: Counter = Counter()
     selected = []
@@ -291,7 +384,12 @@ def main():
         case_dir.mkdir(parents=True, exist_ok=True)
         copy_sticker(case["gold"], sticker_paths[case["gold"]], case_dir, "gold")
         for pred in case["top_predictions"]:
-            copy_sticker(pred["sticker_id"], sticker_paths[pred["sticker_id"]], case_dir, f"top{pred['rank']}")
+            copy_sticker(
+                pred["sticker_id"],
+                sticker_paths[pred["sticker_id"]],
+                case_dir,
+                f"top{pred['rank']}",
+            )
         ctx_dir = case_dir / "context_stickers"
         ctx_dir.mkdir(exist_ok=True)
         copied_ctx = []
@@ -321,7 +419,9 @@ def main():
     make_contact_sheet(selected, sticker_paths)
     print(f"[export] wrote {OUT_DIR}")
     for i, case in enumerate(selected, start=1):
-        print(f"[export] case={i} rank={case['gold_rank']} gold={case['gold']} sample={case['sample_id']}")
+        print(
+            f"[export] case={i} rank={case['gold_rank']} gold={case['gold']} sample={case['sample_id']}"
+        )
 
 
 if __name__ == "__main__":

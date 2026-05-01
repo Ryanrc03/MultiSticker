@@ -40,7 +40,9 @@ def seed_everything(seed: int) -> np.random.Generator:
     return np.random.default_rng(seed)
 
 
-def batched_indices(size: int, batch_size: int, order: np.ndarray) -> Iterator[np.ndarray]:
+def batched_indices(
+    size: int, batch_size: int, order: np.ndarray
+) -> Iterator[np.ndarray]:
     for start in range(0, size, batch_size):
         yield order[start : start + batch_size]
 

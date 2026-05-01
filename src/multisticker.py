@@ -22,7 +22,6 @@ from PIL import Image, ImageSequence
 
 from .utils import ensure_dir, round_dict, save_json
 
-
 SUPPORTED_MEDIA = {".png", ".gif", ".webm"}
 DEFAULT_SUPPORTED_MEDIA = tuple(sorted(SUPPORTED_MEDIA))
 VIDEO_MEDIA = {".webm"}
@@ -114,7 +113,9 @@ class UStickerPaths:
     def manifest_path(self) -> str:
         if self.manifest_override:
             return self.manifest_override
-        return str(Path(self.data_root) / f"usticker_manifest{self._artifact_suffix}.json")
+        return str(
+            Path(self.data_root) / f"usticker_manifest{self._artifact_suffix}.json"
+        )
 
     @property
     def model_path(self) -> str:
@@ -122,7 +123,9 @@ class UStickerPaths:
 
     @property
     def result_path(self) -> str:
-        return str(Path(self.run_root) / f"usticker_igsr_results{self._artifact_suffix}.json")
+        return str(
+            Path(self.run_root) / f"usticker_igsr_results{self._artifact_suffix}.json"
+        )
 
 
 @dataclass
@@ -215,7 +218,15 @@ class SampleRecord:
 
 
 class IntentGuidedRetriever(nn.Module):
-    def __init__(self, input_dim: int, output_dim: int, hidden_dim: int, num_intents: int, dropout: float, temperature: float):
+    def __init__(
+        self,
+        input_dim: int,
+        output_dim: int,
+        hidden_dim: int,
+        num_intents: int,
+        dropout: float,
+        temperature: float,
+    ):
         super().__init__()
         self.intent_proj = nn.Sequential(
             nn.LayerNorm(input_dim),
@@ -237,7 +248,9 @@ class IntentGuidedRetriever(nn.Module):
         intent_text_features: torch.Tensor,
         image_bank: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        combined = torch.cat([context_features, memory_features, intent_text_features], dim=-1)
+        combined = torch.cat(
+            [context_features, memory_features, intent_text_features], dim=-1
+        )
         intent_repr = F.normalize(self.intent_proj(combined), dim=-1)
         retrieval_logits = intent_repr @ image_bank.T / self.temperature
         intent_logits = self.intent_classifier(intent_repr)
@@ -253,7 +266,9 @@ def _set_cache_env(config: MultiStickerConfig) -> None:
     os.environ["HF_HOME"] = cache_root
     os.environ["HUGGINGFACE_HUB_CACHE"] = cache_root
     os.environ["HF_HUB_CACHE"] = cache_root
-    os.environ["HF_XET_CACHE"] = str(Path(config.paths.xdg_cache_home) / "huggingface" / "xet")
+    os.environ["HF_XET_CACHE"] = str(
+        Path(config.paths.xdg_cache_home) / "huggingface" / "xet"
+    )
     os.environ["TRANSFORMERS_CACHE"] = cache_root
     os.environ["TORCH_HOME"] = config.paths.torch_home
     os.environ["XDG_CACHE_HOME"] = config.paths.xdg_cache_home
@@ -297,13 +312,17 @@ def _normalize_text(text: object, max_chars: int) -> str:
 
 
 def _normalize_supported_media(media: Sequence[str]) -> tuple[str, ...]:
-    normalized = sorted({str(item).strip().lower() for item in media if str(item).strip()})
+    normalized = sorted(
+        {str(item).strip().lower() for item in media if str(item).strip()}
+    )
     invalid = [item for item in normalized if not item.startswith(".")]
     if invalid:
         raise ValueError(f"Media extensions must start with '.': {invalid}")
     unsupported = [item for item in normalized if item not in SUPPORTED_MEDIA]
     if unsupported:
-        raise ValueError(f"Unsupported media extensions: {unsupported}; supported={sorted(SUPPORTED_MEDIA)}")
+        raise ValueError(
+            f"Unsupported media extensions: {unsupported}; supported={sorted(SUPPORTED_MEDIA)}"
+        )
     return tuple(normalized)
 
 
@@ -342,9 +361,17 @@ def _empty_media_stats(supported_media: Sequence[str]) -> Dict[str, object]:
     return stats
 
 
-def _build_session_text(turns: Sequence[dict], max_turns: int, max_chars: int, supported_media: Sequence[str]) -> str:
+def _build_session_text(
+    turns: Sequence[dict],
+    max_turns: int,
+    max_chars: int,
+    supported_media: Sequence[str],
+) -> str:
     selected_turns = list(turns[-max_turns:])
-    return " || ".join(_format_turn(turn, max_chars=max_chars, supported_media=supported_media) for turn in selected_turns)
+    return " || ".join(
+        _format_turn(turn, max_chars=max_chars, supported_media=supported_media)
+        for turn in selected_turns
+    )
 
 
 def _read_jsonl(path: str) -> List[dict]:
@@ -418,7 +445,9 @@ def _split_sessions(rows: Sequence[dict], gap_hours: float) -> List[List[dict]]:
     return sessions
 
 
-def _split_name(index: int, total: int, train_ratio: float, val_ratio: float, test_ratio: float) -> str:
+def _split_name(
+    index: int, total: int, train_ratio: float, val_ratio: float, test_ratio: float
+) -> str:
     if total <= 1:
         return "train"
     if test_ratio <= 0.0:
@@ -442,8 +471,14 @@ def _subsample(items: List[dict], limit: int, rng: np.random.Generator) -> List[
     return [items[int(index)] for index in indices]
 
 
-def _session_memory_text(session_id: str, session_memory_map: Dict[str, dict], session_lookup: Dict[str, SessionRecord]) -> str:
-    return session_memory_map.get(session_id, {}).get("session_memory_text", session_lookup[session_id].summary_text)
+def _session_memory_text(
+    session_id: str,
+    session_memory_map: Dict[str, dict],
+    session_lookup: Dict[str, SessionRecord],
+) -> str:
+    return session_memory_map.get(session_id, {}).get(
+        "session_memory_text", session_lookup[session_id].summary_text
+    )
 
 
 def _memory_text_from_history(
@@ -464,8 +499,12 @@ def _memory_text_from_history(
         selected_history = list(reversed(list(history_ids)[-top_k_memories:]))
     elif memory_strategy == "retrieved_topk":
         if query_embedding is None or summary_embedding_map is None:
-            raise ValueError("retrieved_topk memory strategy requires query and summary embeddings")
-        history_matrix = np.asarray([summary_embedding_map[item] for item in history_ids], dtype=np.float32)
+            raise ValueError(
+                "retrieved_topk memory strategy requires query and summary embeddings"
+            )
+        history_matrix = np.asarray(
+            [summary_embedding_map[item] for item in history_ids], dtype=np.float32
+        )
         scores = history_matrix @ query_embedding
         order = np.argsort(-scores)[:top_k_memories]
         selected_history = [history_ids[int(item)] for item in order]
@@ -473,7 +512,9 @@ def _memory_text_from_history(
         raise ValueError(f"Unsupported memory strategy: {memory_strategy}")
 
     return " || ".join(
-        _session_memory_text(item, session_memory_map=session_memory_map, session_lookup=session_lookup)
+        _session_memory_text(
+            item, session_memory_map=session_memory_map, session_lookup=session_lookup
+        )
         for item in selected_history
     )
 
@@ -488,11 +529,15 @@ class MeanPoolingEncoder:
         self.model.eval()
         self.device = device
 
-    def encode(self, texts: Sequence[str], batch_size: int, prefix: str = "") -> np.ndarray:
+    def encode(
+        self, texts: Sequence[str], batch_size: int, prefix: str = ""
+    ) -> np.ndarray:
         outputs = []
         with torch.no_grad():
             for start in range(0, len(texts), batch_size):
-                batch_texts = [prefix + text for text in texts[start : start + batch_size]]
+                batch_texts = [
+                    prefix + text for text in texts[start : start + batch_size]
+                ]
                 batch = self.tokenizer(
                     batch_texts,
                     padding=True,
@@ -506,14 +551,20 @@ class MeanPoolingEncoder:
                 pooled = (hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1)
                 pooled = F.normalize(pooled, dim=-1)
                 outputs.append(pooled.cpu().numpy().astype(np.float32))
-        return np.concatenate(outputs, axis=0) if outputs else np.zeros((0, self.model.config.hidden_size), dtype=np.float32)
+        return (
+            np.concatenate(outputs, axis=0)
+            if outputs
+            else np.zeros((0, self.model.config.hidden_size), dtype=np.float32)
+        )
 
 
 class OpenClipEncoder:
     def __init__(self, model_name: str, pretrained: str, device: torch.device):
         from open_clip.factory import create_model_and_transforms, get_tokenizer
 
-        model, _, preprocess = create_model_and_transforms(model_name, pretrained=pretrained)
+        model, _, preprocess = create_model_and_transforms(
+            model_name, pretrained=pretrained
+        )
         self.model = model.to(device)
         self.model.eval()
         self.preprocess = preprocess
@@ -528,14 +579,22 @@ class OpenClipEncoder:
         outputs = []
         with torch.no_grad():
             for start in range(0, len(texts), batch_size):
-                tokens = self.tokenizer(list(texts[start : start + batch_size])).to(self.device)
+                tokens = self.tokenizer(list(texts[start : start + batch_size])).to(
+                    self.device
+                )
                 encoded = self.model.encode_text(tokens)
                 encoded = F.normalize(encoded, dim=-1)
                 outputs.append(encoded.cpu().numpy().astype(np.float32))
-        return np.concatenate(outputs, axis=0) if outputs else np.zeros((0, self.output_dim), dtype=np.float32)
+        return (
+            np.concatenate(outputs, axis=0)
+            if outputs
+            else np.zeros((0, self.output_dim), dtype=np.float32)
+        )
 
     def _encode_frame_batch(self, images: Sequence[Image.Image]) -> torch.Tensor:
-        batch = torch.stack([self.preprocess(image) for image in images], dim=0).to(self.device)
+        batch = torch.stack([self.preprocess(image) for image in images], dim=0).to(
+            self.device
+        )
         encoded = self.model.encode_image(batch)
         return F.normalize(encoded, dim=-1)
 
@@ -545,7 +604,9 @@ class OpenClipEncoder:
         frame_features = []
         with torch.no_grad():
             for start in range(0, len(frame_images), frame_batch_size):
-                encoded = self._encode_frame_batch(frame_images[start : start + frame_batch_size])
+                encoded = self._encode_frame_batch(
+                    frame_images[start : start + frame_batch_size]
+                )
                 frame_features.append(encoded)
         pooled = torch.cat(frame_features, dim=0).mean(dim=0)
         pooled = F.normalize(pooled.unsqueeze(0), dim=-1).squeeze(0)
@@ -554,10 +615,14 @@ class OpenClipEncoder:
     def encode_images(self, image_paths: Sequence[str], batch_size: int) -> np.ndarray:
         outputs = np.zeros((len(image_paths), self.output_dim), dtype=np.float32)
         static_indices = [
-            index for index, image_path in enumerate(image_paths) if Path(str(image_path)).suffix.lower() not in MULTI_FRAME_MEDIA
+            index
+            for index, image_path in enumerate(image_paths)
+            if Path(str(image_path)).suffix.lower() not in MULTI_FRAME_MEDIA
         ]
         animated_indices = [
-            index for index, image_path in enumerate(image_paths) if Path(str(image_path)).suffix.lower() in MULTI_FRAME_MEDIA
+            index
+            for index, image_path in enumerate(image_paths)
+            if Path(str(image_path)).suffix.lower() in MULTI_FRAME_MEDIA
         ]
         with torch.no_grad():
             for start in range(0, len(static_indices), batch_size):
@@ -571,10 +636,14 @@ class OpenClipEncoder:
                 batch = torch.stack(images, dim=0).to(self.device)
                 encoded = self.model.encode_image(batch)
                 encoded = F.normalize(encoded, dim=-1)
-                outputs[np.asarray(batch_indices, dtype=np.int64)] = encoded.cpu().numpy().astype(np.float32)
+                outputs[np.asarray(batch_indices, dtype=np.int64)] = (
+                    encoded.cpu().numpy().astype(np.float32)
+                )
 
             for item_index in animated_indices:
-                outputs[item_index] = self._encode_media_item(image_paths[item_index], batch_size=batch_size)
+                outputs[item_index] = self._encode_media_item(
+                    image_paths[item_index], batch_size=batch_size
+                )
         return outputs
 
 
@@ -610,7 +679,9 @@ def _extract_video_frames_with_ffmpeg(path: str, all_frames: bool) -> List[Image
             )
         frame_paths = sorted(Path(tmpdir).glob("frame_*.png"))
         if not frame_paths:
-            raise RuntimeError(f"ffmpeg produced no frames for animated sticker: {path}")
+            raise RuntimeError(
+                f"ffmpeg produced no frames for animated sticker: {path}"
+            )
         frames = []
         for frame_path in frame_paths:
             with Image.open(frame_path) as frame_image:
@@ -642,10 +713,16 @@ def _load_sticker_image(path: str) -> Image.Image:
     return _load_sticker_frames(path, all_frames=False)[0]
 
 
-def _extract_missing_stickers(zip_path: str, output_root: str, sticker_ids: Sequence[str]) -> Dict[str, str]:
+def _extract_missing_stickers(
+    zip_path: str, output_root: str, sticker_ids: Sequence[str]
+) -> Dict[str, str]:
     output_dir = Path(output_root)
     output_dir.mkdir(parents=True, exist_ok=True)
-    missing = [sticker_id for sticker_id in sticker_ids if not (output_dir / sticker_id).exists()]
+    missing = [
+        sticker_id
+        for sticker_id in sticker_ids
+        if not (output_dir / sticker_id).exists()
+    ]
     if missing:
         with zipfile.ZipFile(zip_path, "r") as archive:
             available = set(archive.namelist())
@@ -654,10 +731,16 @@ def _extract_missing_stickers(zip_path: str, output_root: str, sticker_ids: Sequ
                 if archive_name not in available:
                     continue
                 archive.extract(archive_name, path=output_dir.parent)
-    return {sticker_id: str(output_dir / sticker_id) for sticker_id in sticker_ids if (output_dir / sticker_id).exists()}
+    return {
+        sticker_id: str(output_dir / sticker_id)
+        for sticker_id in sticker_ids
+        if (output_dir / sticker_id).exists()
+    }
 
 
-def _filter_decodable_stickers(sticker_paths: Dict[str, str]) -> tuple[Dict[str, str], Dict[str, int]]:
+def _filter_decodable_stickers(
+    sticker_paths: Dict[str, str],
+) -> tuple[Dict[str, str], Dict[str, int]]:
     usable: Dict[str, str] = {}
     stats = {"checked": 0, "kept": 0, "failed": 0}
     for sticker_id, path in sticker_paths.items():
@@ -672,7 +755,9 @@ def _filter_decodable_stickers(sticker_paths: Dict[str, str]) -> tuple[Dict[str,
     return usable, stats
 
 
-def _kmeans_assignments(vectors: np.ndarray, clusters: int, iterations: int, seed: int) -> np.ndarray:
+def _kmeans_assignments(
+    vectors: np.ndarray, clusters: int, iterations: int, seed: int
+) -> np.ndarray:
     rng = np.random.default_rng(seed)
     clusters = max(1, min(clusters, len(vectors)))
     centers = vectors[rng.choice(len(vectors), size=clusters, replace=False)].copy()
@@ -691,11 +776,21 @@ def _kmeans_assignments(vectors: np.ndarray, clusters: int, iterations: int, see
     return assignments
 
 
-def _metrics_from_scores(score_matrix: np.ndarray, gold_indices: np.ndarray) -> Dict[str, float]:
+def _metrics_from_scores(
+    score_matrix: np.ndarray, gold_indices: np.ndarray
+) -> Dict[str, float]:
     # Single positive per query, so HitRate@K == Recall@K. MRR is also reported as `map`
     # because mean(1/rank) coincides with MAP under the 1-positive setup.
     if len(gold_indices) == 0:
-        return {"recall@1": 0.0, "recall@3": 0.0, "recall@5": 0.0, "recall@10": 0.0, "recall@30": 0.0, "map": 0.0, "mrr": 0.0}
+        return {
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "recall@30": 0.0,
+            "map": 0.0,
+            "mrr": 0.0,
+        }
     order = np.argsort(-score_matrix, axis=1)
     ranks = []
     for row_index, gold_index in enumerate(gold_indices):
@@ -710,7 +805,8 @@ def _metrics_from_scores(score_matrix: np.ndarray, gold_indices: np.ndarray) -> 
         "recall@30": float((ranks_np <= 30).mean()),
     }
     return round_dict(
-        recall | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
+        recall
+        | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
     )
 
 
@@ -722,7 +818,15 @@ def _group_metrics_from_scores(
     # Group-level any-hit recall: relevance is "any sticker in the gold group".
     # Reports first-relevant rank, so (rank<=K).mean() is Recall@K under that relevance.
     if len(gold_indices) == 0:
-        return {"recall@1": 0.0, "recall@3": 0.0, "recall@5": 0.0, "recall@10": 0.0, "recall@30": 0.0, "map": 0.0, "mrr": 0.0}
+        return {
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "recall@30": 0.0,
+            "map": 0.0,
+            "mrr": 0.0,
+        }
     order = np.argsort(-score_matrix, axis=1)
     ranks = []
     for row_index, gold_index in enumerate(gold_indices):
@@ -742,7 +846,8 @@ def _group_metrics_from_scores(
         "recall@30": float((ranks_np <= 30).mean()),
     }
     return round_dict(
-        recall | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
+        recall
+        | {"map": float((1.0 / ranks_np).mean()), "mrr": float((1.0 / ranks_np).mean())}
     )
 
 
@@ -755,7 +860,9 @@ def _fuse_group_prior_scores(
     if alpha <= 0.0:
         return score_matrix
     stabilized = intent_logit_matrix - intent_logit_matrix.max(axis=1, keepdims=True)
-    group_log_probs = stabilized - np.log(np.exp(stabilized).sum(axis=1, keepdims=True) + 1e-8)
+    group_log_probs = stabilized - np.log(
+        np.exp(stabilized).sum(axis=1, keepdims=True) + 1e-8
+    )
     sticker_group_log_probs = group_log_probs[:, sticker_group_ids]
     return score_matrix + alpha * sticker_group_log_probs.astype(np.float32)
 
@@ -767,7 +874,9 @@ def _two_stage_group_rerank_scores(
     top_groups: int,
     alpha: float,
 ) -> np.ndarray:
-    fused_scores = _fuse_group_prior_scores(score_matrix, intent_logit_matrix, sticker_group_ids, alpha=alpha)
+    fused_scores = _fuse_group_prior_scores(
+        score_matrix, intent_logit_matrix, sticker_group_ids, alpha=alpha
+    )
     if top_groups <= 0 or intent_logit_matrix.size == 0:
         return fused_scores
     top_groups = min(top_groups, intent_logit_matrix.shape[1])
@@ -778,7 +887,9 @@ def _two_stage_group_rerank_scores(
     return masked_scores
 
 
-def _build_raw_sessions(config: MultiStickerConfig) -> tuple[List[SessionRecord], Dict[str, List[str]], Dict[str, int]]:
+def _build_raw_sessions(
+    config: MultiStickerConfig,
+) -> tuple[List[SessionRecord], Dict[str, List[str]], Dict[str, int]]:
     root = Path(config.paths.usticker_root)
     domain_map = _load_domain_map(config.paths.domain_map_path)
     json_files = sorted(root.glob("*.json"))
@@ -791,7 +902,10 @@ def _build_raw_sessions(config: MultiStickerConfig) -> tuple[List[SessionRecord]
     media_stats = _empty_media_stats(supported_media)
     media_stats["json_files"] = len(json_files)
     for file_index, json_path in enumerate(json_files):
-        print(f"[prepare] loading {json_path.name} ({file_index + 1}/{len(json_files)})", flush=True)
+        print(
+            f"[prepare] loading {json_path.name} ({file_index + 1}/{len(json_files)})",
+            flush=True,
+        )
         with open(json_path, "r", encoding="utf-8") as handle:
             rows = json.load(handle)
         media_stats["total_rows"] += len(rows)
@@ -825,7 +939,9 @@ def _build_raw_sessions(config: MultiStickerConfig) -> tuple[List[SessionRecord]
             )
             session_text = _build_session_text(
                 turns=turns,
-                max_turns=max(config.data.max_summary_turns * 2, config.data.max_summary_turns),
+                max_turns=max(
+                    config.data.max_summary_turns * 2, config.data.max_summary_turns
+                ),
                 max_chars=config.data.max_text_chars,
                 supported_media=supported_media,
             )
@@ -858,7 +974,9 @@ def _build_raw_sessions(config: MultiStickerConfig) -> tuple[List[SessionRecord]
         + f"offensive_rows={media_stats['offensive_rows']}",
         flush=True,
     )
-    ordered_sessions = sorted(all_sessions, key=lambda item: (item.file_index, item.session_index))
+    ordered_sessions = sorted(
+        all_sessions, key=lambda item: (item.file_index, item.session_index)
+    )
     rng = np.random.default_rng(config.data.seed)
     permutation = rng.permutation(len(ordered_sessions))
     shuffled_sessions = [ordered_sessions[int(index)] for index in permutation]
@@ -896,22 +1014,36 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
 
     provisional_samples: List[dict] = []
     for session_index, session in enumerate(sessions):
-        history_ids = sessions_by_file[session.file_id][: session.session_index][-config.data.history_session_limit :]
+        history_ids = sessions_by_file[session.file_id][: session.session_index][
+            -config.data.history_session_limit :
+        ]
         formatted_turns = [
-            _format_turn(turn, max_chars=config.data.max_text_chars, supported_media=supported_media)
+            _format_turn(
+                turn,
+                max_chars=config.data.max_text_chars,
+                supported_media=supported_media,
+            )
             for turn in session.turns
         ]
-        current_window = max(config.data.max_context_turns * 2, config.data.max_context_turns)
+        current_window = max(
+            config.data.max_context_turns * 2, config.data.max_context_turns
+        )
         for turn_index, turn in enumerate(session.turns):
             sticker_id = str(turn.get("sticker", "") or "").strip()
             if not _is_usable_sticker(sticker_id, config.data.supported_media):
                 continue
             if turn_index < config.data.min_context_turns:
                 continue
-            context_text = " || ".join(formatted_turns[max(0, turn_index - config.data.max_context_turns) : turn_index])
+            context_text = " || ".join(
+                formatted_turns[
+                    max(0, turn_index - config.data.max_context_turns) : turn_index
+                ]
+            )
             if not context_text.strip():
                 continue
-            current_session_text = " || ".join(formatted_turns[max(0, turn_index - current_window) : turn_index])
+            current_session_text = " || ".join(
+                formatted_turns[max(0, turn_index - current_window) : turn_index]
+            )
             row = {
                 "sample_id": session.session_id + "#turn" + str(turn_index),
                 "session_id": session.session_id,
@@ -945,7 +1077,8 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
     eligible = [
         item
         for item, count in train_sticker_counts.items()
-        if count >= config.data.min_sticker_frequency and Path(item).suffix.lower() in config.data.supported_media
+        if count >= config.data.min_sticker_frequency
+        and Path(item).suffix.lower() in config.data.supported_media
     ]
     eligible = sorted(eligible, key=lambda item: (-train_sticker_counts[item], item))
     if config.data.max_stickers and config.data.max_stickers > 0:
@@ -957,11 +1090,19 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
     full_train_before_cap = len(train_rows)
     train_rows = _subsample(train_rows, config.data.max_train_samples, rng)
     train_label_set = {row["label_id"] for row in train_rows}
-    valid_sticker_to_index = {sticker_id: index for index, sticker_id in enumerate(sorted(train_label_set))}
-    train_rows = [row for row in train_rows if row["label_id"] in valid_sticker_to_index]
-    val_rows = [row for row in full_val_rows if row["label_id"] in valid_sticker_to_index]
+    valid_sticker_to_index = {
+        sticker_id: index for index, sticker_id in enumerate(sorted(train_label_set))
+    }
+    train_rows = [
+        row for row in train_rows if row["label_id"] in valid_sticker_to_index
+    ]
+    val_rows = [
+        row for row in full_val_rows if row["label_id"] in valid_sticker_to_index
+    ]
     val_rows = _subsample(val_rows, config.data.max_val_samples, rng)
-    test_rows = [row for row in full_test_rows if row["label_id"] in valid_sticker_to_index]
+    test_rows = [
+        row for row in full_test_rows if row["label_id"] in valid_sticker_to_index
+    ]
     test_rows = _subsample(test_rows, config.data.max_test_samples, rng)
     sticker_to_index = valid_sticker_to_index
     eligible = sorted(train_label_set)
@@ -979,11 +1120,17 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
     query_embeddings: np.ndarray | None = None
     if memory_strategy == "retrieved_topk":
         print("[prepare] loading memory retriever", flush=True)
-        memory_encoder = MeanPoolingEncoder(config.model.memory_model_name, device=device)
+        memory_encoder = MeanPoolingEncoder(
+            config.model.memory_model_name, device=device
+        )
         session_ids = [session.session_id for session in sessions]
         print(f"[prepare] encoding {len(session_ids)} session summaries", flush=True)
         session_memory_texts = [
-            _session_memory_text(session_id, session_memory_map=session_memory_map, session_lookup=session_lookup)
+            _session_memory_text(
+                session_id,
+                session_memory_map=session_memory_map,
+                session_lookup=session_lookup,
+            )
             for session_id in session_ids
         ]
         summary_embeddings = memory_encoder.encode(
@@ -991,7 +1138,10 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
             batch_size=config.model.infer_batch_size,
             prefix="passage: ",
         )
-        summary_embedding_map = {session_id: summary_embeddings[index] for index, session_id in enumerate(session_ids)}
+        summary_embedding_map = {
+            session_id: summary_embeddings[index]
+            for index, session_id in enumerate(session_ids)
+        }
         query_embeddings = memory_encoder.encode(
             [row["current_session_text"] for row in selected_rows],
             batch_size=config.model.infer_batch_size,
@@ -999,7 +1149,10 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
         )
         print(f"[prepare] encoding {len(selected_rows)} sample queries", flush=True)
     elif memory_strategy in {"recent_topk", "disabled"}:
-        print(f"[prepare] memory strategy={memory_strategy}; skipping semantic memory retrieval", flush=True)
+        print(
+            f"[prepare] memory strategy={memory_strategy}; skipping semantic memory retrieval",
+            flush=True,
+        )
     else:
         raise ValueError(f"Unsupported memory strategy: {config.data.memory_strategy}")
 
@@ -1012,12 +1165,18 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
             top_k_memories=config.data.top_k_memories,
             session_memory_map=session_memory_map,
             session_lookup=session_lookup,
-            query_embedding=None if query_embeddings is None else query_embeddings[row_index],
+            query_embedding=(
+                None if query_embeddings is None else query_embeddings[row_index]
+            ),
             summary_embedding_map=summary_embedding_map,
         )
         sample_intent_payload = sample_intent_map.get(row["sample_id"], {})
-        intent_text = sample_intent_payload.get("intent_text", row["current_session_text"])
-        intent_label = sample_intent_payload.get("intent_label", "neutral_acknowledgment")
+        intent_text = sample_intent_payload.get(
+            "intent_text", row["current_session_text"]
+        )
+        intent_label = sample_intent_payload.get(
+            "intent_label", "neutral_acknowledgment"
+        )
         sample = SampleRecord(
             sample_id=row["sample_id"],
             session_id=row["session_id"],
@@ -1032,7 +1191,9 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
             intent_label=str(intent_label),
             label_id=row["label_id"],
             label_index=sticker_to_index[row["label_id"]],
-            intent_cluster_id=int(intent_cluster_map.get(row["label_id"], {}).get("intent_cluster_id", -1)),
+            intent_cluster_id=int(
+                intent_cluster_map.get(row["label_id"], {}).get("intent_cluster_id", -1)
+            ),
             history_session_ids=list(history_ids),
             turn_index=int(row["turn_index"]),
         )
@@ -1054,7 +1215,9 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
                 "domain": session.domain,
                 "summary_text": session.summary_text,
                 "session_text": session.session_text,
-                "session_memory_text": session_memory_map.get(session.session_id, {}).get("session_memory_text", session.summary_text),
+                "session_memory_text": session_memory_map.get(
+                    session.session_id, {}
+                ).get("session_memory_text", session.summary_text),
                 "split": session.split,
             }
             for session in sessions
@@ -1080,7 +1243,9 @@ def _build_dataset_manifest(config: MultiStickerConfig, device: torch.device) ->
 
 def prepare_manifest(config: MultiStickerConfig, force_rebuild: bool = False) -> dict:
     _set_cache_env(config)
-    config.data.supported_media = _normalize_supported_media(config.data.supported_media)
+    config.data.supported_media = _normalize_supported_media(
+        config.data.supported_media
+    )
     manifest_path = Path(config.paths.manifest_path)
     if manifest_path.exists() and not force_rebuild:
         with open(manifest_path, "r", encoding="utf-8") as handle:
@@ -1096,8 +1261,12 @@ def _gather_split_arrays(
     intent_text_embeddings: np.ndarray,
     intent_labels: Dict[str, int],
 ) -> dict:
-    label_indices = np.asarray([int(row["label_index"]) for row in split_rows], dtype=np.int64)
-    intent_indices = np.asarray([int(intent_labels[row["label_id"]]) for row in split_rows], dtype=np.int64)
+    label_indices = np.asarray(
+        [int(row["label_index"]) for row in split_rows], dtype=np.int64
+    )
+    intent_indices = np.asarray(
+        [int(intent_labels[row["label_id"]]) for row in split_rows], dtype=np.int64
+    )
     return {
         "rows": list(split_rows),
         "context_embeddings": context_embeddings.astype(np.float32),
@@ -1122,13 +1291,22 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
         sticker_ids=sticker_ids,
     )
     sticker_paths, decode_stats = _filter_decodable_stickers(sticker_paths)
-    sticker_ids = [sticker_id for sticker_id in sticker_ids if sticker_id in sticker_paths]
-    sticker_to_index = {sticker_id: index for index, sticker_id in enumerate(sticker_ids)}
-    print(f"[train] decodable stickers kept={decode_stats['kept']} failed={decode_stats['failed']}", flush=True)
+    sticker_ids = [
+        sticker_id for sticker_id in sticker_ids if sticker_id in sticker_paths
+    ]
+    sticker_to_index = {
+        sticker_id: index for index, sticker_id in enumerate(sticker_ids)
+    }
+    print(
+        f"[train] decodable stickers kept={decode_stats['kept']} failed={decode_stats['failed']}",
+        flush=True,
+    )
 
     for split_name in ["train", "val", "test"]:
         manifest["splits"][split_name] = [
-            row for row in manifest["splits"][split_name] if row["label_id"] in sticker_to_index
+            row
+            for row in manifest["splits"][split_name]
+            if row["label_id"] in sticker_to_index
         ]
         for row in manifest["splits"][split_name]:
             row["label_index"] = sticker_to_index[row["label_id"]]
@@ -1146,7 +1324,11 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
         batch_size=config.model.infer_batch_size,
     )
 
-    all_rows = manifest["splits"]["train"] + manifest["splits"]["val"] + manifest["splits"]["test"]
+    all_rows = (
+        manifest["splits"]["train"]
+        + manifest["splits"]["val"]
+        + manifest["splits"]["test"]
+    )
     print(f"[train] encoding context texts for {len(all_rows)} samples", flush=True)
     all_context_embeddings = clip_encoder.encode_texts(
         [row["context_text"] for row in all_rows],
@@ -1164,7 +1346,11 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
     )
     train_rows = manifest["splits"]["train"]
     all_rows_by_sticker: Dict[str, List[dict]] = defaultdict(list)
-    for row in manifest["splits"]["train"] + manifest["splits"]["val"] + manifest["splits"]["test"]:
+    for row in (
+        manifest["splits"]["train"]
+        + manifest["splits"]["val"]
+        + manifest["splits"]["test"]
+    ):
         all_rows_by_sticker[str(row["label_id"])].append(row)
 
     sticker_group_name_map: Dict[str, str] = {}
@@ -1177,14 +1363,18 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
             if row["label_id"] == sticker_id
         )
         if train_group_counts:
-            group_name = sorted(train_group_counts.items(), key=lambda item: (-item[1], item[0]))[0][0]
+            group_name = sorted(
+                train_group_counts.items(), key=lambda item: (-item[1], item[0])
+            )[0][0]
         else:
             fallback_counts = Counter(
                 str(row.get("intent_label", "neutral_acknowledgment"))
                 for row in all_rows_by_sticker.get(sticker_id, [])
             )
             group_name = (
-                sorted(fallback_counts.items(), key=lambda item: (-item[1], item[0]))[0][0]
+                sorted(fallback_counts.items(), key=lambda item: (-item[1], item[0]))[
+                    0
+                ][0]
                 if fallback_counts
                 else "neutral_acknowledgment"
             )
@@ -1194,7 +1384,10 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
         sticker_group_ids_list.append(group_name_to_index[group_name])
 
     sticker_group_ids = np.asarray(sticker_group_ids_list, dtype=np.int64)
-    intent_labels = {sticker_id: int(sticker_group_ids[index]) for index, sticker_id in enumerate(sticker_ids)}
+    intent_labels = {
+        sticker_id: int(sticker_group_ids[index])
+        for index, sticker_id in enumerate(sticker_ids)
+    }
     intent_cluster_count = max(1, len(group_name_to_index))
     save_json(
         {
@@ -1232,14 +1425,22 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
     test_intent_text = all_intent_text_embeddings[train_count + val_count :]
 
     split_tensors = {
-        "train": _gather_split_arrays(train_rows, train_context, train_memory, train_intent_text, intent_labels),
-        "val": _gather_split_arrays(val_rows, val_context, val_memory, val_intent_text, intent_labels),
-        "test": _gather_split_arrays(test_rows, test_context, test_memory, test_intent_text, intent_labels),
+        "train": _gather_split_arrays(
+            train_rows, train_context, train_memory, train_intent_text, intent_labels
+        ),
+        "val": _gather_split_arrays(
+            val_rows, val_context, val_memory, val_intent_text, intent_labels
+        ),
+        "test": _gather_split_arrays(
+            test_rows, test_context, test_memory, test_intent_text, intent_labels
+        ),
     }
 
     image_bank = torch.from_numpy(image_embeddings).to(device)
     model = IntentGuidedRetriever(
-        input_dim=train_context.shape[1] + train_memory.shape[1] + train_intent_text.shape[1],
+        input_dim=train_context.shape[1]
+        + train_memory.shape[1]
+        + train_intent_text.shape[1],
         output_dim=image_embeddings.shape[1],
         hidden_dim=config.model.hidden_dim,
         num_intents=int(intent_cluster_count),
@@ -1263,13 +1464,25 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
         intent_losses = []
         for start in range(0, len(order), config.model.train_batch_size):
             batch_indices = order[start : start + config.model.train_batch_size]
-            context_batch = torch.from_numpy(split_tensors["train"]["context_embeddings"][batch_indices]).to(device)
-            memory_batch = torch.from_numpy(split_tensors["train"]["memory_embeddings"][batch_indices]).to(device)
-            intent_text_batch = torch.from_numpy(split_tensors["train"]["intent_text_embeddings"][batch_indices]).to(device)
-            labels_batch = torch.from_numpy(split_tensors["train"]["label_indices"][batch_indices]).to(device)
-            intent_batch = torch.from_numpy(split_tensors["train"]["intent_indices"][batch_indices]).to(device)
+            context_batch = torch.from_numpy(
+                split_tensors["train"]["context_embeddings"][batch_indices]
+            ).to(device)
+            memory_batch = torch.from_numpy(
+                split_tensors["train"]["memory_embeddings"][batch_indices]
+            ).to(device)
+            intent_text_batch = torch.from_numpy(
+                split_tensors["train"]["intent_text_embeddings"][batch_indices]
+            ).to(device)
+            labels_batch = torch.from_numpy(
+                split_tensors["train"]["label_indices"][batch_indices]
+            ).to(device)
+            intent_batch = torch.from_numpy(
+                split_tensors["train"]["intent_indices"][batch_indices]
+            ).to(device)
 
-            _, retrieval_logits, intent_logits = model(context_batch, memory_batch, intent_text_batch, image_bank)
+            _, retrieval_logits, intent_logits = model(
+                context_batch, memory_batch, intent_text_batch, image_bank
+            )
             retrieval_loss = F.cross_entropy(retrieval_logits, labels_batch)
             intent_loss = F.cross_entropy(intent_logits, intent_batch)
             loss = retrieval_loss + config.model.intent_loss_weight * intent_loss
@@ -1303,7 +1516,10 @@ def train_multisticker(config: MultiStickerConfig, force_rebuild: bool = False) 
         score = val_metrics["semantic_metrics"]["recall@30"]
         if score > best_score:
             best_score = score
-            best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
+            best_state = {
+                key: value.detach().cpu().clone()
+                for key, value in model.state_dict().items()
+            }
         print(
             f"[train] epoch={epoch} loss={history[-1]['train_loss']} "
             + f"exact_val_recall@1={history[-1]['val_recall@1']} "
@@ -1389,14 +1605,28 @@ def evaluate_split(
     score_chunks = []
     with torch.no_grad():
         for start in range(0, len(split_arrays["rows"]), 512):
-            context_batch = torch.from_numpy(split_arrays["context_embeddings"][start : start + 512]).to(device)
-            memory_batch = torch.from_numpy(split_arrays["memory_embeddings"][start : start + 512]).to(device)
-            intent_text_batch = torch.from_numpy(split_arrays["intent_text_embeddings"][start : start + 512]).to(device)
-            _, retrieval_logits, _ = model(context_batch, memory_batch, intent_text_batch, image_bank)
+            context_batch = torch.from_numpy(
+                split_arrays["context_embeddings"][start : start + 512]
+            ).to(device)
+            memory_batch = torch.from_numpy(
+                split_arrays["memory_embeddings"][start : start + 512]
+            ).to(device)
+            intent_text_batch = torch.from_numpy(
+                split_arrays["intent_text_embeddings"][start : start + 512]
+            ).to(device)
+            _, retrieval_logits, _ = model(
+                context_batch, memory_batch, intent_text_batch, image_bank
+            )
             score_chunks.append(retrieval_logits.cpu().numpy().astype(np.float32))
-    score_matrix = np.concatenate(score_chunks, axis=0) if score_chunks else np.zeros((0, image_bank.shape[0]), dtype=np.float32)
+    score_matrix = (
+        np.concatenate(score_chunks, axis=0)
+        if score_chunks
+        else np.zeros((0, image_bank.shape[0]), dtype=np.float32)
+    )
     metrics = _metrics_from_scores(score_matrix, split_arrays["label_indices"])
-    semantic_metrics = _group_metrics_from_scores(score_matrix, split_arrays["label_indices"], sticker_group_ids)
+    semantic_metrics = _group_metrics_from_scores(
+        score_matrix, split_arrays["label_indices"], sticker_group_ids
+    )
     return {
         "metrics": metrics,
         "semantic_metrics": semantic_metrics,
