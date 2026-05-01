@@ -8,9 +8,7 @@ MultiSticker is a COMP 646 final-project codebase for retrieving chat stickers f
 
 These signals are encoded with OpenCLIP and projected into the sticker image space by a trainable intent-guided retriever. The code supports static `.png` stickers and animated `.gif` / `.webm` stickers, with frame-wise OpenCLIP encoding and mean pooling for animated media.
 
-![MultiSticker overview](Latex_report/img/fig1_multisticker_teaser.png)
-
-The README uses a PNG preview so the figure renders directly on GitHub. The LaTeX report uses the vector PDF version under `Latex_report/img/figure1.pdf`.
+![MultiSticker overview](assets/figure1.png)
 
 ## What This Repository Contains
 
@@ -22,11 +20,8 @@ The README uses a PNG preview so the figure renders directly on GitHub. The LaTe
 | `scripts/eval_direct_clip.py` | Zero-shot frozen OpenCLIP baseline with no trainable retrieval head. |
 | `scripts/run_rebuild_pilot.sh` | SLURM/local runner for the pilot or medium experiment matrix. |
 | `scripts/archive_run_artifacts.py` | Copies matched logs/results/checkpoints into organized run folders. |
-| `organized_runs/rebuild_medium/` | Completed medium-scale result JSONs, logs, histories, plots, and checkpoints used in the report. |
-| `Latex_report/report.tex` | Final 4-page CVPR-style report source. |
-| `Latex_report/report.pdf` | Compiled final report. |
-| `final_report.md` | Longer internal method/result notes with implementation links. |
-| `check.md` | Submission self-check against the course report advice. |
+| `organized_runs/rebuild_medium/` | Completed medium-scale result JSONs, logs, histories, plots, and checkpoints. |
+| `assets/figure1.png` | GitHub-friendly PNG overview rendered from the original Figure 1 PDF. |
 
 ## Method Summary
 
@@ -76,7 +71,7 @@ The most useful interpretation is:
 - retrieved dialogue memory substantially improves the learned head's exact retrieval;
 - `dual_lora` is the most balanced trained model for a chat sticker panel, while `image_lora` gives the strongest exact top-5 ranking.
 
-Detailed per-media tables and the no-memory ablation are in `organized_runs/rebuild_medium/mediumReport.md` and `Latex_report/report.pdf`.
+Detailed per-media metrics and the no-memory ablation are available in the JSON/CSV artifacts under `organized_runs/rebuild_medium/`.
 
 ## Reproducing the Medium Experiment
 
@@ -198,11 +193,6 @@ The project uses external libraries and pretrained components as off-the-shelf b
 
 AI assistance was used for coding and writing support and is acknowledged in the final report.
 
-## Report and Submission Checklist
+## Repository Notes
 
-The final report follows the course guidance in the provided CVPR-style template:
-
-- real input/output and pipeline figures are exported as PDF;
-- exact model names are used for OpenCLIP, E5, and LoRA settings;
-- the report includes a frozen CLIP baseline, memory ablation, LoRA ablations, qualitative examples, and quantitative tables;
-- figures, logs, JSON metrics, checkpoints, and demo assets are included under `Latex_report/`, `results/`, `logs/`, and `organized_runs/`.
+The `main` branch is kept focused on code, README documentation, runnable scripts, compact result artifacts, and the PNG overview image. LaTeX sources and PDF report packaging are intentionally not tracked on `main`.
