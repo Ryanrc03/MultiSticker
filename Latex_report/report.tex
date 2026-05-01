@@ -24,9 +24,10 @@
 %%%%%%%%% TITLE
 \title{MultiSticker: Intent-Guided Multimodal Sticker Retrieval\\with Dialogue Memory}
 
-\author{Anonymous Author\\
+\author{Rongcheng Li, Xinyou\\
+COMP 646: Deep Learning for Vision and Language final project report\\
 Department of Computer Science, Rice University\\
-{\tt\small rl182@rice.edu}
+{\tt\small rl182@rice.edu, xy68@rice.edu}
 }
 
 \maketitle
@@ -58,7 +59,7 @@ within-group ranking diagnostic.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig1_multisticker_teaser.png}
+\includegraphics[width=0.98\textwidth]{figure1.pdf}
 \caption{\textbf{MultiSticker at a glance.} A real validation dialogue is
 converted into three retrieval signals: local dialogue context, retrieved
 long-term memory, and an LLM-generated reply intent. The dual-LoRA OpenCLIP
@@ -149,7 +150,7 @@ adaptation through name-based parameter masking.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.96\textwidth]{pipeline_overview.png}
+\includegraphics[width=0.96\textwidth]{pipeline_overview.pdf}
 \caption{End-to-end MultiSticker pipeline. Raw U-Sticker JSON is split into
 12-hour sessions; an LLM produces a per-session memory and a per-sample
 intent label/text; multilingual~E5 retrieves the top-3 historical sessions
@@ -377,16 +378,24 @@ WEBM remains the hardest exact-retrieval format.}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.78\linewidth,trim=55 215 55 35,clip]%
-  {demo_assets/dual_lora_png_demo/case_06_rank_2/case_06_rank_2_demo.pdf}
-\caption{\textbf{Qualitative example (case~06, \texttt{dual\_lora}).} A
-\texttt{humor\_teasing} turn from a Media-Sharing chat. The retriever places
-the gold sticker at rank~2 (green frame); rank~1 is a visually similar
-\texttt{neutral\_acknowledgment} sticker (red). All five candidates are
-plausible reactions for the conversation, illustrating why Group@5 is more
-informative than Exact@1 for sticker-panel UX. Seven additional
-cases (success $\to$ near-miss $\to$ failure) are listed in
-Appendix~\ref{app:cases}.}
+\setlength{\tabcolsep}{1pt}
+\begin{minipage}[t]{0.495\linewidth}\centering
+\includegraphics[width=\linewidth,trim=40 215 40 55,clip]%
+  {demo_assets/dual_lora_png_demo/case_06_rank_2/case_06_rank_2_demo.pdf}\\[-1pt]
+{\scriptsize (a)}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.495\linewidth}\centering
+\includegraphics[width=\linewidth,trim=40 215 40 55,clip]%
+  {demo_assets/dual_lora_png_demo/case_26_rank_19/case_26_rank_19_demo.pdf}\\[-1pt]
+{\scriptsize (b)}
+\end{minipage}
+\caption{\textbf{Qualitative examples (\texttt{dual\_lora}).}
+(a) Near-success: the gold sticker is at rank~2 and all five candidates are
+plausible \texttt{humor\_teasing} reactions, illustrating why Group@5 is
+more informative than Exact@1 for sticker-panel UX. (b) Failure: gold rank
+is 19; the model retrieves visually similar but tonally wrong stickers,
+showing the limits of frozen-bank retrieval on long Game-domain disputes.
+Six additional cases are listed in Appendix~\ref{app:cases}.}
 \label{fig:case06}
 \end{figure}
 
@@ -479,7 +488,7 @@ produced with Qwen2.5-32B-GPTQ; all experimental decisions are our own.
 \appendix
 \section{Additional qualitative cases}
 \label{app:cases}
-Seven additional rendered demos (chat bubble + retrieved top-5 panel +
+Six additional rendered demos (chat bubble + retrieved top-5 panel +
 session memory + intent) accompany the case shown in
 Figure~\ref{fig:case06}. They span a success$\to$near-miss$\to$failure
 gradient across the Game and Media-Sharing domains and the
@@ -492,12 +501,67 @@ gradient across the Game and Media-Sharing domains and the
 \item \href{demo_assets/dual_lora_png_demo/case_10_rank_4/case_10_rank_4_demo.pdf}{Case~10} — Game, \texttt{frustration\_disapproval}, gold rank~4.
 \item \href{demo_assets/dual_lora_png_demo/case_14_rank_9/case_14_rank_9_demo.pdf}{Case~14} — Game, \texttt{frustration\_disapproval}, gold rank~9.
 \item \href{demo_assets/dual_lora_png_demo/case_15_rank_11/case_15_rank_11_demo.pdf}{Case~15} — Game, \texttt{frustration\_disapproval}, gold rank~11 (near-miss).
-\item \href{demo_assets/dual_lora_png_demo/case_26_rank_19/case_26_rank_19_demo.pdf}{Case~26} — Game, \texttt{frustration\_disapproval}, gold rank~19 (failure).
 \item \href{demo_assets/dual_lora_png_demo/case_27_rank_20/case_27_rank_20_demo.pdf}{Case~27} — Game, \texttt{neutral\_acknowledgment}, gold rank~20 (failure).
 \end{itemize}
 
 The PDFs live under
 \path{Latex_report/demo_assets/dual_lora_png_demo/<case>/} in the source
 release.
+
+\clearpage
+\onecolumn
+\begin{figure}[p]
+\centering
+\includegraphics[page=1,width=0.96\textwidth]%
+  {demo_assets/dual_lora_png_demo/case_01_rank_1/case_01_rank_1_demo.pdf}
+\caption{\textbf{Appendix demo: Case~01.} Media Sharing,
+\texttt{humor\_teasing}, gold rank~1.}
+\label{fig:app-case01}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[page=1,width=0.96\textwidth]%
+  {demo_assets/dual_lora_png_demo/case_09_rank_3/case_09_rank_3_demo.pdf}
+\caption{\textbf{Appendix demo: Case~09.} Game,
+\texttt{neutral\_acknowledgment}, gold rank~3.}
+\label{fig:app-case09}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[page=1,width=0.96\textwidth]%
+  {demo_assets/dual_lora_png_demo/case_10_rank_4/case_10_rank_4_demo.pdf}
+\caption{\textbf{Appendix demo: Case~10.} Game,
+\texttt{frustration\_disapproval}, gold rank~4.}
+\label{fig:app-case10}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[page=1,width=0.96\textwidth]%
+  {demo_assets/dual_lora_png_demo/case_14_rank_9/case_14_rank_9_demo.pdf}
+\caption{\textbf{Appendix demo: Case~14.} Game,
+\texttt{frustration\_disapproval}, gold rank~9.}
+\label{fig:app-case14}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[page=1,width=0.96\textwidth]%
+  {demo_assets/dual_lora_png_demo/case_15_rank_11/case_15_rank_11_demo.pdf}
+\caption{\textbf{Appendix demo: Case~15.} Game,
+\texttt{frustration\_disapproval}, gold rank~11.}
+\label{fig:app-case15}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[page=1,width=0.96\textwidth]%
+  {demo_assets/dual_lora_png_demo/case_27_rank_20/case_27_rank_20_demo.pdf}
+\caption{\textbf{Appendix demo: Case~27.} Game,
+\texttt{neutral\_acknowledgment}, gold rank~20.}
+\label{fig:app-case27}
+\end{figure}
 
 \end{document}
